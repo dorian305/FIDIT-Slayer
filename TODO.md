@@ -1,0 +1,19 @@
+## TO DO list
+- Break the game story into levels, and design levels accordingly
+- Fix collision detection
+- Add level music
+- Add sound effects for:
+  - jumping
+  - melee weapon attack
+  - ranged weapon shooting
+  - taking damage,
+  - dying,
+  - ...
+- Secret body armor collecting pieces scattered throughout the levels
+- Implement running function (at least in debug?)
+- NewGamePlus
+- Krule weapon
+- Dialogue boxes
+- Level completion (killed enemies, collectibles, found secrets)
+- Add health increase powerup
+- Add health potion
