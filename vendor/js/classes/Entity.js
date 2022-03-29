@@ -6,7 +6,7 @@ import { Graphics } from "./Graphics.js";
 	bullets etc...
 */
 export class Entity {
-	constructor({x, y, w, h, sprite, visible}){
+	constructor({x, y, w, h, sprite, spriteLength, visible}){
 		if (this.constructor === Entity){
 			throw new Error(`Cannot instantiate an abstract class "Entity"!`);
 		}
@@ -22,6 +22,8 @@ export class Entity {
 		this.oldBottom =      this.bottom;                   // Keeps track of the old bottom edge of the entity
 		this.velocity =       {x: 0, y: 0};                  // X and Y components of entity velocity (+ = right and down, - = left and up)
 		this.sprite =         Graphics.createImage(sprite);  // Image handler for entity sprite
+		this.spriteLength =	  spriteLength;                  // Number of frames sprite animation consists of
+		this.spriteFrame =    0;                             // Current frame of the animation
 		this.visible =		  visible;				 		 // Determine if entity sprite is drawn
 	}
 
@@ -46,7 +48,14 @@ export class Entity {
 		this.top =              this.position.y;							// Update current top to new Y coordinate
 		this.bottom =           this.position.y + this.size.h;				// Update current bottom to new Y coordinate + height
 
-    // Draw entity at updated coordinates
-    this.draw();
+		// Updating sprite frame for animation
+		if (this.spriteLength === undefined || this.spriteFrame >= this.spriteLength){
+			this.spriteFrame = 0;
+		} else {
+			this.spriteFrame = this.spriteFrame + 1;
+		}
+
+		// Draw entity at updated coordinates
+		this.draw();
 	}
 }

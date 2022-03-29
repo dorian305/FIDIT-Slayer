@@ -6,9 +6,9 @@ import { createSound } from "../../functions/createsound.js";
   Class for character which will be controlled by the player
 */
 export class PlayerCharacter extends Character {
-  constructor({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, playerName}){
-    super({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite});
-    this.name =           playerName;                             // Name of the player character
+  constructor({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, spriteLength, playerName}){
+    super({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, spriteLength});
+    this.name =           playerName;                                       // Name of the player character
     this.deathSound =     createSound(`${PATH_AUDIO}/sounds/death.mp3`);
     this.keys = {
       A: { pressed: false },                                      // A = moving left
@@ -19,7 +19,17 @@ export class PlayerCharacter extends Character {
   }
 
   draw() {
-    Graphics.drawImage({x: this.position.x, y: this.position.y, sprite: this.sprite});
+    CTX.drawImage(
+      this.sprite,
+      this.spriteFrame * this.size.w,
+      0,
+      this.size.w,
+      this.size.h,
+      this.position.x,
+      this.position.y,
+      this.size.w,
+      this.size.h
+    );
 		
     /*
 			Drawing HP bar in the left top corner of the screen

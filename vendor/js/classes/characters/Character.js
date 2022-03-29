@@ -8,8 +8,8 @@ import { createSound } from "../../functions/createsound.js";
 	It inherits from Entity class.
 */
 export class Character extends Entity {
-  constructor({x, y, w, h, sprite, movespeed, HP, jumpHeight, jumps}){
-		super({x, y, w, h, sprite});												 // Calling constructor from the extended class Entity
+  constructor({x, y, w, h, sprite, spriteLength, movespeed, HP, jumpHeight, jumps}){
+		super({x, y, w, h, sprite, spriteLength});												 // Calling constructor from the extended class Entity
     if (this.constructor === Character){
       throw new Error(`Cannot instantiate an abstract class "Character"!`);
     }
@@ -25,7 +25,6 @@ export class Character extends Entity {
     this.damaged =        false;                         // Character can be damaged only when this is false
     this.direction =      "right";                       // Keeps track of the direction the character is facing
     this.lastDirection =  this.direction;                // Keeps track of the last direction the character was facing
-    this.spriteFrames =   0;                             // How many images does the sprite animation consists of
     this.jumpSound =      createSound(`${PATH_AUDIO}/sounds/jump.mp3`);
 		CHARACTERS.push(this);
   }
@@ -50,7 +49,17 @@ export class Character extends Entity {
 
   // Draws the character and their HP bars
   draw() {
-    Graphics.drawImage({x: this.position.x, y: this.position.y, sprite: this.sprite});
+    CTX.drawImage(
+      this.sprite,
+      this.spriteFrame * this.size.w,
+      0,
+      this.size.w,
+      this.size.h,
+      this.position.x,
+      this.position.y,
+      this.size.w,
+      this.size.h
+    );
 		
     /*
 			Drawing HP bar above the character.
