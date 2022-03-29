@@ -15,5 +15,3 @@
 - Krule weapon
 - Dialogue boxes
 - Level completion (killed enemies, collectibles, found secrets)
-- Add health increase powerup
-- Add health potion

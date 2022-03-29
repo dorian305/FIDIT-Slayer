@@ -159,16 +159,10 @@ function Render(){
 				genericObject.velocity.y = GENERIC_OBJECTS_VELOCITY.y;
 				genericObject.update();
 			});
-			ORBS.forEach(orb => {
-				orb.velocity.x = ORBS_VELOCITY.x;
-				orb.velocity.y = ORBS_VELOCITY.y;
-				orb.checkCollected();
-				orb.update();
-			});
 			PLATFORMS.forEach(platform => {
-			platform.velocity.x = PLATFORMS_VELOCITY.x;
-			platform.velocity.y = PLATFORMS_VELOCITY.y;
-			platform.update();
+				platform.velocity.x = PLATFORMS_VELOCITY.x;
+				platform.velocity.y = PLATFORMS_VELOCITY.y;
+				platform.update();
 			});
 			CHARACTERS.forEach(character => {
 				if (character.isEnemy){
@@ -176,6 +170,12 @@ function Render(){
 					PLAYER.checkEnemyCollision(character);
 				}
 				character.update();
+			});
+			ORBS.forEach(orb => {
+				orb.velocity.x = ORBS_VELOCITY.x;
+				orb.velocity.y = ORBS_VELOCITY.y;
+				orb.checkCollected();
+				orb.update();
 			});
 			/* */
 			/*

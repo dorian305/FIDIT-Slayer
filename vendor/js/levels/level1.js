@@ -1,9 +1,10 @@
-import { startRendering } 	from "../render.js";
-import { PlayerCharacter } 	from "../classes/characters/PlayerCharacter.js";
-import { EnemyCharacter } 	from "../classes/characters/EnemyCharacter.js";
-import { Platform } 		from "../classes/Platform.js";
-import { GenericObject }    from "../classes/GenericObject.js";
-import { OrbOfHeal } 		from "../classes/Orbs/OrbOfHeal.js";
+import { startRendering } 			from "../render.js";
+import { PlayerCharacter } 			from "../classes/characters/PlayerCharacter.js";
+import { EnemyCharacter } 			from "../classes/characters/EnemyCharacter.js";
+import { Platform } 				from "../classes/Platform.js";
+import { GenericObject }    		from "../classes/GenericObject.js";
+import { OrbOfHealth } 				from "../classes/Orbs/OrbOfHealth.js";
+import { OrbOfRejuvenation } 		from "../classes/Orbs/OrbOfRejuvenation.js";
 
 export function level1(){
 	/*
@@ -125,7 +126,7 @@ export function level1(){
 		Creating enemies
 	*/
 	new EnemyCharacter({x: 600, y: CANVAS.height - GROUND_PLATFORM_SIZE.h * 3, w: ENEMY_SIZE.w, h: ENEMY_SIZE.h, jumpHeight: 10, jumps: 1, movespeed: 10, HP: 50, sprite: ENEMY_SPRITE});
-	new OrbOfHeal({x: 500, y: ground_level - 32, w: 32, h: 32, sprite: `${PATH_SPRITES}orbs/orbofheal.png`, healPercentage: 0.25});
+	new OrbOfHealth({x: 500, y: ground_level - 32, w: 32, h: 32, sprite: `${PATH_SPRITES}orbs/orbofheal.png`, HPIncrease: 50});
 
 	// Start the level rendering
 	startRendering();
