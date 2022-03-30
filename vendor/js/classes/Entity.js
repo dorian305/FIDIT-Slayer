@@ -27,7 +27,9 @@ export class Entity {
 		this.visible =		  visible;				 		 // Determine if entity sprite is drawn
 	}
 
-	// Checking collision with the entity
+	/*
+		Collision checking with other objects. Every entity can perform collision check against any other entity.
+	*/
 	checkCollision(other){
 		return !(this.left > other.right || this.right < other.left || this.top > other.bottom || this.bottom < other.top)
 	}

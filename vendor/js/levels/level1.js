@@ -45,7 +45,7 @@ export function level1(){
 	Platform.generateTriangle({ x:  900, y: ground_level - GROUND_PLATFORM_SIZE.h * 2, 	h: 2, direction: "left", sprite: ground_sprite});
 	Platform.generateRectangle({x: 1000, y: ground_level - GROUND_PLATFORM_SIZE.h * 3,  w: 8,  h: 3, sprite: ground_sprite});
 	Platform.generateTriangle({ x: 1250, y: ground_level - GROUND_PLATFORM_SIZE.h * 6,	h: 3, direction: "left", sprite: ground_sprite});
-	Platform.generateRectangle({x: 1600, y: ground_level - GROUND_PLATFORM_SIZE.h * 3,  w: 12, h: 1, sprite: ground_sprite});
+	Platform.generateRectangle({x: 1600, y: ground_level - GROUND_PLATFORM_SIZE.h * 3,  w: 14, h: 1, sprite: ground_sprite});
 	// -
 	Platform.generateRectangle({x: 2500, y: ground_level - GROUND_PLATFORM_SIZE.h * 4,  w: 35, h: 1, sprite: ground_sprite});
 	Platform.generateRectangle({x: 3125, y: ground_level - GROUND_PLATFORM_SIZE.h * 6,  w: 10, h: 2, sprite: ground_sprite});
@@ -115,9 +115,9 @@ export function level1(){
 	  y: 200 + PLAYER_SIZE.h,
 	  w: PLAYER_SIZE.w,
 	  h: PLAYER_SIZE.h,
-	  jumpHeight: 13,
+	  jumpHeight: 15,
 	  jumps: 1,
-	  movespeed: 8,
+	  movespeed: 5,
 	  HP: 100.0,
 	  sprite: PLAYER_SPRITE,
 	  playerName: "BloodDrunk"
@@ -126,7 +126,7 @@ export function level1(){
 		Creating enemies
 	*/
 	new EnemyCharacter({x: 600, y: CANVAS.height - GROUND_PLATFORM_SIZE.h * 3, w: ENEMY_SIZE.w, h: ENEMY_SIZE.h, jumpHeight: 10, jumps: 1, movespeed: 10, HP: 50, sprite: ENEMY_SPRITE});
-	new OrbOfHealth({x: 500, y: ground_level - 32, w: 32, h: 32, sprite: `${PATH_SPRITES}orbs/orbofheal.png`, HPIncrease: 50});
+	new OrbOfRejuvenation({x: 500, y: ground_level - 32, w: 32, h: 32, sprite: `${PATH_SPRITES}orbs/orbofheal.png`, healPercentage: 0.5});
 
 	// Start the level rendering
 	startRendering();
