@@ -1,6 +1,8 @@
-import { Entity } from "../Entity.js";
-import { Graphics } from "../Graphics.js";
-import { createSound } from "../../functions/createsound.js";
+import { Entity }           from "../Entity.js";
+import { Graphics }         from "../Graphics.js";
+import { createSound }      from "../../functions/createsound.js";
+import { removeFromArray }  from "../../functions/removefromarray.js";
+import { Bullet }           from "../Bullet.js";
 
 /*
   Abstract class Character which contains properties
@@ -8,8 +10,8 @@ import { createSound } from "../../functions/createsound.js";
 	It inherits from Entity class.
 */
 export class Character extends Entity {
-  constructor({x, y, w, h, sprite, spriteLength, movespeed, HP, jumpHeight, jumps}){
-		super({x, y, w, h, sprite, spriteLength});												 // Calling constructor from the extended class Entity
+  constructor({x, y, w, h, sprite, movespeed, HP, jumpHeight, jumps, attackDamage}){
+		super({x, y, w, h, sprite});												 // Calling constructor from the extended class Entity
     if (this.constructor === Character){
       throw new Error(`Cannot instantiate an abstract class "Character"!`);
     }
@@ -17,16 +19,61 @@ export class Character extends Entity {
     this.maxHP =          HP;                            // Max HP of a character
 		this.currentHP = 			this.maxHP;										 // Current HP of a character
     this.isDead =         false;                         // Flag tracking whether character died in any way
-    this.weapon =         null                           // Flag tracking whether character has a weapon or not
 		this.jumpHeight =     jumpHeight;                    // How high the character can jump
     this.jumps =          jumps;                         // How many times can character jump in a row
     this.remainingJumps = this.jumps;                    // Remaining jumps
     this.isCrouching =    false;                         // Flag tracking whether character is crouching
     this.damaged =        false;                         // Character can be damaged only when this is false
+    this.attackDamage =   attackDamage;                  // How much damage character's attack deal
     this.direction =      "right";                       // Keeps track of the direction the character is facing
     this.lastDirection =  this.direction;                // Keeps track of the last direction the character was facing
     this.jumpSound =      createSound(`${PATH_AUDIO}/sounds/jump.mp3`);
-		CHARACTERS.push(this);
+  }
+
+  /*
+    Every character has the ability to perform an attack.
+  */
+  attack() {
+    let bulletXPos =      0;
+    let bulletYPos =      0;
+    let bulletXVelocity = 0;
+    let bulletYVelocity = 0;
+    let bulletSprite =    "";
+
+    // Determine which way the bullet is moving depending on the character direction
+    if (this.direction === "left"){
+      bulletXPos = this.left - 40;
+      bulletYPos = this.top + 40;
+      bulletXVelocity = -10;
+      bulletYVelocity = 0;
+      bulletSprite = `${PATH_SPRITES}/weapons/ranged/bulletleft.png`
+    }
+    else if (this.direction === "right"){
+      bulletXPos = this.right + 20;
+      bulletYPos = this.top + 40;
+      bulletXVelocity = 10;
+      bulletYVelocity = 0;
+      bulletSprite = `${PATH_SPRITES}/weapons/ranged/bulletright.png`
+    }
+    else if (this.direction === "up" && this.lastDirection === "left"){
+      bulletXPos = this.left - 40;
+      bulletYPos = this.top;
+      bulletXVelocity = 0;
+      bulletYVelocity = -10;
+      bulletSprite = `${PATH_SPRITES}/weapons/ranged/bulletup.png`
+    }
+    else if (this.direction === "up" && this.lastDirection === "right"){
+      bulletXPos = this.right + 20;
+      bulletYPos = this.top;
+      bulletXVelocity = 0;
+      bulletYVelocity = -10;
+      bulletSprite = `${PATH_SPRITES}/weapons/ranged/bulletup.png`
+    }
+
+    // Creating the bullet
+    const bullet = new Bullet({x: bulletXPos, y: bulletYPos, w: 20, h: 20, sprite: {default: bulletSprite}, damage: this.attackDamage});
+    bullet.velocity.x = bulletXVelocity;
+    bullet.velocity.y = bulletYVelocity;
   }
 
   /*
@@ -47,141 +94,30 @@ export class Character extends Entity {
     /* */
   }
 
-  // Draws the character and their HP bars
-  draw() {
-    CTX.drawImage(
-      this.sprite,
-      this.spriteFrame * this.size.w,
-      0,
-      this.size.w,
-      this.size.h,
-      this.position.x,
-      this.position.y,
-      this.size.w,
-      this.size.h
-    );
-		
-    /*
-			Drawing HP bar above the character.
-			HP bar consists of HP shell and remaining HP which is reduced from left to right.
-		*/
-		// Common
-		const HPOffsetFromTop = 		10;
-		// HP Shell properties
-		const HPShellBorderSize = 	2;
-		const HPShellBorderColor =  "#d7d7d7";
-		const HPShellWidth = 				(this.size.w * 2) - (HPShellBorderSize * 2);
-		const HPShellHeight = 			15 - (HPShellBorderSize * 2);
-		const HPShellColor = 				"#262626";
-		const HPShellPositionX = 		this.left - (this.size.w / 2) + HPShellBorderSize;
-		const HPShellPositionY = 		this.top - HPOffsetFromTop - HPShellHeight;
-		// HP Bar properties
-		const HPScale = 						HPShellWidth / this.maxHP;
-		const HPBarWidth = 					this.currentHP * HPScale;
-		const HPBarHeight = 				HPShellHeight;
-		const HPBarColors = 				{healthy: "#09de25", weakened: "#deb009", critical: "#de1709"};
-		let 	HPBarColor = 					null;
-		const HPBarPositionX = 			HPShellPositionX;
-		const HPBarPositionY = 			HPShellPositionY;
-		// Determining HP bar color based on current health percentage
-		const HPRatio = HPBarWidth / HPShellWidth;
-		if (HPRatio > 0.66 && HPRatio <= 1){
-			HPBarColor = HPBarColors.healthy;					// Heath percentage is in healthy range
-		} else if (HPRatio > 0.33 && HPRatio < 0.66){
-			HPBarColor = HPBarColors.weakened;				// Heath percentage is in weakened range
-		} else {
-			HPBarColor = HPBarColors.critical;				// Heath percentage is in critical range
-		}
-
-		// Drawing border
-		Graphics.drawLine({					// Top border
-			x1: HPShellPositionX,
-			y1: HPShellPositionY,
-			x2: HPShellPositionX + HPShellWidth,
-			y2: HPShellPositionY,
-			thickness: HPShellBorderSize,
-			color: HPShellBorderColor
-		});
-		Graphics.drawLine({					// Left border
-			x1: HPShellPositionX,
-			y1: HPShellPositionY,
-			x2: HPShellPositionX,
-			y2: HPShellPositionY + HPShellHeight,
-			thickness: HPShellBorderSize,
-			color: HPShellBorderColor
-		});
-		Graphics.drawLine({					// Right border
-			x1: HPShellPositionX + HPShellWidth,
-			y1: HPShellPositionY,
-			x2: HPShellPositionX + HPShellWidth,
-			y2: HPShellPositionY + HPShellHeight,
-			thickness: HPShellBorderSize,
-			color: HPShellBorderColor
-		});
-		Graphics.drawLine({					// Bottom border
-			x1: HPShellPositionX,
-			y1: HPShellPositionY + HPShellHeight,
-			x2: HPShellPositionX + HPShellWidth,
-			y2: HPShellPositionY + HPShellHeight,
-			thickness: HPShellBorderSize,
-			color: HPShellBorderColor
-		});
-		// Drawing HP Shell
-    Graphics.drawRectangle({
-      x: HPShellPositionX,
-      y: HPShellPositionY,
-      w: HPShellWidth,
-      h: HPShellHeight,
-      color: HPShellColor,
-    });
-		// Drawing HP Bar
-    Graphics.drawRectangle({
-      x: HPBarPositionX,
-      y: HPBarPositionY,
-      w: HPBarWidth,
-      h: HPBarHeight,
-      color: HPBarColor,
-    });
-  }
-
-  // Updating character properties
-  update(){
-    /*
-      Every game character is under the influence of gravity.
-      So, if a character is in the air, meaning if its bottom side is NOT
-      on some kind of platform, then apply the gravity effect.
-    */
-    if (this.top < CANVAS.height){
-      // Increase character velocity Y by GRAVITY amount
-      this.velocity.y = this.velocity.y + GRAVITY;
-    }
-    /*
-      The character top side is less than the canvas height.
-      Character has died and the.
-    */
-    else {
-      this.isDead = true;
-    }
-
+  /*
+    Collision detection for each character
+  */
+  collider2D(){
+    // Collision with platforms
     PLATFORMS.forEach(platform => {
       /*
-        Platform collision detection!
-        The characters' coordinates are constantly compared against the platform coordinates
-        to determine whether it has came into collision with any of the platforms.
-        Collision sides are looked at from the character's perspective.
+        Check if character is colliding with any platform.
+        If it isn't, skip to the next platform.
       */
-      // First check whether the character's next move will be in collision.
-			// If it isn't, move to the next platform
-			if (this.bottom < platform.top || this.top > platform.bottom || this.left > platform.right || this.right < platform.left) return;
+			if (!this.checkCollision(platform)) return;
 
-			/*
-				Check whether the current platform gets destroyed on touch.
-				If it does, then remove it from the array and continue to next element.
-			*/
-			if (platform.destroyOnTouch){
-				PLATFORMS.splice(PLATFORMS.indexOf(platform), 1);
-				return;
-			}
+      /*
+        If player has collided with a platform that gets destroyed on touch,
+        remove the platform.
+      */
+      if (this === PLAYER && platform.destroyOnTouch){
+        removeFromArray(PLATFORMS, this);
+        return;
+      }
+
+      /*
+        Detect from which side the collision occured.
+      */
       if (this.bottom + this.velocity.y > platform.top && this.oldBottom < platform.oldTop){
         // The collision has occured from the bottom (character has landed on a platform).
         this.position.y =           (platform.top - this.size.h) - 0.1;
@@ -223,6 +159,153 @@ export class Character extends Entity {
         }
       }
     });
+
+    // Collision with an enemy character if this === PLAYER
+    if (this === PLAYER && !this.damaged){
+      ENEMIES.forEach(enemy => {
+        if (this.checkCollision(enemy)){
+          this.damaged = 				true;
+          this.currentHP = 			this.currentHP - enemy.contactDamage;
+          if (this.currentHP < 0){
+            this.currentHP = 			0;
+            this.isDead = 				true
+          }
+          setTimeout(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
+        }
+      });
+    }
+
+    // Collision with an orb collectible
+    if (this === PLAYER){
+      ORBS.forEach(orb => {
+        if (this.checkCollision(orb)){
+          orb.checkCollected();
+        }
+      });
+    }
+
+    // Collision with bullets
+    BULLETS.forEach(bullet => {
+      if (this.checkCollision(bullet)){
+          /*
+            Check if the bullet damage is greater than currenHP.
+            If it is, set damage equal to currentHP.
+          */
+          if (this.currentHP - bullet.damage < 0){
+            bullet.damage = this.currentHP;
+          }
+          this.currentHP = this.currentHP - bullet.damage;
+          removeFromArray(BULLETS, bullet);
+          return;
+      }
+    });
+  }
+
+  /*
+    Drawing HP bar above the character.
+    HP bar consists of HP shell and remaining HP which is reduced from left to right.
+  */
+ drawHPBar() {
+    // Common
+    const HPOffsetFromTop = 		10;
+
+    // HP Shell properties
+    const HPShellBorderSize = 	2;
+    const HPShellBorderColor =  "#d7d7d7";
+    const HPShellWidth = 				(this.size.w * 2) - (HPShellBorderSize * 2);
+    const HPShellHeight = 			15 - (HPShellBorderSize * 2);
+    const HPShellColor = 				"#262626";
+    const HPShellPositionX = 		this.left - (this.size.w / 2) + HPShellBorderSize;
+    const HPShellPositionY = 		this.top - HPOffsetFromTop - HPShellHeight;
+
+    // HP Bar properties
+    const HPScale = 						HPShellWidth / this.maxHP;
+    const HPBarWidth = 					this.currentHP * HPScale;
+    const HPBarHeight = 				HPShellHeight;
+    const HPBarColors = 				{healthy: "#09de25", weakened: "#deb009", critical: "#de1709"};
+    let 	HPBarColor = 					null;
+    const HPBarPositionX = 			HPShellPositionX;
+    const HPBarPositionY = 			HPShellPositionY;
+
+    // Determining HP bar color based on current health percentage
+    const HPRatio = HPBarWidth / HPShellWidth;
+    if (HPRatio > 0.66 && HPRatio <= 1){
+      HPBarColor = HPBarColors.healthy;					// Heath percentage is in healthy range
+    }
+    else if (HPRatio > 0.33 && HPRatio < 0.66){
+      HPBarColor = HPBarColors.weakened;				// Heath percentage is in weakened range
+    }
+    else {
+      HPBarColor = HPBarColors.critical;				// Heath percentage is in critical range
+    }
+    Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY, thickness: HPShellBorderSize, color: HPShellBorderColor});      // Top border
+    Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY, x2: HPShellPositionX, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});     // Left border
+    Graphics.drawLine({x1: HPShellPositionX + HPShellWidth, y1: HPShellPositionY, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});     // Right border
+    Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY + HPShellHeight, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});    // Bottom border
+    Graphics.drawRectangle({x: HPShellPositionX, y: HPShellPositionY, w: HPShellWidth, h: HPShellHeight, color: HPShellColor}); // Drawing HP Shell
+    Graphics.drawRectangle({x: HPBarPositionX, y: HPBarPositionY, w: HPBarWidth, h: HPBarHeight, color: HPBarColor});           // Drawing HP Bar
+ }
+
+  // Draws the character and their HP bars
+  draw() {
+    CTX.drawImage(
+      this.currentSprite,
+      this.currentSpriteFrame * this.spriteFrameWidth,
+      0,
+      this.size.w,
+      this.size.h,
+      this.position.x,
+      this.position.y,
+      this.size.w,
+      this.size.h
+    );
+    this.drawHPBar();
+  }
+
+  // Updating character properties
+  update(){
+    /*
+      Every game character is under the influence of gravity.
+      So, if a character is in the air, meaning if its bottom side is NOT
+      on some kind of platform, then apply the gravity effect.
+    */
+    if (this.top < CANVAS.height){
+      // Increase character velocity Y by GRAVITY amount
+      this.velocity.y = this.velocity.y + GRAVITY;
+    }
+    /*
+      The character top side is less than the canvas height.
+      Character has died and the.
+    */
+    else {
+      this.currentHP = 0;
+    }
+
+    /*
+    Checking whether the character current HP is 0.
+    If it is, the character is dead, remove it from the array.
+    */
+    if (this.currentHP <= 0){
+      this.isDead = true;
+      if (this !== PLAYER){
+        removeFromArray(ENEMIES, this);
+      }
+    }
+
+    // Perform collision detection for each character
+    this.collider2D();
+
+    /*
+      Updating character sprite to match the character's current direction.
+      If it's moving leftwards, then change the sprite to be facing left.
+      Same for other directions.
+    */
+    if (this.direction === "left"){
+      this.currentSprite.src = this.sprite.stand.left;
+    }
+    else if (this.direction === "right"){
+      this.currentSprite.src = this.sprite.stand.right;
+    }
     
     /*
       Updating character old sides coordinates to current sides coordinates,

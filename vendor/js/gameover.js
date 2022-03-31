@@ -8,7 +8,7 @@ export function gameOver(){
 	*/
 	GENERIC_OBJECTS.length =		0;
 	PLATFORMS.length =				0;
-	CHARACTERS.length =				0;
+	ENEMIES.length =				0;
 	INGAME =						false;
 	GAME_PAUSED =					false;
 	/*

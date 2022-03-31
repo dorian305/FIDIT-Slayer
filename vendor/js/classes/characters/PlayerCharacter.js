@@ -1,13 +1,13 @@
-import { Character } from "./Character.js";
-import { Graphics } from "../Graphics.js";
-import { createSound } from "../../functions/createsound.js";
+import { Character }    from "./Character.js";
+import { Graphics }     from "../Graphics.js";
+import { createSound }  from "../../functions/createsound.js";
 
 /*
   Class for character which will be controlled by the player
 */
 export class PlayerCharacter extends Character {
-  constructor({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, spriteLength, playerName}){
-    super({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, spriteLength});
+  constructor({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, playerName, attackDamage}){
+    super({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, attackDamage});
     this.name =           playerName;                                       // Name of the player character
     this.deathSound =     createSound(`${PATH_AUDIO}/sounds/death.mp3`);
     this.keys = {
@@ -18,23 +18,11 @@ export class PlayerCharacter extends Character {
     };
   }
 
-  draw() {
-    CTX.drawImage(
-      this.sprite,
-      this.spriteFrame * this.size.w,
-      0,
-      this.size.w,
-      this.size.h,
-      this.position.x,
-      this.position.y,
-      this.size.w,
-      this.size.h
-    );
-		
-    /*
-			Drawing HP bar in the left top corner of the screen
-			HP bar consists of HP shell and remaining HP which is reduced from left to right.
-		*/
+  /*
+    Drawing HP bar in the left top corner of the screen
+    HP bar consists of HP shell and remaining HP which is reduced from left to right.
+  */
+  drawHPBar() {
 		// HP Shell properties
 		const HPShellBorderSize = 	2;
 		const HPShellBorderColor =  "#d7d7d7";
@@ -55,79 +43,19 @@ export class PlayerCharacter extends Character {
 		const HPRatio = HPBarWidth / HPShellWidth;
 		if (HPRatio > 0.66 && HPRatio <= 1){
 			HPBarColor = HPBarColors.healthy;					// Heath percentage is in healthy range
-		} else if (HPRatio > 0.33 && HPRatio < 0.66){
+		}
+    else if (HPRatio > 0.33 && HPRatio < 0.66){
 			HPBarColor = HPBarColors.weakened;				// Heath percentage is in weakened range
-		} else {
+		}
+    else {
 			HPBarColor = HPBarColors.critical;				// Heath percentage is in critical range
 		}
-
-		// Drawing border
-		Graphics.drawLine({					// Top border
-			x1: HPShellPositionX,
-			y1: HPShellPositionY,
-			x2: HPShellPositionX + HPShellWidth,
-			y2: HPShellPositionY,
-			thickness: HPShellBorderSize,
-			color: HPShellBorderColor
-		});
-		Graphics.drawLine({					// Left border
-			x1: HPShellPositionX,
-			y1: HPShellPositionY,
-			x2: HPShellPositionX,
-			y2: HPShellPositionY + HPShellHeight,
-			thickness: HPShellBorderSize,
-			color: HPShellBorderColor
-		});
-		Graphics.drawLine({					// Right border
-			x1: HPShellPositionX + HPShellWidth,
-			y1: HPShellPositionY,
-			x2: HPShellPositionX + HPShellWidth,
-			y2: HPShellPositionY + HPShellHeight,
-			thickness: HPShellBorderSize,
-			color: HPShellBorderColor
-		});
-		Graphics.drawLine({					// Bottom border
-			x1: HPShellPositionX,
-			y1: HPShellPositionY + HPShellHeight,
-			x2: HPShellPositionX + HPShellWidth,
-			y2: HPShellPositionY + HPShellHeight,
-			thickness: HPShellBorderSize,
-			color: HPShellBorderColor
-		});
-		// Drawing HP Shell
-    Graphics.drawText({x: HPShellPositionX - 50, y: HPShellPositionY + 17, size: 35, color: "White", content: "HP", align: "left", font: GAME_FONT});
-    Graphics.drawRectangle({
-      x: HPShellPositionX,
-      y: HPShellPositionY,
-      w: HPShellWidth,
-      h: HPShellHeight,
-      color: HPShellColor,
-    });
-		// Drawing HP Bar
-    Graphics.drawRectangle({
-      x: HPBarPositionX,
-      y: HPBarPositionY,
-      w: HPBarWidth,
-      h: HPBarHeight,
-      color: HPBarColor,
-    });
-  }
-
-  /*
-    Player character to enemy character collision
-    detection. Checks whether the player character
-    has collided with an enemy character, and damages it.
-  */
-  checkEnemyCollision(enemy) {
-    if (!(this.left > enemy.right || this.right < enemy.left || this.top > enemy.bottom || this.bottom < enemy.top) && !this.damaged){
-      this.damaged = 				true;
-			this.currentHP = 			this.currentHP - enemy.contactDamage;
-			if (this.currentHP < 0){
-				this.currentHP = 			0;
-				this.isDead = 				true
-			}
-      setTimeout(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
-    }
+    Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY, thickness: HPShellBorderSize, color: HPShellBorderColor});      // Top border
+    Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY, x2: HPShellPositionX, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});     // Left border
+    Graphics.drawLine({x1: HPShellPositionX + HPShellWidth, y1: HPShellPositionY, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});     // Right border
+    Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY + HPShellHeight, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});    // Bottom border
+    Graphics.drawRectangle({x: HPShellPositionX, y: HPShellPositionY, w: HPShellWidth, h: HPShellHeight, color: HPShellColor}); // Drawing HP Shell
+    Graphics.drawRectangle({x: HPBarPositionX, y: HPBarPositionY, w: HPBarWidth, h: HPBarHeight, color: HPBarColor});           // Drawing HP Bar
   }
 
   printDebugText() {

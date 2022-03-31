@@ -66,6 +66,8 @@ export function pauseGame(){
 	*/
 	else {
 		startRendering();
+		INGAME = true;
+		GAME_PAUSED = false;
 		BUTTONS.length = 0;
 	}	
 }

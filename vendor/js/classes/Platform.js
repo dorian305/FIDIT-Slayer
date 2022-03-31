@@ -55,7 +55,7 @@ export class Platform extends Entity {
       for (let i = 0; i < h; i++){
         for (let j = 0; j < h; j++){
 					if (i + j >= h - 1){
-          new Platform({x: x + (i * GROUND_PLATFORM_SIZE.w), y: y + (j * GROUND_PLATFORM_SIZE.h), w: GROUND_PLATFORM_SIZE.w, h: GROUND_PLATFORM_SIZE.h, sprite: sprite, visible: visible, destroyOnTouch: destroyOnTouch});
+            new Platform({x: x + (i * GROUND_PLATFORM_SIZE.w), y: y + (j * GROUND_PLATFORM_SIZE.h), w: GROUND_PLATFORM_SIZE.w, h: GROUND_PLATFORM_SIZE.h, sprite: sprite, visible: visible, destroyOnTouch: destroyOnTouch});
 					}
         }
       }
@@ -65,7 +65,7 @@ export class Platform extends Entity {
       for (let i = 0; i < h; i++){
         for (let j = 0; j < h; j++){
 					if (i <= j){
-          new Platform({x: x + (i * GROUND_PLATFORM_SIZE.w), y: y + (j * GROUND_PLATFORM_SIZE.h), w: GROUND_PLATFORM_SIZE.w, h: GROUND_PLATFORM_SIZE.h, sprite: sprite, visible: visible, destroyOnTouch: destroyOnTouch});
+            new Platform({x: x + (i * GROUND_PLATFORM_SIZE.w), y: y + (j * GROUND_PLATFORM_SIZE.h), w: GROUND_PLATFORM_SIZE.w, h: GROUND_PLATFORM_SIZE.h, sprite: sprite, visible: visible, destroyOnTouch: destroyOnTouch});
 					}
         }
       }

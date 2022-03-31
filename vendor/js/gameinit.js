@@ -11,7 +11,6 @@ const PATH_AUDIO =				`${PATH_ASSETS}audio/`;
 const PATH_IMAGES =				`${PATH_ASSETS}images/`;
 let PLAYER =                    null;                                        // Player character
 let PLAYER_SIZE =               {w: 35, h: 78};                              // Player character size
-let PLAYER_SPRITE =             `${PATH_SPRITES}playeridleright.png`; 		 // Sprite for player character
 const PLAYER_DAMAGED_DELAY =    2000;                                        // Delay between player taking damages
 let PLAYER_INITIATED_JUMP =     false;                                       // Flag to prevent jump to trigger when holding down spacebar
 let LEFT_WALL =                 null;                                        // Level left wall
@@ -19,11 +18,12 @@ let RIGHT_WALL =                null;                                        // 
 let GAME_PAUSED =               false;                                       // Game state flag (Paused / Resumed)
 let INGAME =					false;										 // Playing a level or not
 let DEBUG_MODE =                false;                                       // Flag for when debug mode is enabled
+const ENEMIES =					[];                                          // Enemy characters in the game
 const PLATFORMS =               [];                                          // All platforms in the game
-const CHARACTERS =				[];                                          // All characters in the game
 const GENERIC_OBJECTS =			[];											 // All generic objects
 const BUTTONS =					[];											 // UI buttons
 const ORBS = 					[];											 // Orbs collectibles. There are orbs of heal, orbs of strength...
+const BULLETS = 				[];											 // Bullets in the game
 let CLICKED_BUTTON =			null;																				 
 const GRAVITY =                 0.6;                                         // Gravity constant, implementation in character class
 let LEVEL_BEGINNING_EDGE =    	null;	                                     // Leftmost edge of the game level
@@ -52,6 +52,16 @@ window.addEventListener("keydown", event => {
 	window.addEventListener(event, e => {
 		if (e.ctrlKey == true) event.preventDefault();
 	}, { passive: false });
+});
+
+/*
+	Player character attack.
+	Clicking left mouse click performs an attack.
+*/
+window.addEventListener("click", e => {
+	if (e.button === 0 && INGAME && !GAME_PAUSED){
+		PLAYER.attack();
+	}
 });
 
 /*

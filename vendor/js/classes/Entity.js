@@ -6,7 +6,7 @@ import { Graphics } from "./Graphics.js";
 	bullets etc...
 */
 export class Entity {
-	constructor({x, y, w, h, sprite, spriteLength, visible}){
+	constructor({x, y, w, h, sprite, visible}){
 		if (this.constructor === Entity){
 			throw new Error(`Cannot instantiate an abstract class "Entity"!`);
 		}
@@ -21,9 +21,12 @@ export class Entity {
 		this.oldTop =         this.top;                      // Keeps track of the old top edge of the entity
 		this.oldBottom =      this.bottom;                   // Keeps track of the old bottom edge of the entity
 		this.velocity =       {x: 0, y: 0};                  // X and Y components of entity velocity (+ = right and down, - = left and up)
-		this.sprite =         Graphics.createImage(sprite);  // Image handler for entity sprite
-		this.spriteLength =	  spriteLength;                  // Number of frames sprite animation consists of
-		this.spriteFrame =    0;                             // Current frame of the animation
+		this.sprite =         sprite;						 // Character sprite
+		this.currentSprite =  Graphics.createImage(sprite.default); // Image handler for sprite that will currently be displayed for a character
+		this.currentSpriteFrame = 0;                         // Current frame of the animation
+		this.spriteWidth = 	  this.currentSprite.width;		 // Width of character sprite
+		this.spriteLength =	  Math.floor(this.spriteWidth / this.size.w); // Number of frames sprite animation consists of
+		this.spriteFrameWidth = Math.floor(this.spriteWidth / this.spriteLength);
 		this.visible =		  visible;				 		 // Determine if entity sprite is drawn
 	}
 
@@ -31,15 +34,19 @@ export class Entity {
 		Collision checking with other objects. Every entity can perform collision check against any other entity.
 	*/
 	checkCollision(other){
-		return !(this.left > other.right || this.right < other.left || this.top > other.bottom || this.bottom < other.top)
+		// Skip other if it's null
+		if (other){
+			return !(this.left + this.velocity.x > other.right || this.right + this.velocity.x < other.left || this.top + this.velocity.y > other.bottom || this.bottom + this.velocity.y < other.top)
+		}
 	}
 
 	// Drawing the entity
 	draw() {
 		// Draw entity sprite if it's not hidden
     	if (this.visible !== false){
-			Graphics.drawImage({x: this.position.x, y: this.position.y, sprite: this.sprite});
+			Graphics.drawImage({x: this.position.x, y: this.position.y, sprite: this.currentSprite});
 		}
+		
 	}
 
 	// Updating entity properties
@@ -56,12 +63,11 @@ export class Entity {
 		this.bottom =           this.position.y + this.size.h;				// Update current bottom to new Y coordinate + height
 
 		// Updating sprite frame for animation
-		if (this.spriteLength === undefined || this.spriteFrame >= this.spriteLength){
-			this.spriteFrame = 0;
+		if (this.currentSpriteFrame >= this.spriteLength){
+			this.currentSpriteFrame = 0;
 		} else {
-			this.spriteFrame = this.spriteFrame + 1;
+			this.currentSpriteFrame = this.currentSpriteFrame + 1;
 		}
-
 		// Draw entity at updated coordinates
 		this.draw();
 	}

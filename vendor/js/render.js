@@ -7,7 +7,7 @@ import { gameOver } from "./gameover.js";
 	Help variables for component velocity
 */
 let PLATFORMS_VELOCITY =             {x: 0, y: 0};                       // Velocity which will apply to all the platforms
-let CHARACTERS_VELOCITY =            {x: 0, y: 0};                       // Velocity which will apply to all the characters
+let ENEMIES_VELOCITY =            	 {x: 0, y: 0};                       // Velocity which will apply to all the enemies
 let GENERIC_OBJECTS_VELOCITY =       {x: 0, y: 0};                       // Velocity which will apply to all the generic objects
 let ORBS_VELOCITY =       			 {x: 0, y: 0};                       // Velocity which will apply to all the orb collectibles;
 
@@ -15,7 +15,6 @@ let ORBS_VELOCITY =       			 {x: 0, y: 0};                       // Velocity wh
 	FPS Restriction setup
 */
 let stop = false;
-let frameCount = 0;
 let fpsInterval, startTime, now, then, elapsed;
 
 function Render(){
@@ -50,8 +49,10 @@ function Render(){
 			// Player holds down A key (Moves left)
 			if (PLAYER.keys.A.pressed && !PLAYER.keys.D.pressed){
 				PLAYER.velocity.x =					-PLAYER.movespeed;
-				PLAYER.lastDirection =				 PLAYER.direction;	 // Update last direction to current direction
-				PLAYER.direction =					 "left";						 // Update current direction
+				if (PLAYER.direction !== "left"){
+					PLAYER.lastDirection =				 PLAYER.direction;	 // Update last direction to current direction
+					PLAYER.direction =					 "left";			 // Update current direction
+				}
 				if (LEFT_WALL.position.x + PLAYER.movespeed > 0){
 					/*
 					The left edge of the left game wall is within viewport, which means that the player character
@@ -62,7 +63,7 @@ function Render(){
 					// Removing velocities of all other game objects
 					GENERIC_OBJECTS_VELOCITY.x =			0;
 					PLATFORMS_VELOCITY.x =					0;
-					CHARACTERS_VELOCITY.x =					0;
+					ENEMIES_VELOCITY.x =					0;
 					ORBS_VELOCITY.x =						0;
 				}
 				/*
@@ -80,7 +81,7 @@ function Render(){
 						// Add right velocity to all other game objects
 						GENERIC_OBJECTS_VELOCITY.x =		PLAYER.movespeed / 2;
 						PLATFORMS_VELOCITY.x =				PLAYER.movespeed;
-						CHARACTERS_VELOCITY.x =				PLAYER.movespeed;
+						ENEMIES_VELOCITY.x =				PLAYER.movespeed;
 						ORBS_VELOCITY.x =					PLAYER.movespeed;
 					}
 					/*
@@ -90,7 +91,7 @@ function Render(){
 					else {
 						GENERIC_OBJECTS_VELOCITY.x =		0;
 						PLATFORMS_VELOCITY.x =				0;
-						CHARACTERS_VELOCITY.x =				0;
+						ENEMIES_VELOCITY.x =				0;
 						ORBS_VELOCITY.x =					0;
 					}
 				}
@@ -101,13 +102,15 @@ function Render(){
 			// Player holds down D key (Moves right)
 			else if (PLAYER.keys.D.pressed && !PLAYER.keys.A.pressed){
 				PLAYER.velocity.x =					PLAYER.movespeed;
-				PLAYER.lastDirection =				PLAYER.direction;
-				PLAYER.direction =					"right";
+				if (PLAYER.direction !== "right"){
+					PLAYER.lastDirection =				PLAYER.direction;
+					PLAYER.direction =					"right";
+				}
 				if (RIGHT_WALL.position.x + RIGHT_WALL.size.w <= CANVAS.width){
 					RIGHT_WALL.position.x =					CANVAS.width - RIGHT_WALL.size.w;
 					GENERIC_OBJECTS_VELOCITY.x =			0;
 					PLATFORMS_VELOCITY.x =					0;
-					CHARACTERS_VELOCITY.x =					0;
+					ENEMIES_VELOCITY.x =					0;
 					ORBS_VELOCITY.x =						0;
 				}
 				else {
@@ -115,13 +118,13 @@ function Render(){
 						PLAYER.velocity.x =                    	  0;
 						GENERIC_OBJECTS_VELOCITY.x =             -PLAYER.movespeed / 2;
 						PLATFORMS_VELOCITY.x =                   -PLAYER.movespeed;
-						CHARACTERS_VELOCITY.x =            		 -PLAYER.movespeed;
+						ENEMIES_VELOCITY.x =            		 -PLAYER.movespeed;
 						ORBS_VELOCITY.x =						 -PLAYER.movespeed;
 					}
 					else {
 						GENERIC_OBJECTS_VELOCITY.x =			0;
 						PLATFORMS_VELOCITY.x =					0;
-						CHARACTERS_VELOCITY.x =					0;
+						ENEMIES_VELOCITY.x =					0;
 						ORBS_VELOCITY.x =						0;
 					}
 				}
@@ -131,7 +134,7 @@ function Render(){
 				PLAYER.velocity.x =					0;
 				GENERIC_OBJECTS_VELOCITY.x =		0;
 				PLATFORMS_VELOCITY.x =				0;
-				CHARACTERS_VELOCITY.x =				0;
+				ENEMIES_VELOCITY.x =				0;
 				ORBS_VELOCITY.x =					0;
 			}
 			/*
@@ -142,40 +145,51 @@ function Render(){
 				Player character is looking upwards
 			*/
 			if (PLAYER.keys.W.pressed){
-				PLAYER.lastDirection =					PLAYER.direction;
-				PLAYER.direction =						"up";
+				if (PLAYER.direction !== "up"){
+					PLAYER.lastDirection =					PLAYER.direction;
+					PLAYER.direction =						"up";
+				}
 			} else {
-				PLAYER.direction =						PLAYER.lastDirection;
-				PLAYER.lastDirection =					"up";
+				
 			}
 			/*
-			This code handles game component drawing,srbija
+			This code handles game component drawing,
 			character to platform collisions, character to enemy collisions,
 			character and platform position updating, generic objects movements etc...
 			*/
 			Graphics.clearScreen();
 			GENERIC_OBJECTS.forEach(genericObject => {
-				genericObject.velocity.x = GENERIC_OBJECTS_VELOCITY.x;
-				genericObject.velocity.y = GENERIC_OBJECTS_VELOCITY.y;
-				genericObject.update();
+				if (genericObject){
+					genericObject.velocity.x = GENERIC_OBJECTS_VELOCITY.x;
+					genericObject.velocity.y = GENERIC_OBJECTS_VELOCITY.y;
+					genericObject.update();
+				}
 			});
 			PLATFORMS.forEach(platform => {
-				platform.velocity.x = PLATFORMS_VELOCITY.x;
-				platform.velocity.y = PLATFORMS_VELOCITY.y;
-				platform.update();
-			});
-			CHARACTERS.forEach(character => {
-				if (character.isEnemy){
-					character.velocity.x = CHARACTERS_VELOCITY.x;
-					PLAYER.checkEnemyCollision(character);
+				if (platform){
+					platform.velocity.x = PLATFORMS_VELOCITY.x;
+					platform.velocity.y = PLATFORMS_VELOCITY.y;
+					platform.update();
 				}
-				character.update();
 			});
+			ENEMIES.forEach(enemy => {
+				if (enemy){
+					enemy.velocity.x = ENEMIES_VELOCITY.x;
+					enemy.update();
+				}
+			});
+			PLAYER.update();
 			ORBS.forEach(orb => {
-				orb.velocity.x = ORBS_VELOCITY.x;
-				orb.velocity.y = ORBS_VELOCITY.y;
-				orb.checkCollected();
-				orb.update();
+				if (orb){
+					orb.velocity.x = ORBS_VELOCITY.x;
+					orb.velocity.y = ORBS_VELOCITY.y;
+					orb.update();
+				}
+			});
+			BULLETS.forEach(bullet => {
+				if (bullet){
+					bullet.update();
+				}
 			});
 			/* */
 			/*

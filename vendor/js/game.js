@@ -1,4 +1,3 @@
-import { MainMenu } 	from "./mainmenu.js";
 import { level1 } 		from "./levels/level1.js";
 
 /*

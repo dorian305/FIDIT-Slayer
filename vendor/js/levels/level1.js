@@ -1,6 +1,6 @@
 import { startRendering } 			from "../render.js";
-import { PlayerCharacter } 			from "../classes/characters/PlayerCharacter.js";
-import { EnemyCharacter } 			from "../classes/characters/EnemyCharacter.js";
+import { PlayerCharacter } 			from "../classes/Characters/PlayerCharacter.js";
+import { EnemyCharacter } 			from "../classes/Characters/EnemyCharacter.js";
 import { Platform } 				from "../classes/Platform.js";
 import { GenericObject }    		from "../classes/GenericObject.js";
 import { OrbOfHealth } 				from "../classes/Orbs/OrbOfHealth.js";
@@ -12,7 +12,8 @@ export function level1(){
 	*/
 	GENERIC_OBJECTS.length =  		0;
 	PLATFORMS.length = 				0;
-	CHARACTERS.length = 			0;
+	ENEMIES.length = 				0;
+	BULLETS.length = 				0;
 	BUTTONS.length = 				0;
 	LEVEL_BEGINNING_EDGE = 			0;
 	LEVEL_END_EDGE = 				12000;
@@ -22,17 +23,25 @@ export function level1(){
 		Setting up properties for level design
 	*/
 	GROUND_PLATFORM_SIZE =    		{w: 50, h: 50}; 								// Ground platform size
-	const ground_sprite = 			`${PATH_SPRITES}level1/ground.png`;  			// Terrain sprites
 	const ground_level = 			CANVAS.height - GROUND_PLATFORM_SIZE.h;			// Ground level
 	const sky_level = 				0;												// Top screen level
+	const ground_sprite = {															// Terrain sprites
+		default: `${PATH_SPRITES}level1/ground.png`,
+	}
 	/*
 		Setting up enemy properties
 	*/
-	let ENEMY_SPRITE = 				`${PATH_SPRITES}level1/enemysmall.png`;
-	let ENEMY_SIZE =          		{w: 35, h: 36};
+	let ENEMY_SIZE =          		{w: 50, h: 50};
+	let ENEMY_SPRITE = {
+		stand: {
+			left: `${PATH_SPRITES}level1/enemystandleft.png`,
+			right: `${PATH_SPRITES}level1/enemystandright.png`,
+		},
+		default: `${PATH_SPRITES}level1/enemystandleft.png`,
+	}
 
 	// Creating background
-	new GenericObject({x: 0, y: 0, w: LEVEL_END_EDGE, h: CANVAS.height, sprite: `${PATH_SPRITES}level1/background.png`});
+	new GenericObject({x: 0, y: 0, w: LEVEL_END_EDGE, h: CANVAS.height, sprite: {default: `${PATH_SPRITES}level1/background.png`}});
 	// Creating terrain
 	LEFT_WALL = Platform.createLeftWall({sprite: ground_sprite});
 	RIGHT_WALL = Platform.createRightWall({sprite: ground_sprite});
@@ -119,14 +128,21 @@ export function level1(){
 	  jumps: 1,
 	  movespeed: 5,
 	  HP: 100.0,
-	  sprite: PLAYER_SPRITE,
-	  playerName: "BloodDrunk"
+	  sprite: {
+		  default: `${PATH_SPRITES}playerstandright.png`,
+		  stand: {
+			  left: `${PATH_SPRITES}playerstandleft.png`,
+			  right: `${PATH_SPRITES}playerstandright.png`,
+		  }
+	  },
+	  playerName: "BloodDrunk",
+	  attackDamage: 20,
 	});
 	/*
 		Creating enemies
 	*/
-	new EnemyCharacter({x: 600, y: CANVAS.height - GROUND_PLATFORM_SIZE.h * 3, w: ENEMY_SIZE.w, h: ENEMY_SIZE.h, jumpHeight: 10, jumps: 1, movespeed: 10, HP: 50, sprite: ENEMY_SPRITE});
-	new OrbOfRejuvenation({x: 500, y: ground_level - 32, w: 32, h: 32, sprite: `${PATH_SPRITES}orbs/orbofheal.png`, healPercentage: 0.5});
+	new EnemyCharacter({x: 600, y: CANVAS.height - GROUND_PLATFORM_SIZE.h * 3, w: ENEMY_SIZE.w, h: ENEMY_SIZE.h, jumpHeight: 10, jumps: 1, movespeed: 5, HP: 50, contactDamage: 20, attackDamage: 5, sprite: ENEMY_SPRITE});
+	new OrbOfRejuvenation({x: 500, y: ground_level - 30, w: 30, h: 30, sprite: {default: `${PATH_SPRITES}orbs/orbofrejuvenation.png`}, healPercentage: 0.5});
 
 	// Start the level rendering
 	startRendering();

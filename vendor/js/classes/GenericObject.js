@@ -6,8 +6,8 @@ import { Entity } from "./Entity.js";
 	not be able to interact with.
 */
 export class GenericObject extends Entity {
-  constructor({x, y, w, h, sprite, spriteLength}){
-    super({x, y, w, h, sprite, spriteLength});
+  constructor({x, y, w, h, sprite}){
+    super({x, y, w, h, sprite});
 		GENERIC_OBJECTS.push(this);
   }
 }
