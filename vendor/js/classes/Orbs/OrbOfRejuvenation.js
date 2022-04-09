@@ -9,7 +9,7 @@ export class OrbOfRejuvenation extends Orb {
         this.healPercentage = healPercentage;                // The amount of HP that will be restored when collecting orb of rejuvenation
     }
     // Player has collected the orb
-    checkCollected(){
+    collect(){
         // Check if player is at full health
         if (PLAYER.currentHP < PLAYER.maxHP){
             // Heal the player

@@ -10,7 +10,7 @@ export class OrbOfHealth extends Orb {
         this.HPIncrease = HPIncrease;                // The amount of HP that will be added to a player total HP
     }
     // Player has collected the orb
-    checkCollected(){
+    collect(){
         // Increase player maxHP
         PLAYER.maxHP = PLAYER.maxHP + this.HPIncrease;
         PLAYER.currentHP = PLAYER.maxHP;

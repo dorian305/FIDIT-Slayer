@@ -22,12 +22,15 @@ export class Entity {
 		this.oldBottom =      this.bottom;                   // Keeps track of the old bottom edge of the entity
 		this.velocity =       {x: 0, y: 0};                  // X and Y components of entity velocity (+ = right and down, - = left and up)
 		this.sprite =         sprite;						 // Character sprite
-		this.currentSprite =  Graphics.createImage(sprite.default); // Image handler for sprite that will currently be displayed for a character
-		this.currentSpriteFrame = 0;                         // Current frame of the animation
-		this.spriteWidth = 	  this.currentSprite.width;		 // Width of character sprite
-		this.spriteLength =	  Math.floor(this.spriteWidth / this.size.w); // Number of frames sprite animation consists of
-		this.spriteFrameWidth = Math.floor(this.spriteWidth / this.spriteLength);
+		this.currentSprite =  Graphics.createImage(this.sprite.default); // Image handler for sprite that will currently be displayed for a character
 		this.visible =		  visible;				 		 // Determine if entity sprite is drawn
+		// Wait until the sprite has loaded
+		this.currentSprite.onload = () => {
+			this.currentSpriteFrame = 		0;                         							// Current frame of the animation
+			this.spriteWidth = 	  			this.currentSprite.width;		 					// Width of character sprite
+			this.spriteLength =	  			Math.floor(this.spriteWidth / this.size.w); 		// Number of frames sprite animation consists of
+			this.spriteFrameWidth = 		Math.floor(this.spriteWidth / this.spriteLength);	// Width of one sprite frame
+		}
 	}
 
 	/*
@@ -44,7 +47,17 @@ export class Entity {
 	draw() {
 		// Draw entity sprite if it's not hidden
     	if (this.visible !== false){
-			Graphics.drawImage({x: this.position.x, y: this.position.y, sprite: this.currentSprite});
+			CTX.drawImage(
+				this.currentSprite,
+				this.currentSpriteFrame * this.spriteFrameWidth,
+				0,
+				this.size.w,
+				this.size.h,
+				this.position.x,
+				this.position.y,
+				this.size.w,
+				this.size.h
+			  );
 		}
 		
 	}
@@ -63,7 +76,7 @@ export class Entity {
 		this.bottom =           this.position.y + this.size.h;				// Update current bottom to new Y coordinate + height
 
 		// Updating sprite frame for animation
-		if (this.currentSpriteFrame >= this.spriteLength){
+		if (this.currentSpriteFrame >= this.spriteLength - 1){
 			this.currentSpriteFrame = 0;
 		} else {
 			this.currentSpriteFrame = this.currentSpriteFrame + 1;

@@ -48,11 +48,7 @@ function Render(){
 			*/
 			// Player holds down A key (Moves left)
 			if (PLAYER.keys.A.pressed && !PLAYER.keys.D.pressed){
-				PLAYER.velocity.x =					-PLAYER.movespeed;
-				if (PLAYER.direction !== "left"){
-					PLAYER.lastDirection =				 PLAYER.direction;	 // Update last direction to current direction
-					PLAYER.direction =					 "left";			 // Update current direction
-				}
+				PLAYER.velocity.x =	-PLAYER.movespeed;
 				if (LEFT_WALL.position.x + PLAYER.movespeed > 0){
 					/*
 					The left edge of the left game wall is within viewport, which means that the player character
@@ -102,10 +98,6 @@ function Render(){
 			// Player holds down D key (Moves right)
 			else if (PLAYER.keys.D.pressed && !PLAYER.keys.A.pressed){
 				PLAYER.velocity.x =					PLAYER.movespeed;
-				if (PLAYER.direction !== "right"){
-					PLAYER.lastDirection =				PLAYER.direction;
-					PLAYER.direction =					"right";
-				}
 				if (RIGHT_WALL.position.x + RIGHT_WALL.size.w <= CANVAS.width){
 					RIGHT_WALL.position.x =					CANVAS.width - RIGHT_WALL.size.w;
 					GENERIC_OBJECTS_VELOCITY.x =			0;
@@ -145,12 +137,9 @@ function Render(){
 				Player character is looking upwards
 			*/
 			if (PLAYER.keys.W.pressed){
-				if (PLAYER.direction !== "up"){
-					PLAYER.lastDirection =					PLAYER.direction;
-					PLAYER.direction =						"up";
-				}
-			} else {
-				
+				PLAYER.direction.up = true;
+			} else if (!PLAYER.keys.W.pressed){
+				PLAYER.direction.up = false;
 			}
 			/*
 			This code handles game component drawing,
@@ -178,7 +167,6 @@ function Render(){
 					enemy.update();
 				}
 			});
-			PLAYER.update();
 			ORBS.forEach(orb => {
 				if (orb){
 					orb.velocity.x = ORBS_VELOCITY.x;
@@ -191,6 +179,7 @@ function Render(){
 					bullet.update();
 				}
 			});
+			PLAYER.update();
 			/* */
 			/*
 			Printing debugging text for player character

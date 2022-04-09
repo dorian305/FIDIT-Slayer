@@ -2,7 +2,7 @@ import { Entity }           from "../Entity.js";
 import { Graphics }         from "../Graphics.js";
 import { createSound }      from "../../functions/createsound.js";
 import { removeFromArray }  from "../../functions/removefromarray.js";
-import { Bullet }           from "../Bullet.js";
+import { Bullet }           from "../Weapons/Bullet.js";
 
 /*
   Abstract class Character which contains properties
@@ -11,7 +11,7 @@ import { Bullet }           from "../Bullet.js";
 */
 export class Character extends Entity {
   constructor({x, y, w, h, sprite, movespeed, HP, jumpHeight, jumps, attackDamage}){
-		super({x, y, w, h, sprite});												 // Calling constructor from the extended class Entity
+    super({x, y, w, h, sprite});												 // Calling constructor from the extended class Entity
     if (this.constructor === Character){
       throw new Error(`Cannot instantiate an abstract class "Character"!`);
     }
@@ -25,9 +25,12 @@ export class Character extends Entity {
     this.isCrouching =    false;                         // Flag tracking whether character is crouching
     this.damaged =        false;                         // Character can be damaged only when this is false
     this.attackDamage =   attackDamage;                  // How much damage character's attack deal
-    this.direction =      "right";                       // Keeps track of the direction the character is facing
-    this.lastDirection =  this.direction;                // Keeps track of the last direction the character was facing
     this.jumpSound =      createSound(`${PATH_AUDIO}/sounds/jump.mp3`);
+    this.direction = {
+      up:     false,
+      left:   false,
+      right:  true,
+    }
   }
 
   /*
@@ -41,33 +44,33 @@ export class Character extends Entity {
     let bulletSprite =    "";
 
     // Determine which way the bullet is moving depending on the character direction
-    if (this.direction === "left"){
+    if (this.direction.up && this.direction.left){
+      bulletXPos = this.left - 40;
+      bulletYPos = this.top;
+      bulletXVelocity = 0;
+      bulletYVelocity = -10;
+      bulletSprite = `${PATH_SPRITES}/weapons/ranged/bulletup.png`
+    }
+    else if (this.direction.up && this.direction.right){
+      bulletXPos = this.right + 20;
+      bulletYPos = this.top;
+      bulletXVelocity = 0;
+      bulletYVelocity = -10;
+      bulletSprite = `${PATH_SPRITES}/weapons/ranged/bulletup.png`
+    }
+    else if (this.direction.left){
       bulletXPos = this.left - 40;
       bulletYPos = this.top + 40;
       bulletXVelocity = -10;
       bulletYVelocity = 0;
       bulletSprite = `${PATH_SPRITES}/weapons/ranged/bulletleft.png`
     }
-    else if (this.direction === "right"){
+    else if (this.direction.right){
       bulletXPos = this.right + 20;
       bulletYPos = this.top + 40;
       bulletXVelocity = 10;
       bulletYVelocity = 0;
       bulletSprite = `${PATH_SPRITES}/weapons/ranged/bulletright.png`
-    }
-    else if (this.direction === "up" && this.lastDirection === "left"){
-      bulletXPos = this.left - 40;
-      bulletYPos = this.top;
-      bulletXVelocity = 0;
-      bulletYVelocity = -10;
-      bulletSprite = `${PATH_SPRITES}/weapons/ranged/bulletup.png`
-    }
-    else if (this.direction === "up" && this.lastDirection === "right"){
-      bulletXPos = this.right + 20;
-      bulletYPos = this.top;
-      bulletXVelocity = 0;
-      bulletYVelocity = -10;
-      bulletSprite = `${PATH_SPRITES}/weapons/ranged/bulletup.png`
     }
 
     // Creating the bullet
@@ -107,55 +110,73 @@ export class Character extends Entity {
 			if (!this.checkCollision(platform)) return;
 
       /*
-        If player has collided with a platform that gets destroyed on touch,
-        remove the platform.
+        Detecting from which side the collision has occured. The reference is character.
       */
-      if (this === PLAYER && platform.destroyOnTouch){
-        removeFromArray(PLATFORMS, this);
-        return;
-      }
+     // Check if collision occured from the left side.
+     if (this.oldLeft > platform.oldRight){
+       // If player has collided with a platform that gets destroyed on touch, remove the platform.
+       if (platform.destroyOnTouch){
+         removeFromArray(PLATFORMS, platform);
+       }
+       else {
+         this.position.x = platform.right + 0.1;
+         this.velocity.x = platform.velocity.x;
+        }
 
-      /*
-        Detect from which side the collision occured.
-      */
-      if (this.bottom + this.velocity.y > platform.top && this.oldBottom < platform.oldTop){
-        // The collision has occured from the bottom (character has landed on a platform).
-        this.position.y =           (platform.top - this.size.h) - 0.1;
-        this.velocity.y =           platform.velocity.y;
-        this.remainingJumps =       this.jumps;
-				// If the platform is invisible and player landed on it, set it to be visible
-				if (platform.visible === false) platform.visible = true;
-        // In debug mode, display red vertical line whenever collision occurs
-        if (this === PLAYER && DEBUG_MODE)
-          Graphics.drawLine({x1: 0, y1: this.position.y + this.size.h, x2: CANVAS.width, y2: this.position.y + this.size.h, thickness: 1, color: 'red'});
-        } 
-      
-      else if (this.top + this.velocity.y < platform.bottom && this.oldTop > platform.oldBottom){
-        // The collision has occured from the top (character has bumped into the platform from below).
-        this.position.y =           platform.bottom + 0.1;
-        this.velocity.y =          -this.velocity.y;
-        // In debug mode, display red vertical line whenever collision occurs
-        if (this === PLAYER && DEBUG_MODE)
-          Graphics.drawLine({x1: 0, y1: this.position.y, x2: CANVAS.width, y2: this.position.y, thickness: 1, color: 'red'});
-        } 
-      
-      else if (this.right + this.velocity.x > platform.left && this.oldRight < platform.oldLeft){
-        // The collision has occured from the right.
-        this.position.x =            (platform.left - this.size.w) - 0.1;
-        this.velocity.x =            platform.velocity.x;
-        // In debug mode, display red vertical line whenever collision occurs
-        if (this === PLAYER && DEBUG_MODE)
-          Graphics.drawLine({x1: this.position.x + this.size.w, y1: 0, x2: this.position.x + this.size.w, y2: CANVAS.height, thickness: 1, color: 'red'});
-        
-      } 
-      
-      else if (this.left + this.velocity.x < platform.right && this.oldLeft > platform.oldRight){
-        // The collision has occured from the left.
-        this.position.x =             platform.right + 0.1;
-        this.velocity.x =             platform.velocity.x;
         // In debug mode, display red vertical line whenever collision occurs
         if (this === PLAYER && DEBUG_MODE){
           Graphics.drawLine({x1: this.position.x, y1: 0, x2: this.position.x, y2: CANVAS.height, thickness: 1, color: 'red'});
+        }
+      }
+
+      // Check if collision occured from the right side.
+      else if (this.oldRight < platform.oldLeft){
+        // If player has collided with a platform that gets destroyed on touch, remove the platform.
+        if (platform.destroyOnTouch){
+          removeFromArray(PLATFORMS, platform);
+        }
+        else {
+          this.position.x = platform.left - this.size.w - 0.1;
+          this.velocity.x = platform.velocity.x;
+        }
+
+        // In debug mode, display red vertical line whenever collision occurs
+        if (this === PLAYER && DEBUG_MODE){
+          Graphics.drawLine({x1: this.position.x + this.size.w, y1: 0, x2: this.position.x + this.size.w, y2: CANVAS.height, thickness: 1, color: 'red'});
+        }
+      }
+
+      // Check if collision occured from the top side (bumping into the platform from below).
+      else if (this.oldTop > platform.oldBottom){
+        // If player has collided with a platform that gets destroyed on touch, remove the platform.
+        if (platform.destroyOnTouch){
+          removeFromArray(PLATFORMS, platform);
+        }
+        else {
+          this.position.y = platform.bottom + 0.1;
+          this.velocity.y = -this.velocity.y;
+        }
+
+        // In debug mode, display red vertical line whenever collision occurs
+        if (this === PLAYER && DEBUG_MODE){
+          Graphics.drawLine({x1: 0, y1: this.position.y, x2: CANVAS.width, y2: this.position.y, thickness: 1, color: 'red'});
+        }
+      }
+
+      // Check if the collision occured from the bottom side (landing on the platform).
+      else if (this.oldBottom < platform.oldTop){
+        this.position.y =     platform.top - this.size.h - 0.1;
+        this.velocity.y =     platform.velocity.y;
+        this.remainingJumps = this.jumps;
+        
+				// If the platform is invisible and player landed on it, set it to be visible
+				if (platform.visible === false){
+          platform.visible = true;
+        }
+
+        // In debug mode, display red vertical line whenever collision occurs
+        if (this === PLAYER && DEBUG_MODE){
+          Graphics.drawLine({x1: 0, y1: this.position.y + this.size.h, x2: CANVAS.width, y2: this.position.y + this.size.h, thickness: 1, color: 'red'});
         }
       }
     });
@@ -167,9 +188,11 @@ export class Character extends Entity {
           this.damaged = 				true;
           this.currentHP = 			this.currentHP - enemy.contactDamage;
           if (this.currentHP < 0){
-            this.currentHP = 			0;
-            this.isDead = 				true
+            this.currentHP = 		0;
+            this.isDead = 			true
           }
+
+          // When the player gets damaged, give PLAYER_DAMAGED_DELAY time before allowing another damage.
           setTimeout(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
         }
       });
@@ -179,7 +202,7 @@ export class Character extends Entity {
     if (this === PLAYER){
       ORBS.forEach(orb => {
         if (this.checkCollision(orb)){
-          orb.checkCollected();
+          orb.collect();
         }
       });
     }
@@ -196,7 +219,6 @@ export class Character extends Entity {
           }
           this.currentHP = this.currentHP - bullet.damage;
           removeFromArray(BULLETS, bullet);
-          return;
       }
     });
   }
@@ -300,11 +322,18 @@ export class Character extends Entity {
       If it's moving leftwards, then change the sprite to be facing left.
       Same for other directions.
     */
-    if (this.direction === "left"){
+    if (this.velocity.x < 0 && !this.direction.left){
+      this.direction.left = true;
+      this.direction.right = false;
       this.currentSprite.src = this.sprite.stand.left;
     }
-    else if (this.direction === "right"){
+    else if (this.velocity.x > 0 && !this.direction.right){
+      this.direction.right = true;
+      this.direction.left = false;
       this.currentSprite.src = this.sprite.stand.right;
+    }
+    else if (this.velocity.x === 0){
+      // ...
     }
     
     /*
