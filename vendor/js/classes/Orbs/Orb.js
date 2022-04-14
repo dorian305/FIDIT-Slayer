@@ -8,18 +8,4 @@ export class Orb extends Entity {
         }
         ORBS.push(this);
     }
-
-    draw() {
-        CTX.drawImage(
-            this.currentSprite,
-            this.currentSpriteFrame * this.spriteFrameWidth,
-            0,
-            this.size.w,
-            this.size.h,
-            this.position.x,
-            this.position.y,
-            this.size.w,
-            this.size.h
-          );
-    }
 }

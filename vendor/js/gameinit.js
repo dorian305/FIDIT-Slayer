@@ -1,20 +1,17 @@
 /*
   Game variables and default settings
 */
-const CANVAS =                  document.querySelector('canvas');           // Canvas element
-const CTX =                     CANVAS.getContext("2d");                    // Canvas context
-CANVAS.width =                  innerWidth;                                 // Setting canvas width to the viewport width
-CANVAS.height =                 innerHeight;                                // Setting canvas height to the viewport height
-const PATH_ASSETS =				"/assets/";									// Absolute path to game assets
-const PATH_SPRITES =			`${PATH_ASSETS}sprites/`;
-const PATH_AUDIO =				`${PATH_ASSETS}audio/`;
-const PATH_IMAGES =				`${PATH_ASSETS}images/`;
+const CANVAS =                  document.querySelector('canvas');            // Canvas element
+const CTX =                     CANVAS.getContext("2d");                     // Canvas context
+const PATH_ASSETS =				"/Assets";									 // Path to game assets
+const PATH_SPRITES =			`${PATH_ASSETS}/Sprites`;					 // Path to sprites
+const PATH_AUDIO =				`${PATH_ASSETS}/Audio`;						 // Path to audio
+const PATH_IMAGES =				`${PATH_ASSETS}/Images`;					 // Path to images
 let PLAYER =                    null;                                        // Player character
-let PLAYER_SIZE =               {w: 35, h: 78};                              // Player character size
+let PLAYER_SIZE =               {w: 63, h: 78};                              // Player character size
 const PLAYER_DAMAGED_DELAY =    2000;                                        // Delay between player taking damages
 let PLAYER_INITIATED_JUMP =     false;                                       // Flag to prevent jump to trigger when holding down spacebar
-let LEFT_WALL =                 null;                                        // Level left wall
-let RIGHT_WALL =                null;                                        // Level right wall
+let CANVAS_EDGES =				{};                                       	 // CANVAS edge positions
 let GAME_PAUSED =               false;                                       // Game state flag (Paused / Resumed)
 let INGAME =					false;										 // Playing a level or not
 let DEBUG_MODE =                false;                                       // Flag for when debug mode is enabled
@@ -23,19 +20,21 @@ const PLATFORMS =               [];                                          // 
 const GENERIC_OBJECTS =			[];											 // All generic objects
 const BUTTONS =					[];											 // UI buttons
 const ORBS = 					[];											 // Orbs collectibles. There are orbs of heal, orbs of strength...
-const BULLETS = 				[];											 // Bullets in the game
-let CLICKED_BUTTON =			null;																				 
+const MISSILES = 				[];											 // Missiles in the game
+const FIREBALLS = 				[];											 // Fireballs in the game
+const EFFECTS = 				[];											 // Effects in the game
+const TIMERS = 					[];											 // Timers in the game
+let CLICKED_BUTTON =			null;										 // Function which will run when a certain button is clicked
 const GRAVITY =                 0.6;                                         // Gravity constant, implementation in character class
 let LEVEL_BEGINNING_EDGE =    	null;	                                     // Leftmost edge of the game level
 let LEVEL_END_EDGE =          	null;	                                     // Rightmost edge of the game level
-let GROUND_PLATFORM_SIZE =    	{w: 50, h: 50};                              // Ground platform size
 const DIMMED_BACKGROUND_COLOR = "#000000b3";								 // Dimmed background color
 const GAME_FONT =				"Consolas";									 // Font which is used for the text in game
 const GAME_FPS =				75;											 // Animation FPS
 let CURRENT_LEVEL =				null;										 // Keeps track of current level
 
 /*
-	Disabling window zoom in / out
+	Disabling window zoom in / out.
 */
 window.addEventListener("keydown", event => {
 		if (event.ctrlKey == true &&
@@ -64,11 +63,6 @@ window.addEventListener("click", e => {
 	}
 });
 
-/*
-	Initializing key events for the game
-	such as jumping, moving left and right, crouching,
-	toggling debug mode etc...
-*/
 ['keydown', 'keyup'].forEach(event => {
 	window.addEventListener(event, e => {
 		// Events are only available if the PLAYER is existing
@@ -102,7 +96,9 @@ window.addEventListener("click", e => {
 				}
 			}
 	
-			// Toggling debug mode
+			/*
+				Toggling debug mode.
+			*/
 			if (e.key.toLowerCase() === "z" && event === "keydown"){
 				DEBUG_MODE = !DEBUG_MODE;
 			}
@@ -117,13 +113,14 @@ window.addEventListener("click", e => {
 ["mousemove", "click"].forEach(event => {
 	window.addEventListener(event, e => {
 		if (BUTTONS){
-			let mouse = {x: e.clientX, y: e.clientY};							// Getting mouse coordinates
+			let mouse = {x: e.clientX, y: e.clientY};	// Getting mouse coordinates
 			/*
 				Looping through each button and checking whether the coordinates of the mouse pointer
 				were inside any of the buttons when the mouse click occured.
 			*/
 			BUTTONS.forEach(button => {
-				if (!(mouse.x < button.position.x || mouse.x > button.position.x + button.size.w || mouse.y < button.position.y || mouse.y > button.position.y + button.size.h)){
+				// -CANVAS_EDGES offset is added to the mouse coordinates because the overlay is drawn with the offset aswell
+				if (!(mouse.x - CANVAS_EDGES.left < button.position.x || mouse.x - CANVAS_EDGES.left > button.position.x + button.size.w || mouse.y - CANVAS_EDGES.top < button.position.y || mouse.y - CANVAS_EDGES.top > button.position.y + button.size.h)){
 					if (event === "click"){
 						/*
 							The click occured on a button, which means the button was clicked.
@@ -144,3 +141,7 @@ window.addEventListener("click", e => {
 		}
 	});
 });
+
+/*
+	Pausing all the timer when the game window is not in focus.
+*/

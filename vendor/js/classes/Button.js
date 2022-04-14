@@ -12,6 +12,11 @@ export class Button {
 		this.text =		      text;							 // Button text content
 		this.action =         action;						 // The function tied to the button's action
 		BUTTONS.push(this);
+
+		// Draw the buttons when the images load
+		this.sprite.onload = () => {
+			this.draw();
+		}
 	}
 
 	draw() {

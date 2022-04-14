@@ -3,7 +3,7 @@ import { Button }		  from "./classes/Button.js";
 import { MainMenu }		  from "./mainmenu.js";
 import { startRendering } from "./render.js";
 
-export function pauseGame(){
+function pauseGame(){
 	GAME_PAUSED = !GAME_PAUSED;									// Update game paused flag
 	/*
 		If flag is true, game has been paused.
@@ -12,16 +12,16 @@ export function pauseGame(){
 	if (GAME_PAUSED){
 		// Dimmed overlay
 		Graphics.drawRectangle({
-			x: 0,
-			y: 0,
-			w: CANVAS.width,
-			h: CANVAS.height,
+			x: -CANVAS_EDGES.left,
+			y: -CANVAS_EDGES.top,
+			w: innerWidth,
+			h: innerHeight,
 			color: DIMMED_BACKGROUND_COLOR
 		});
 		// Title
 		Graphics.drawText({
-			x: CANVAS.width / 2,
-			y: CANVAS.height / 2 - 200,
+			x: -CANVAS_EDGES.left + (innerWidth / 2),
+			y: -CANVAS_EDGES.top + (innerHeight / 2) - 200,
 			size: 100,
 			color: "White",
 			content: `Paused`,
@@ -32,9 +32,9 @@ export function pauseGame(){
 		new Button({
 			w: 200,
 			h: 50,
-			x: CANVAS.width / 2 - 100,
-			y: CANVAS.height / 2 - 25,
-			sprite: `${PATH_IMAGES}button.png`,
+			x: -CANVAS_EDGES.left + (innerWidth / 2) - 100,
+			y: -CANVAS_EDGES.top + (innerHeight / 2) - 25,
+			sprite: `${PATH_IMAGES}/Button.png`,
 			text: "Resume",
 			action: pauseGame
 		});
@@ -42,9 +42,9 @@ export function pauseGame(){
 		new Button({
 			w: 200,
 			h: 50,
-			x: CANVAS.width / 2 - 100,
-			y: CANVAS.height / 2 + 35,
-			sprite: `${PATH_IMAGES}button.png`,
+			x: -CANVAS_EDGES.left + (innerWidth / 2) - 100,
+			y: -CANVAS_EDGES.top + (innerHeight / 2) + 35,
+			sprite: `${PATH_IMAGES}/Button.png`,
 			text: "Restart",
 			action: CURRENT_LEVEL
 		});
@@ -52,13 +52,17 @@ export function pauseGame(){
 		new Button({
 			w: 200,
 			h: 50,
-			x: CANVAS.width / 2 - 100,
-			y: CANVAS.height / 2 + 95,
-			sprite: `${PATH_IMAGES}button.png`,
+			x: -CANVAS_EDGES.left + (innerWidth / 2) - 100,
+			y: -CANVAS_EDGES.top + (innerHeight / 2) + 95,
+			sprite: `${PATH_IMAGES}/Button.png`,
 			text: "Main menu",
 			action: MainMenu
 		});
-		setTimeout(() => BUTTONS.forEach(button => button.draw()), 500);
+
+		// Pause running timers
+		TIMERS.forEach(timer => {
+			if (timer) timer.pause();
+		});
 	}
 	/*
 		Game has been unpaused.
@@ -69,9 +73,17 @@ export function pauseGame(){
 		INGAME = true;
 		GAME_PAUSED = false;
 		BUTTONS.length = 0;
+
+		// Resume timers
+		TIMERS.forEach(timer => {
+			if (timer) timer.resume();
+		});
 	}	
 }
 
+/*
+	Pausing the game.
+*/
 window.addEventListener("keydown", e => {
 	if (e.key.toLowerCase() === "escape" && INGAME){
 		pauseGame();

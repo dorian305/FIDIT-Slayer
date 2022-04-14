@@ -1,34 +1,26 @@
 import { Entity } from "./Entity.js";
 /*
   Platforms in the game.
-  Used as a ground for characters to walk on, 
-	and collision check is performed against platforms.
+  Used as a ground for characters to walk on, as walls, and some can be destroyed using your weapon. 
+  Causes collision!
 */
 export class Platform extends Entity {
-  constructor({x, y, w, h, sprite, visible, destroyOnTouch}){
+  constructor({x, y, w, h, sprite, visible, destroyable, HP, killOnTouch}){
 		super({x, y, w, h, sprite, visible});
-		this.destroyOnTouch = destroyOnTouch;																		// The platform will be destroyed when touched
-    PLATFORMS.push(this);
-  }
+    
+    // If platform can be destroyed, create additional properties
+    if (destroyable){
+      this.destroyable = destroyable;   // The platform can be destroyed
+      this.HP =          HP;            // Platform's HP
+    }
 
-  /*
-    Generating left and right walls in the game.
-    The left wall represents the beginning of the level,
-    while the right wall represents the end of the level.
-  */
-  static createLeftWall({sprite}) {
-		let LEFT_WALL = null;
-    for (let i = 0; i < CANVAS.height / GROUND_PLATFORM_SIZE.h; i++){
-      LEFT_WALL = new Platform({x: LEVEL_BEGINNING_EDGE, y: i * GROUND_PLATFORM_SIZE.h, w: GROUND_PLATFORM_SIZE.w, h: GROUND_PLATFORM_SIZE.h, sprite: sprite});
+    // If platforms kill entity that touches it
+    if (killOnTouch){
+      this.killOnTouch = killOnTouch;;  // Kill any entity that touches the platform immediately
     }
-		return LEFT_WALL;
-  }
-  static createRightWall({sprite}) {
-		let RIGHT_WALL = null;
-    for (let i = 0; i < CANVAS.height / GROUND_PLATFORM_SIZE.h; i++){
-      RIGHT_WALL = new Platform({x: LEVEL_END_EDGE - GROUND_PLATFORM_SIZE.w, y: i * GROUND_PLATFORM_SIZE.h, w: GROUND_PLATFORM_SIZE.w, h: GROUND_PLATFORM_SIZE.h, sprite: sprite});
-    }
-    return RIGHT_WALL;
+
+    // Push platform into array of all platforms
+    PLATFORMS.push(this);
   }
 
   /*
@@ -37,25 +29,30 @@ export class Platform extends Entity {
     So rectangle with width: 5 and height: 5 is going to the the rectangle
     made of 5 units of ground platform along the X and 5 units along the Y axis.
   */
-  static generateRectangle({x, y, w, h, sprite, visible, destroyOnTouch}) {
-    for (let i = 0; i < h; i++){
-      for (let j = 0; j < w; j++){
-        new Platform({x: x + (j * GROUND_PLATFORM_SIZE.w), y: y + (i * GROUND_PLATFORM_SIZE.h), w: GROUND_PLATFORM_SIZE.w, h: GROUND_PLATFORM_SIZE.h, sprite: sprite, visible: visible, destroyOnTouch: destroyOnTouch});
-      }
-    }
+  static generateRectangle({x, y, w, h, sprite, visible, destroyable, HP, killOnTouch}) {
+    new Platform({x: x,
+      y: y,
+      w: w,
+      h: h,
+      sprite: sprite,
+      visible: visible,
+      destroyable: destroyable,
+      HP: HP,
+      killOnTouch: killOnTouch,
+    });
   }
 
   /*
     Creating left and right triangles from individual platforms.
 		The triangles are built from the bottom up!
   */
-  static generateTriangle({x, y, h, direction, sprite, visible, destroyOnTouch}){
+  static generateTriangle({x, y, h, size, direction, sprite, visible, destroyOnTouch}){
     if (direction === "left"){
       // Generating left triangle
       for (let i = 0; i < h; i++){
         for (let j = 0; j < h; j++){
 					if (i + j >= h - 1){
-            new Platform({x: x + (i * GROUND_PLATFORM_SIZE.w), y: y + (j * GROUND_PLATFORM_SIZE.h), w: GROUND_PLATFORM_SIZE.w, h: GROUND_PLATFORM_SIZE.h, sprite: sprite, visible: visible, destroyOnTouch: destroyOnTouch});
+            new Platform({x: x + (i * size.w), y: y + (j * size.h), w: size.w, h: size.h, sprite: sprite, visible: visible, destroyOnTouch: destroyOnTouch});
 					}
         }
       }
@@ -65,7 +62,7 @@ export class Platform extends Entity {
       for (let i = 0; i < h; i++){
         for (let j = 0; j < h; j++){
 					if (i <= j){
-            new Platform({x: x + (i * GROUND_PLATFORM_SIZE.w), y: y + (j * GROUND_PLATFORM_SIZE.h), w: GROUND_PLATFORM_SIZE.w, h: GROUND_PLATFORM_SIZE.h, sprite: sprite, visible: visible, destroyOnTouch: destroyOnTouch});
+            new Platform({x: x + (i * size.w), y: y + (j * size.h), w: size.w, h: size.h, sprite: sprite, visible: visible, destroyOnTouch: destroyOnTouch});
 					}
         }
       }

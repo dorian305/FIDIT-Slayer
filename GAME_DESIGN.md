@@ -44,33 +44,22 @@ The pause screen will dim the background and offer several buttons:
 - Enemies become incrementally harder to kill after each boss defeat
 
 ### Enemy Types
-- Three enemies killed by any weapon
-- Two enemies immune to ranged weapons (bullet armor)
-- Two enemies immune to melee (flying)
-- One enemy immune to all attacks (to be avoided)
-- One general boss design (100% probability of spawn)
+- Melee
+- Ranged
+- Kamikaze
+- 
 
 ### Enemy List
-
-All enemies are reddish in color.
+- Enemies are mostly level-exclusive, though some might reappear at further levels.
 
 - `Studum`: This is the simplest enemy and the first one that shows up. It is as large as the main character and likewise humanoid but looks like a zombie or something. Health: 1; Attack: 1; Speed: 1.
-- `Name2`: 
-- `Name3`: smol and fast
-- 4
-- 5
-- 6
-- 7
-- 8
 
 ### Boss List
-- `Name1` [Levels 1-6]: 
-- `Name2` [Levels 7-9]: 
-- `DLAB` [Level 10]:
+- `Name1`   [Levels 1-6]: 
 
 ### Pick-up List
-- Health | [Very common] 
-- Double damage | [Common], [Time-limited] 
-- Double jump | [Common], [Time-limited] 
-- One-hit K.O. (doesn't work on boss) | [Rare], [Time-limited] 
-- Immunity to all attacks | [Rare], [Time-limited]
+- Orb of Rejuvenation (Health refill) | [Common]
+- Orb of Health (Health increase)     | [Rare]
+- Double damage                | [Rare], [Time-limited] 
+- Double jump                  | [Rare], [Time-limited] 
+- Immunity                     | [Rare], [Time-limited]

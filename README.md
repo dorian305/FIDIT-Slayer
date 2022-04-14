@@ -2,16 +2,17 @@
 A game about REVENGE.
 - Genre: Platformer, Adventure, 2D
 
-### Game controls
-- Move Left (A)
-- Move right (D)
-- Jump (Spacebar)
-- Crouch (S)
-- Pick up weapon (E)
-- Drop weapon (R)
-- Attack (Left mouse button)
-- Pause / Resume (P)
-- Toggle debug mode (Z)
+### Game Controls
+| **Action**             | **Keys**                                                                                       |
+|------------------------|------------------------------------------------------------------------------------------------|
+| Movement               | <kbd>A</kbd> <kbd>D</kbd>                                                                      |
+| Jumping                | <kbd>Spacebar</kbd>                                                                            |
+| Crouching              | <kbd>S</kbd>                                                                                   |
+| Pick up weapon         | <kbd>E</kbd>                                                                                   |
+| Drop weapon            | <kbd>R</kbd>                                                                                   |
+| Attack                 | <kbd>![LMB](https://raw.githubusercontent.com/emre-aki/raycast.js/master/images/lmb.png)</kbd> |
+| Pause/resume           | <kbd>P</kbd>                                                                                   |
+| Toggle debug mode      | <kbd>Z</kbd>                                                                                   |
 
 ## Credits
 ### Code and Story
@@ -27,7 +28,4 @@ A game about REVENGE.
 - 
 
 ### Art
-- 
-
-### External Libraries
 - 

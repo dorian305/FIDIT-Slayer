@@ -10,26 +10,25 @@ export class Entity {
 		if (this.constructor === Entity){
 			throw new Error(`Cannot instantiate an abstract class "Entity"!`);
 		}
-		this.position =       {x, y};                        // Position of the entity (X and Y coordinates)
-    	this.size =           {w, h};                        // Width and height of the entity
-		this.left =           this.position.x;               // Keeps track of the current left edge of the entity
-    	this.right =          this.position.x + this.size.w; // Keeps track of the current right edge of the entity 
-		this.top =            this.position.y;               // Keeps track of the current top edge of the entity
-		this.bottom =         this.position.y + this.size.h; // Keeps track of the current bottom edge of the entity
-		this.oldLeft =        this.left;                     // Keeps track of the old left edge of the entity
-		this.oldRight =       this.right;                    // Keeps track of the old right edge of the entity
-		this.oldTop =         this.top;                      // Keeps track of the old top edge of the entity
-		this.oldBottom =      this.bottom;                   // Keeps track of the old bottom edge of the entity
-		this.velocity =       {x: 0, y: 0};                  // X and Y components of entity velocity (+ = right and down, - = left and up)
-		this.sprite =         sprite;						 // Character sprite
-		this.currentSprite =  Graphics.createImage(this.sprite.default); // Image handler for sprite that will currently be displayed for a character
-		this.visible =		  visible;				 		 // Determine if entity sprite is drawn
-		// Wait until the sprite has loaded
+		this.position =       		{x, y};                        						// Position of the entity (X and Y coordinates)
+    	this.size =           		{w, h};                        						// Width and height of the entity
+		this.left =           		this.position.x;               						// Keeps track of the current left edge of the entity
+    	this.right =          		this.position.x + this.size.w; 						// Keeps track of the current right edge of the entity 
+		this.top =            		this.position.y;               						// Keeps track of the current top edge of the entity
+		this.bottom =         		this.position.y + this.size.h; 						// Keeps track of the current bottom edge of the entity
+		this.oldLeft =        		this.left;                     						// Keeps track of the old left edge of the entity
+		this.oldRight =       		this.right;                    						// Keeps track of the old right edge of the entity
+		this.oldTop =         		this.top;                     					 	// Keeps track of the old top edge of the entity
+		this.oldBottom =      		this.bottom;                   						// Keeps track of the old bottom edge of the entity
+		this.velocity =       		{x: 0, y: 0};                  						// X and Y components of entity velocity (+ = right and down, - = left and up)
+		this.sprite =         		sprite;												// Character sprite
+		this.currentSprite =  		Graphics.createImage(this.sprite.default); 			// Image handler for sprite that will currently be displayed for a character
+		this.visible =		  		visible === false ? visible : true;					// Determine if entity sprite is drawn
 		this.currentSprite.onload = () => {
-			this.currentSpriteFrame = 		0;                         							// Current frame of the animation
-			this.spriteWidth = 	  			this.currentSprite.width;		 					// Width of character sprite
-			this.spriteLength =	  			Math.floor(this.spriteWidth / this.size.w); 		// Number of frames sprite animation consists of
-			this.spriteFrameWidth = 		Math.floor(this.spriteWidth / this.spriteLength);	// Width of one sprite frame
+			this.currentSpriteFrame =	0;                         							// Current frame of the animation
+			this.spriteWidth =	  		this.currentSprite.width;		 					// Width of character sprite
+			this.spriteLength =	  		Math.floor(this.spriteWidth / this.size.w); 		// Number of frames sprite animation consists of
+			this.spriteFrameWidth = 	Math.floor(this.spriteWidth / this.spriteLength);	// Width of one sprite frame
 		}
 	}
 
@@ -40,6 +39,19 @@ export class Entity {
 		// Skip other if it's null
 		if (other){
 			return !(this.left + this.velocity.x > other.right || this.right + this.velocity.x < other.left || this.top + this.velocity.y > other.bottom || this.bottom + this.velocity.y < other.top)
+		}
+	}
+
+	/*
+		Updating sprite.
+		Every frame, the new sprite frame is calculated based on current frame count
+		times the width of the entity sprite frame.
+	*/
+	updateSprite(){
+		if (this.currentSpriteFrame >= this.spriteLength - 1){
+			this.currentSpriteFrame = 0;
+		} else {
+			this.currentSpriteFrame = this.currentSpriteFrame + 1;
 		}
 	}
 
@@ -75,12 +87,9 @@ export class Entity {
 		this.top =              this.position.y;							// Update current top to new Y coordinate
 		this.bottom =           this.position.y + this.size.h;				// Update current bottom to new Y coordinate + height
 
-		// Updating sprite frame for animation
-		if (this.currentSpriteFrame >= this.spriteLength - 1){
-			this.currentSpriteFrame = 0;
-		} else {
-			this.currentSpriteFrame = this.currentSpriteFrame + 1;
-		}
+		// Periodically updating entity sprite
+		this.updateSprite();
+		
 		// Draw entity at updated coordinates
 		this.draw();
 	}

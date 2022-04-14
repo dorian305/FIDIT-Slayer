@@ -1,17 +1,6 @@
 import { Graphics } from "./classes/Graphics.js";
 import { gameOver } from "./gameover.js";
 /*
-  This is an animation file which handles periodic redrawing of the game components, such as platforms, characters, background
-*/
-/*
-	Help variables for component velocity
-*/
-let PLATFORMS_VELOCITY =             {x: 0, y: 0};                       // Velocity which will apply to all the platforms
-let ENEMIES_VELOCITY =            	 {x: 0, y: 0};                       // Velocity which will apply to all the enemies
-let GENERIC_OBJECTS_VELOCITY =       {x: 0, y: 0};                       // Velocity which will apply to all the generic objects
-let ORBS_VELOCITY =       			 {x: 0, y: 0};                       // Velocity which will apply to all the orb collectibles;
-
-/*
 	FPS Restriction setup
 */
 let stop = false;
@@ -43,94 +32,50 @@ function Render(){
 		// Player is playing a game and the game is not paused
 	  	if (INGAME && !GAME_PAUSED){
 			/*
-			This piece of code handles player character movement,
-			and movement of any other game object in relation to the player character movement.
+				This piece of code handles player character movement and camera following the player.
 			*/
 			// Player holds down A key (Moves left)
-			if (PLAYER.keys.A.pressed && !PLAYER.keys.D.pressed){
-				PLAYER.velocity.x =	-PLAYER.movespeed;
-				if (LEFT_WALL.position.x + PLAYER.movespeed > 0){
-					/*
-					The left edge of the left game wall is within viewport, which means that the player character
-					is at the beginning of the level, on the left side of the screen.
-					Allow player character to move left and right, and do not move other game objects.
-					*/
-					LEFT_WALL.position.x =					0;          				 // Fixating left wall to the correct position
-					// Removing velocities of all other game objects
-					GENERIC_OBJECTS_VELOCITY.x =			0;
-					PLATFORMS_VELOCITY.x =					0;
-					ENEMIES_VELOCITY.x =					0;
-					ORBS_VELOCITY.x =						0;
+			if (PLAYER.keys.A.pressed && !PLAYER.keys.D.pressed && !PLAYER.keys.W.pressed){
+				PLAYER.velocity.x =	-PLAYER.movespeed;		// Set player X velocity to negative movespeed
+				/*
+					Preventing moving further leftwards than the left edge of the game.
+				*/
+				if (CANVAS_EDGES.left + PLAYER.movespeed > 0){
+					CANVAS_EDGES.left = 0;
+					CANVAS_EDGES.right = LEVEL_END_EDGE;
 				}
 				/*
-					The left edge of the left wall is out of viewport, which means player character is
-					not at the beginning of the level.
+					Move camera leftwards only if player is at least halfway through the screen width.
 				*/
-				else {
-					/*
-					Check first if, when the player character starts moving leftwards,
-					that the its left edge is past the middle line of the screen.
-					If so, remove its velocity and move all other game objects to the right.
-					*/
-					if (PLAYER.left <= CANVAS.width / 2 - PLAYER.size.w / 2){
-						PLAYER.velocity.x =					0;        					// Fixate player character
-						// Add right velocity to all other game objects
-						GENERIC_OBJECTS_VELOCITY.x =		PLAYER.movespeed / 2;
-						PLATFORMS_VELOCITY.x =				PLAYER.movespeed;
-						ENEMIES_VELOCITY.x =				PLAYER.movespeed;
-						ORBS_VELOCITY.x =					PLAYER.movespeed;
-					}
-					/*
-					Player character isn't past the middle line of the screen, do not remove
-					its velocity, but also do not move any other game objects.
-					*/
-					else {
-						GENERIC_OBJECTS_VELOCITY.x =		0;
-						PLATFORMS_VELOCITY.x =				0;
-						ENEMIES_VELOCITY.x =				0;
-						ORBS_VELOCITY.x =					0;
-					}
+				else if (PLAYER.left <= -CANVAS_EDGES.left + innerWidth / 2 - PLAYER.size.w / 2) {
+					CANVAS_EDGES.left = CANVAS_EDGES.left + PLAYER.movespeed;
+					CANVAS_EDGES.right = CANVAS_EDGES.right + PLAYER.movespeed;
 				}
 			}
-			/*
-			Same thing but for the right side.
-			*/
 			// Player holds down D key (Moves right)
-			else if (PLAYER.keys.D.pressed && !PLAYER.keys.A.pressed){
-				PLAYER.velocity.x =					PLAYER.movespeed;
-				if (RIGHT_WALL.position.x + RIGHT_WALL.size.w <= CANVAS.width){
-					RIGHT_WALL.position.x =					CANVAS.width - RIGHT_WALL.size.w;
-					GENERIC_OBJECTS_VELOCITY.x =			0;
-					PLATFORMS_VELOCITY.x =					0;
-					ENEMIES_VELOCITY.x =					0;
-					ORBS_VELOCITY.x =						0;
+			else if (PLAYER.keys.D.pressed && !PLAYER.keys.A.pressed && !PLAYER.keys.W.pressed){
+				PLAYER.velocity.x =	PLAYER.movespeed;		// Set player X velocity to movespeed
+				/*
+				Preventing moving further rightwards than the right edge of the game.
+				*/
+				if (CANVAS_EDGES.right - PLAYER.movespeed < innerWidth){
+					CANVAS_EDGES.left = innerWidth - LEVEL_END_EDGE;
+					CANVAS_EDGES.right = innerWidth;
 				}
-				else {
-					if (PLAYER.right >= CANVAS.width / 2 + PLAYER.size.w / 2){
-						PLAYER.velocity.x =                    	  0;
-						GENERIC_OBJECTS_VELOCITY.x =             -PLAYER.movespeed / 2;
-						PLATFORMS_VELOCITY.x =                   -PLAYER.movespeed;
-						ENEMIES_VELOCITY.x =            		 -PLAYER.movespeed;
-						ORBS_VELOCITY.x =						 -PLAYER.movespeed;
-					}
-					else {
-						GENERIC_OBJECTS_VELOCITY.x =			0;
-						PLATFORMS_VELOCITY.x =					0;
-						ENEMIES_VELOCITY.x =					0;
-						ORBS_VELOCITY.x =						0;
-					}
+				/*
+					Move camera rightwards only if player is at least halfway through the screen width.
+				*/
+				else if (PLAYER.right >= -CANVAS_EDGES.left + innerWidth / 2 + PLAYER.size.w / 2){
+					CANVAS_EDGES.left = CANVAS_EDGES.left - PLAYER.movespeed;
+					CANVAS_EDGES.right = CANVAS_EDGES.right - PLAYER.movespeed;
 				}
 			}
-			// Player isn't holding down A nor D key (Stationary)
+			// Player isn't holding down A nor D key, or is aiming upwards (Stationary)
 			else {
-				PLAYER.velocity.x =					0;
-				GENERIC_OBJECTS_VELOCITY.x =		0;
-				PLATFORMS_VELOCITY.x =				0;
-				ENEMIES_VELOCITY.x =				0;
-				ORBS_VELOCITY.x =					0;
+				PLAYER.velocity.x = 0;
 			}
 			/*
-			Player character is crouching by holding down the S key.
+				Player character is crouching by holding down the S key.
 			*/
 			PLAYER.isCrouching = PLAYER.keys.S.pressed || false;
 			/*
@@ -141,49 +86,38 @@ function Render(){
 			} else if (!PLAYER.keys.W.pressed){
 				PLAYER.direction.up = false;
 			}
+			
 			/*
-			This code handles game component drawing,
-			character to platform collisions, character to enemy collisions,
-			character and platform position updating, generic objects movements etc...
+				Render the game objects and update their properties every frame.
 			*/
+			CANVAS.style.marginLeft = 	`${CANVAS_EDGES.left}px`;
+			CANVAS.style.marginTop =	`${CANVAS_EDGES.top}px`;
 			Graphics.clearScreen();
 			GENERIC_OBJECTS.forEach(genericObject => {
-				if (genericObject){
-					genericObject.velocity.x = GENERIC_OBJECTS_VELOCITY.x;
-					genericObject.velocity.y = GENERIC_OBJECTS_VELOCITY.y;
-					genericObject.update();
-				}
+				if (genericObject) genericObject.update();
 			});
 			PLATFORMS.forEach(platform => {
-				if (platform){
-					platform.velocity.x = PLATFORMS_VELOCITY.x;
-					platform.velocity.y = PLATFORMS_VELOCITY.y;
-					platform.update();
-				}
+				if (platform) platform.update();
 			});
 			ENEMIES.forEach(enemy => {
-				if (enemy){
-					enemy.velocity.x = ENEMIES_VELOCITY.x;
-					enemy.update();
-				}
+				if (enemy) enemy.update();
 			});
 			ORBS.forEach(orb => {
-				if (orb){
-					orb.velocity.x = ORBS_VELOCITY.x;
-					orb.velocity.y = ORBS_VELOCITY.y;
-					orb.update();
-				}
+				if (orb) orb.update();
 			});
-			BULLETS.forEach(bullet => {
-				if (bullet){
-					bullet.update();
-				}
+			MISSILES.forEach(bullet => {
+				if (bullet) bullet.update();
+			});
+			EFFECTS.forEach(effect => {
+				if (effect) effect.update();
+			});
+			FIREBALLS.forEach(fireball => {
+				if (fireball) fireball.update();
 			});
 			PLAYER.update();
-			/* */
+
 			/*
-			Printing debugging text for player character
-			if debug mode is turned on
+				Printing debugging text for player character if debug mode is turned on.
 			*/
 			if (DEBUG_MODE){
 				PLAYER.printDebugText();
