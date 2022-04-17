@@ -68,9 +68,9 @@ export class PlayerCharacter extends Character {
       When this is enabled, player character properties are displayed on the screen.
     */
     Graphics.drawText({x: -CANVAS_EDGES.left + 100, y: -CANVAS_EDGES.top + 125, size: 20, color: "yellow", content: `DEBUG MODE ENABLED`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 150, size: 15, color: "yellow", content: `Position =      (${this.position.x}, ${this.position.y})`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 170, size: 15, color: "yellow", content: `Velocity =      (${this.velocity.x}, ${this.velocity.y})`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 190, size: 15, color: "yellow", content: `W and H =       (${this.size.w}, ${this.size.h})`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 150, size: 15, color: "yellow", content: `Position =     (${this.position.x}, ${this.position.y})`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 170, size: 15, color: "yellow", content: `Velocity =     (${this.velocity.x}, ${this.velocity.y})`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 190, size: 15, color: "yellow", content: `W and H =      (${this.size.w}, ${this.size.h})`, align: "left", font: "Consolas"});
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 210, size: 15, color: "yellow", content: `Left =          ${this.left}`, align: "left", font: "Consolas"});
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 230, size: 15, color: "yellow", content: `Right =         ${this.right}`, align: "left", font: "Consolas"});
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 250, size: 15, color: "yellow", content: `Top =           ${this.top}`, align: "left", font: "Consolas"});
@@ -82,8 +82,8 @@ export class PlayerCharacter extends Character {
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 370, size: 15, color: "yellow", content: `Remaining =     ${this.remainingJumps}`, align: "left", font: "Consolas"});
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 390, size: 15, color: "yellow", content: `Crouching =     ${this.isCrouching}`, align: "left", font: "Consolas"});
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 410, size: 15, color: "yellow", content: `Damaged =       ${this.damaged}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 430, size: 15, color: "yellow", content: `Keys =          (W: ${this.keys.W.pressed}, A: ${this.keys.A.pressed}, S: ${this.keys.S.pressed}, D: ${this.keys.D.pressed})`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 450, size: 15, color: "yellow", content: `Facing =        (Up: ${this.direction.up}, Left: ${this.direction.left}, Right: ${this.direction.right})`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 430, size: 15, color: "yellow", content: `Keys =         (W: ${this.keys.W.pressed}, A: ${this.keys.A.pressed}, S: ${this.keys.S.pressed}, D: ${this.keys.D.pressed})`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 450, size: 15, color: "yellow", content: `Facing =       (Up: ${this.direction.up}, Left: ${this.direction.left}, Right: ${this.direction.right})`, align: "left", font: "Consolas"});
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 470, size: 15, color: "yellow", content: `Visible =       ${this.visible}`, align: "left", font: "Consolas"});
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 490, size: 15, color: "yellow", content: `Weapon =        ${this.weapon.name}`, align: "left", font: "Consolas"});
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 510, size: 15, color: "yellow", content: `Damage =        ${this.weapon.damage}`, align: "left", font: "Consolas"});

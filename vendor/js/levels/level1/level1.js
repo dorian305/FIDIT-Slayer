@@ -155,35 +155,30 @@ export function level1(){
 		movespeed: 5,
 		HP: 100.0,
 		sprite: {
-			stand: {
-				left: `${PATH_SPRITES}/Player/PlayerStandLeft.png`,
-				right: `${PATH_SPRITES}/Player/PlayerStandRight.png`,
+			idle: {
+				left: `${PATH_SPRITES}/Player/PlayerIdleLeft.png`,
+				right: `${PATH_SPRITES}/Player/PlayerIdleRight.png`,
 			},
-			default: `${PATH_SPRITES}/Player/PlayerStandRight.png`,
+			move: {
+				left: `${PATH_SPRITES}/Player/PlayerMoveLeft.png`,
+				right: `${PATH_SPRITES}/Player/PlayerMoveRight.png`,
+			},
+			default: `${PATH_SPRITES}/Player/PlayerIdleRight.png`,
 		},
 		playerName: "Dorian",
 		weapon: new Weapon({
-			x: 125,
-			y: 0,
-			w: 30,
-			h: 24,
-			sprite: {
-				left: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/WeaponLeft.png`,
-				right: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/WeaponRight.png`,
-				missile: {
-					left: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/MissileLeft.png`,
-					right: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/MissileRight.png`,
-					up: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/MissileUp.png`,
-				},
-				fire: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/FiredLeft.png`,
-				default: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/WeaponRight.png`,
-			},
 			name: "Izanagi",
 			damage: 20,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izanagi/Fire.mp3`),
 			missileSpeed: 15,
 			missileSize: {w: 21, h: 10},
 			fireEffectSize: {w: 64, h: 64},
+			missileSprite: {
+				left: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/MissileLeft.png`,
+				right: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/MissileRight.png`,
+				up: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/MissileUp.png`,
+				fire: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/FiredLeft.png`,
+			},
 		}),
 	});
 	/*

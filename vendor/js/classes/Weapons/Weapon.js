@@ -1,4 +1,3 @@
-import { Entity }       from "../Entity.js";
 import { Missile }      from "./Missile.js";
 import { Effect }       from "../Effect.js";
 import { stopSound }    from "../../functions/stopsound.js";
@@ -6,15 +5,15 @@ import { stopSound }    from "../../functions/stopsound.js";
 /*
     Instantiate a new weapon instance from this class. Weapons have their sound, sprite animation, damage...
 */
-export class Weapon extends Entity {
-    constructor({x, y, w, h, sprite, name, damage, sound, missileSpeed, missileSize, fireEffectSize}){
-        super({x, y, w, h, sprite});
+export class Weapon {
+    constructor({name, damage, sound, missileSpeed, missileSize, fireEffectSize, missileSprite}){
         this.name =             name;
         this.damage =           damage;
         this.sound =            sound;
         this.missileSpeed =     missileSpeed;
         this.missileSize =      missileSize;
         this.fireEffectSize =   fireEffectSize;
+        this.missileSprite =    missileSprite;
     }
 
     // Executing weapon's attack
@@ -40,7 +39,7 @@ export class Weapon extends Entity {
 			w: this.fireEffectSize.w,
 			h: this.fireEffectSize.h,
 			sprite: {
-				default: this.sprite.fire,
+				default: this.missileSprite.fire,
 			},
 		});
 

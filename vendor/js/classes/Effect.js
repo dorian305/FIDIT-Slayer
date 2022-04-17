@@ -10,7 +10,7 @@ export class Effect extends Entity {
         EFFECTS.push(this);
     }
 
-    updateSprite(){
+    updateSpriteFrame(){
 		if (this.currentSpriteFrame >= this.spriteLength - 1){
 			this.currentSpriteFrame = 0;
             removeFromArray(EFFECTS, this);

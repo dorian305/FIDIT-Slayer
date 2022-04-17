@@ -23,7 +23,6 @@ export class Fireball extends Entity {
         else {
             this.currentSprite.src = this.sprite.down;
         }
-        this.updateSprite();
         
         this.oldLeft =          this.left;
         this.oldRight =         this.right;

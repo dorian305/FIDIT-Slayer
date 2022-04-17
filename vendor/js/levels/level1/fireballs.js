@@ -22,7 +22,7 @@ export const spawnFireballs = () => {
         fireball.velocity.y = -10 * randomNumber(2, 3);
         
         // When current fireball gets destroyed, spawn another one
-        const fireballTimer = new Timer(() => spawnFireball({x: x, y: y}), 2000 * randomNumber(1, 2));
+        const fireballTimer = new Timer(() => spawnFireball({x: x, y: y}), 1500 * randomNumber(1, 2));
         fireballTimer.start();
     }
 

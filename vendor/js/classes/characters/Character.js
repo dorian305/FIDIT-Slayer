@@ -50,7 +50,7 @@ export class Character extends Entity {
           missileVelocity.x =   0;
           missileVelocity.y =  -this.weapon.missileSpeed;
           missileSize =         {w: this.weapon.missileSize.h, h: this.weapon.missileSize.w};
-          missileSprite =       this.weapon.sprite.missile.up;
+          missileSprite =       this.weapon.missileSprite.up;
       }
       else if (this.direction.up && this.direction.right){
           missilePosition.x =   this.right + 10;
@@ -58,7 +58,7 @@ export class Character extends Entity {
           missileVelocity.x =   0;
           missileVelocity.y =  -this.weapon.missileSpeed;
           missileSize =         {w: this.weapon.missileSize.h, h: this.weapon.missileSize.w};
-          missileSprite =       this.weapon.sprite.missile.up;
+          missileSprite =       this.weapon.missileSprite.up;
       }
       else if (this.direction.left){
           missilePosition.x =   this.left - this.weapon.missileSize.w;
@@ -66,7 +66,7 @@ export class Character extends Entity {
           missileVelocity.x =  -this.weapon.missileSpeed;
           missileVelocity.y =   0;
           missileSize =         {w: this.weapon.missileSize.w, h: this.weapon.missileSize.h};
-          missileSprite =       this.weapon.sprite.missile.left;
+          missileSprite =       this.weapon.missileSprite.left;
           }
       else if (this.direction.right){
           missilePosition.x =   this.right + 10;
@@ -74,9 +74,8 @@ export class Character extends Entity {
           missileVelocity.x =   this.weapon.missileSpeed;
           missileVelocity.y =   0;
           missileSize =         {w: this.weapon.missileSize.w, h: this.weapon.missileSize.h};
-          missileSprite =       this.weapon.sprite.missile.right;
+          missileSprite =       this.weapon.missileSprite.right;
       }
-
       this.weapon.attack({missileSprite, missilePosition, missileVelocity, missileSize});
     }
   }
@@ -88,7 +87,7 @@ export class Character extends Entity {
     another jump can't be initiated).
   */
   jump() {
-    if (!this.isCrouching && this.remainingJumps > 0 && this.velocity.y <= 3){
+    if (!this.isCrouching && !this.direction.up && this.remainingJumps > 0 && this.velocity.y <= 3){
       this.velocity.y =       0;                                     // Reset Y velocity whenever new jump is initiated (allows clean jump)
       this.velocity.y =       this.velocity.y - this.jumpHeight;     // Move character upwards
       if (!DEBUG_MODE){
@@ -339,30 +338,41 @@ export class Character extends Entity {
     this.collider2D();
 
     /*
-      Updating character sprite to match the character's current direction.
-      If it's moving leftwards, then change the sprite to be facing left.
-      Same for other directions.
+      Updating character's facing direction depending on its X velocity.
+      If it's negative, character is facing left. Otherwise character is facing right.
     */
     if (this.velocity.x < 0 && !this.direction.left){
       this.direction.left = true;
       this.direction.right = false;
-      this.currentSprite.src = this.sprite.stand.left;
     }
     else if (this.velocity.x > 0 && !this.direction.right){
       this.direction.right = true;
       this.direction.left = false;
-      this.currentSprite.src = this.sprite.stand.right;
     }
-    else if (this.velocity.x === 0){
-      if (this.direction.left){
-        this.currentSprite.src = this.sprite.stand.left;
+    
+    /*
+      Updating character's current sprite to match its direction.
+    */
+    if (this.direction.left){
+      if (this.velocity.x === 0 && this.currentSpriteSrc !== this.sprite.idle.left){
+        this.currentSpriteSrc = this.sprite.idle.left;
+        this.currentSprite.src = this.currentSpriteSrc;
+      } else if (this.velocity.x < 0 && this.currentSpriteSrc !== this.sprite.move.left){
+        this.currentSpriteSrc = this.sprite.move.left;
+        this.currentSprite.src = this.currentSpriteSrc;
       }
-      else if (this.direction.right){
-        this.currentSprite.src = this.sprite.stand.right;
+    }
+    else if (this.direction.right){
+      if (this.velocity.x === 0 && this.currentSpriteSrc !== this.sprite.idle.right){
+        this.currentSpriteSrc = this.sprite.idle.right;
+        this.currentSprite.src = this.currentSpriteSrc;
+      } else if (this.velocity.x > 0 && this.currentSpriteSrc !== this.sprite.move.right){
+        this.currentSpriteSrc = this.sprite.move.right;
+        this.currentSprite.src = this.currentSpriteSrc;
       }
     }
 
-    this.updateSprite();
+    this.updateSpriteFrame();
     
     /*
       Updating character old sides coordinates to current sides coordinates,
