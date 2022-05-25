@@ -3,6 +3,7 @@ import { Graphics }         from "../Graphics.js";
 import { removeFromArray }  from "../../functions/removefromarray.js";
 import { stopSound }        from "../../functions/stopsound.js";
 import { randomNumber }     from "../../functions/randomnumber.js";
+import { Timer }            from "../Timer.js";
 
 /*
   Abstract class Character which contains properties
@@ -356,23 +357,26 @@ export class Character extends Entity {
     if (this.direction.left){
       if (this.velocity.x === 0 && this.currentSpriteSrc !== this.sprite.idle.left){
         this.currentSpriteSrc = this.sprite.idle.left;
-        this.currentSprite.src = this.currentSpriteSrc;
       } else if (this.velocity.x < 0 && this.currentSpriteSrc !== this.sprite.move.left){
         this.currentSpriteSrc = this.sprite.move.left;
-        this.currentSprite.src = this.currentSpriteSrc;
       }
     }
     else if (this.direction.right){
       if (this.velocity.x === 0 && this.currentSpriteSrc !== this.sprite.idle.right){
         this.currentSpriteSrc = this.sprite.idle.right;
-        this.currentSprite.src = this.currentSpriteSrc;
       } else if (this.velocity.x > 0 && this.currentSpriteSrc !== this.sprite.move.right){
         this.currentSpriteSrc = this.sprite.move.right;
-        this.currentSprite.src = this.currentSpriteSrc;
       }
     }
 
     this.updateSpriteFrame();
+
+    /*
+      Perform these operations only if the character is an enemy.
+    */
+    if (this.isEnemy){
+      this.patrol();
+    }
     
     /*
       Updating character old sides coordinates to current sides coordinates,

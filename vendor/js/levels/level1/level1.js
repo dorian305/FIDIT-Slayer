@@ -34,11 +34,15 @@ export function level1(){
 		bottom: CANVAS.height,
 	}
 	const ENEMY_SPRITE = {								// Setting sprites for the enemy characters
-		stand: {
-			left: `${PATH_SPRITES}/Level 1/EnemyStandLeft.png`,
-			right: `${PATH_SPRITES}/Level 1/EnemyStandRight.png`,
+		idle: {
+			left: `${PATH_SPRITES}/Player/PlayerIdleLeft.png`,
+			right: `${PATH_SPRITES}/Player/PlayerIdleRight.png`,
 		},
-		default: `${PATH_SPRITES}/Level 1/EnemyStandLeft.png`,
+		move: {
+			left: `${PATH_SPRITES}/Player/PlayerMoveLeft.png`,
+			right: `${PATH_SPRITES}/Player/PlayerMoveRight.png`,
+		},
+		default: `${PATH_SPRITES}/Player/PlayerIdleRight.png`,
 	}
 	// Clearing all timers
 	TIMERS.forEach(timer => {
@@ -184,7 +188,20 @@ export function level1(){
 	/*
 		Creating enemy characters.
 	*/
-
+	new EnemyCharacter({
+		x: 1700,
+		y: 650,
+		w: PLAYER_SIZE.w,
+		h: PLAYER_SIZE.h,
+		jumpHeight: 10,
+		jumps: 1,
+		movespeed: 2,
+		HP: 300,
+		sprite: ENEMY_SPRITE,
+		contactDamage: 18,
+		patrolDistance: 300,
+		attackCooldown: 3000,
+	});
 	/*
 		Creating Orb Of Health.
 	*/

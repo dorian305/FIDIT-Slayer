@@ -10,8 +10,8 @@ export class PlayerCharacter extends Character {
     super({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, weapon});
     this.name =           playerName;                                       // Name of the player character
     // this.deathSound =  createSound(`${PATH_AUDIO}/sounds/death.mp3`);
-    this.jumpSound1 =      createSound(`${PATH_AUDIO}/Player/Jump1.mp3`);
-    this.jumpSound2 =      createSound(`${PATH_AUDIO}/Player/Jump2.mp3`);
+    this.jumpSound1 =      createSound(`${PATH_AUDIO}/Player/Jumping/Jump1.mp3`);
+    this.jumpSound2 =      createSound(`${PATH_AUDIO}/Player/Jumping/Jump2.mp3`);
     this.keys = {
       A: { pressed: false },                                      // A = moving left
       D: { pressed: false },                                      // D = moving right
