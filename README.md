@@ -22,7 +22,7 @@ A game about REVENGE.
 ### Voicing
 - `NARRATOR`: Marino Linic
 - `POBAR`: Dorian Manjaric
-- `DLAB`: Marino Linic
+- `TVRTKO`: Tvrtko Kaurinovica
 
 ### Sound
 - 

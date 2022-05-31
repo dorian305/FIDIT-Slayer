@@ -5,7 +5,7 @@ Once upon a time, the OIRI clan ruled the land of UNIRI. It was a prosperous tim
 
 For ten thousand years, civilization advanced and prospered under the guardianship of OIRI. However, a competing clan of discontents had been growing in the land towards the end of the period. The clan was called FIDIT.
 
-One day, after hundreds of years of scheming, the terrifying millennium-old ruler of FIDIT, DLAB, had ordered her minions to take over and annihilate the clan of OIRI. It was known as the WAR OF UNIRI.
+One day, after hundreds of years of scheming, the terrifying millennium-old ruler of FIDIT, TVRTKO, had ordered her minions to take over and annihilate the clan of OIRI. It was known as the WAR OF UNIRI.
 
 She had commanded the destruction of the humans of OIRI to be complete and utterly cruel. The OIRI clan was thus reduced to a few hundred surviving members of whom all retreated to the underground where they hid from the FIDIT scourge. 
 
@@ -34,7 +34,7 @@ For the time being, he is imprisoned inside a dungeon, unconscious, as one of hi
 
 `Dialogue final:`
 ```
-DLAB: "You have slain my people"
+TVRTKO: "You have slain my people"
 ```
 
 `Ending`
