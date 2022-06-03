@@ -26,6 +26,7 @@ export class Character extends Entity {
     this.isCrouching =    false;                         // Flag tracking whether character is crouching
     this.damaged =        false;                         // Character can be damaged only when this is false
     this.weapon =         weapon;                        // Character's weapon
+    this.currentState =   "idle";                        // Character's current animation state
     this.direction = {
       up:     false,
       left:   false,
@@ -355,28 +356,24 @@ export class Character extends Entity {
       Updating character's current sprite to match its direction.
     */
     if (this.direction.left){
-      // console.log("facing left");
-      // If character is stationary and current sprite isn't idle left
-      if (this.velocity.x === 0 && this.currentSpriteSrc !== this.sprite.idle.left){
-        console.log("Character is stationary facing left");
-        this.currentSpriteSrc = this.sprite.idle.left;
-        // If character isn't stationary (velocity < 0 meaning character is moving to the left) and current sprite isn't moving left
-      } else if (this.velocity.x < 0 && this.currentSpriteSrc !== this.sprite.move.left){
-        console.log("Character is moving to the left");
-        this.currentSpriteSrc = this.sprite.move.left;
+      if (this.velocity.x == 0){
+        this.currentSprite.src = this.sprite.idle.left;
+        this.currentState = "idleleft";
+      }
+      else if (this.velocity.x != 0 && this.currentState != "moveleft"){
+        this.currentSprite.src = this.sprite.move.left;
+        this.currentState = "moveleft";
       }
     }
     else if (this.direction.right){
-      // console.log("facing right");
-      // If character is stationary and current sprite isn't idle right
-      if (this.velocity.x === 0 && this.currentSpriteSrc !== this.sprite.idle.right){
-        console.log("Character is stationary facing right");
-        this.currentSpriteSrc = this.sprite.idle.right;
-        // If character isn't stationary (velocity > 0 meaning character is moving to the right) and current sprite isn't moving right
-      } else if (this.velocity.x > 0 && this.currentSpriteSrc !== this.sprite.move.right){
-          console.log("Character is moving to the right");
-          this.currentSpriteSrc = this.sprite.move.right;
-        }
+      if (this.velocity.x == 0){
+        this.currentSprite.src = this.sprite.idle.right;
+        this.currentState = "idleright";
+      }
+      else if (this.velocity.x != 0 && this.currentState != "moveright"){
+        this.currentSprite.src = this.sprite.move.right;
+        this.currentState = "moveright";
+      }
     }
 
     this.updateSpriteFrame();
