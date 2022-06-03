@@ -143,5 +143,5 @@ window.addEventListener("click", e => {
 });
 
 /*
-	Pausing all the timer when the game window is not in focus.
+	Pausing all the timers when the game window is not in focus.
 */

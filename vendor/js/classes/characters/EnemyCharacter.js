@@ -21,7 +21,13 @@ export class EnemyCharacter extends Character {
     // Enemy patrol
     patrol() {
       // Check if player character is within enemy patrol area. If it is, attack it
-      if (PLAYER.position.x >= this.origin - this.patrolDistance && PLAYER.position.x <= this.origin + this.patrolDistance && this.allowAttack){
+      if (
+          PLAYER.position.x + PLAYER.size.w >= this.origin - this.patrolDistance &&
+          PLAYER.position.x <= this.origin + this.patrolDistance &&
+          PLAYER.position.y + PLAYER.size.h >= this.position.y &&
+          PLAYER.position.y <= this.position.y + this.size.h &&
+          this.allowAttack
+        ){
         this.attack();
       }
       else if (this.direction.right){
