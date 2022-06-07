@@ -202,6 +202,20 @@ export function level1(){
 		patrolDistance: 300,
 		attackCooldown: 3000,
 	});
+	new EnemyCharacter({
+		x: 825,
+		y: 700,
+		w: PLAYER_SIZE.w,
+		h: PLAYER_SIZE.h,
+		jumpHeight: 10,
+		jumps: 1,
+		movespeed: 2,
+		HP: 300,
+		sprite: ENEMY_SPRITE,
+		contactDamage: 18,
+		patrolDistance: 125,
+		attackCooldown: 3000,
+	});
 	/*
 		Creating Orb Of Health.
 	*/
