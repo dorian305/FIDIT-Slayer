@@ -6,8 +6,8 @@ import { createSound }  from "../../functions/createsound.js";
   Class for character which will be controlled by the player
 */
 export class PlayerCharacter extends Character {
-  constructor({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, playerName, weapon}){
-    super({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, weapon});
+  constructor({x, y, w, h, crouch_height, jumpHeight, jumps, movespeed, HP, sprite, playerName, weapon}){
+    super({x, y, w, h, crouch_height, jumpHeight, jumps, movespeed, HP, sprite, weapon});
     this.name =           playerName;                                       // Name of the player character
     // this.deathSound =  createSound(`${PATH_AUDIO}/sounds/death.mp3`);
     this.jumpSound1 =      createSound(`${PATH_AUDIO}/Player/Jumping/Jump1.mp3`);

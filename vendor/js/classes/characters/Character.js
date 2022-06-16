@@ -11,7 +11,7 @@ import { Timer }            from "../Timer.js";
 	It inherits from Entity class.
 */
 export class Character extends Entity {
-  constructor({x, y, w, h, sprite, movespeed, HP, jumpHeight, jumps, weapon}){
+  constructor({x, y, w, h, crouch_height, sprite, movespeed, HP, jumpHeight, jumps, weapon}){
     super({x, y, w, h, sprite});												 // Calling constructor from the extended class Entity
     if (this.constructor === Character){
       throw new Error(`Cannot instantiate an abstract class "Character"!`);
@@ -20,6 +20,7 @@ export class Character extends Entity {
     this.maxHP =          HP;                            // Max HP of a character
 		this.currentHP = 			this.maxHP;										 // Current HP of a character
     this.isDead =         false;                         // Flag tracking whether character died in any way
+    this.crouch_height =  crouch_height;                 // Height of the character while crouching
 		this.jumpHeight =     jumpHeight;                    // How high the character can jump
     this.jumps =          jumps;                         // How many times can character jump in a row
     this.remainingJumps = this.jumps;                    // Remaining jumps
@@ -336,6 +337,16 @@ export class Character extends Entity {
       }
     }
 
+    /*
+      Checking if character is crouching
+    */
+   if (this.isCrouching){
+     this.size.h = this.crouch_height;
+   }
+   else {
+     this.size.h = PLAYER_SIZE.h;
+   }
+
     // Perform collision detection for each character
     this.collider2D();
 
@@ -351,12 +362,24 @@ export class Character extends Entity {
       this.direction.right = true;
       this.direction.left = false;
     }
-    
+
     /*
-      Updating character's current sprite to match its direction.
+      Updating character's sprites.
     */
     if (this.direction.left){
-      if (this.velocity.x == 0){
+      if (this.isCrouching){
+        this.currentSprite.src = this.sprite.crouch.left;
+        this.currentState = "crouchingleft";
+      }
+      else if (this.velocity.y < 0){
+        this.currentSprite.src = this.sprite.jump.left;
+        this.currentState = "jumpingleft";
+      }
+      else if (this.velocity.y > 0){
+        this.currentSprite.src = this.sprite.fall.right;
+        this.currentState = "fallingleft";
+      }
+      else if (this.velocity.x == 0){
         this.currentSprite.src = this.sprite.idle.left;
         this.currentState = "idleleft";
       }
@@ -366,7 +389,19 @@ export class Character extends Entity {
       }
     }
     else if (this.direction.right){
-      if (this.velocity.x == 0){
+      if (this.isCrouching){
+        this.currentSprite.src = this.sprite.crouch.right;
+        this.currentState = "crouchingright";
+      }
+      else if (this.velocity.y < 0){
+        this.currentSprite.src = this.sprite.jump.left;
+        this.currentState = "jumpingright";
+      }
+      else if (this.velocity.y > 0){
+        this.currentSprite.src = this.sprite.fall.right;
+        this.currentState = "fallingright";
+      }
+      else if (this.velocity.x == 0){
         this.currentSprite.src = this.sprite.idle.right;
         this.currentState = "idleright";
       }
@@ -375,7 +410,6 @@ export class Character extends Entity {
         this.currentState = "moveright";
       }
     }
-
     this.updateSpriteFrame();
 
     /*

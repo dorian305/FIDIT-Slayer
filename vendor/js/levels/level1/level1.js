@@ -154,6 +154,7 @@ export function level1(){
 		y: 0,
 		w: PLAYER_SIZE.w,
 		h: PLAYER_SIZE.h,
+		crouch_height: 62,
 		jumpHeight: 15,
 		jumps: 1,
 		movespeed: 5,
@@ -166,6 +167,18 @@ export function level1(){
 			move: {
 				left: `${PATH_SPRITES}/Player/PlayerMoveLeft.png`,
 				right: `${PATH_SPRITES}/Player/PlayerMoveRight.png`,
+			},
+			crouch: {
+				left: `${PATH_SPRITES}/Player/PlayerCrouchLeft.png`,
+				right: `${PATH_SPRITES}/Player/PlayerCrouchRight.png`,
+			},
+			jump: {
+				left: `${PATH_SPRITES}/Player/PlayerJumpLeft.png`,
+				right: `${PATH_SPRITES}/Player/PlayerJumpRight.png`,
+			},
+			fall: {
+				left: `${PATH_SPRITES}/Player/PlayerFallLeft.png`,
+				right: `${PATH_SPRITES}/Player/PlayerFallRight.png`,
 			},
 			default: `${PATH_SPRITES}/Player/PlayerIdleRight.png`,
 		},
@@ -189,13 +202,13 @@ export function level1(){
 		Creating enemy characters.
 	*/
 	new EnemyCharacter({
-		x: 1700,
+		x: 1700 - PLAYER_SIZE.w,
 		y: 650,
 		w: PLAYER_SIZE.w,
 		h: PLAYER_SIZE.h,
 		jumpHeight: 10,
 		jumps: 1,
-		movespeed: 2,
+		movespeed: 3,
 		HP: 300,
 		sprite: ENEMY_SPRITE,
 		contactDamage: 18,
@@ -203,8 +216,8 @@ export function level1(){
 		attackCooldown: 3000,
 	});
 	new EnemyCharacter({
-		x: 825,
-		y: 700,
+		x: 3200 - PLAYER_SIZE.w,
+		y: 450,
 		w: PLAYER_SIZE.w,
 		h: PLAYER_SIZE.h,
 		jumpHeight: 10,
@@ -213,7 +226,7 @@ export function level1(){
 		HP: 300,
 		sprite: ENEMY_SPRITE,
 		contactDamage: 18,
-		patrolDistance: 125,
+		patrolDistance: 200 - PLAYER_SIZE.w,
 		attackCooldown: 3000,
 	});
 	/*
