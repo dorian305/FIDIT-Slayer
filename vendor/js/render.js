@@ -35,7 +35,7 @@ function Render(){
 				This piece of code handles player character movement and camera following the player.
 			*/
 			// Player holds down A key (Moves left)
-			if (PLAYER.keys.A.pressed && !PLAYER.keys.D.pressed && !PLAYER.keys.W.pressed && !PLAYER.keys.S.pressed){
+			if (PLAYER.keys.A.pressed && !PLAYER.keys.D.pressed && !PLAYER.isCrouching){
 				PLAYER.velocity.x =	-PLAYER.movespeed;		// Set player X velocity to negative movespeed
 				/*
 					Preventing moving further leftwards than the left edge of the game.
@@ -53,7 +53,7 @@ function Render(){
 				}
 			}
 			// Player holds down D key (Moves right)
-			else if (PLAYER.keys.D.pressed && !PLAYER.keys.A.pressed && !PLAYER.keys.W.pressed && !PLAYER.keys.S.pressed){
+			else if (PLAYER.keys.D.pressed && !PLAYER.keys.A.pressed && !PLAYER.isCrouching){
 				PLAYER.velocity.x =	PLAYER.movespeed;		// Set player X velocity to movespeed
 				/*
 				Preventing moving further rightwards than the right edge of the game.
@@ -78,15 +78,13 @@ function Render(){
 				Player character is crouching by holding down the S key.
 			*/
 			if (!PLAYER.keys.W.pressed){
-				PLAYER.isCrouching = PLAYER.keys.S.pressed || false;
+				PLAYER.isCrouching = (PLAYER.keys.S.pressed && PLAYER.isGrounded) || false;
 			}
 			/*
 				Player character is looking upwards
 			*/
-			if (!PLAYER.keys.S.pressed){
-				PLAYER.direction.up = PLAYER.keys.W.pressed || false;
-			}
-			
+			PLAYER.direction.up = PLAYER.keys.W.pressed || false;
+
 			/*
 				Render the game objects and update their properties every frame.
 			*/

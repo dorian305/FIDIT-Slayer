@@ -1,6 +1,7 @@
 import { MainMenu } from "./mainmenu.js";
 import { Graphics } from "./classes/Graphics.js";
 import { Button }   from "./classes/Button.js";
+import { stopSound } from "./functions/stopsound.js";
 
 export function gameOver(){
 	/*
@@ -63,6 +64,13 @@ export function gameOver(){
 		text: "Main menu",
 		action: MainMenu
 	});
+
+	// Stopping level music
+	stopSound(LEVEL_MUSIC);
+	LEVEL_MUSIC = null;
+
+	// Playing game over music
+	// GAME_OVER_MUSIC = createSound(`${PATH_AUDIO}/)
 
 	// Destroy any remaining timers
 	TIMERS.forEach(timer => {

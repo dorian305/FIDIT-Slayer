@@ -25,6 +25,7 @@ export class Character extends Entity {
     this.jumps =          jumps;                         // How many times can character jump in a row
     this.remainingJumps = this.jumps;                    // Remaining jumps
     this.isCrouching =    false;                         // Flag tracking whether character is crouching
+    this.isGrounded =     false;                         // Flag tracking whether character is grounded
     this.damaged =        false;                         // Character can be damaged only when this is false
     this.weapon =         weapon;                        // Character's weapon
     this.currentState =   "idle";                        // Character's current animation state
@@ -91,6 +92,7 @@ export class Character extends Entity {
   */
   jump() {
     if (!this.isCrouching && !this.direction.up && this.remainingJumps > 0 && this.velocity.y <= 3){
+      this.isGrounded =       false;                                 // Character isn't grounded if it jumped.
       this.velocity.y =       0;                                     // Reset Y velocity whenever new jump is initiated (allows clean jump)
       this.velocity.y =       this.velocity.y - this.jumpHeight;     // Move character upwards
       if (!DEBUG_MODE){
@@ -142,6 +144,7 @@ export class Character extends Entity {
         this.position.y =     platform.top - this.size.h - 0.1;
         this.velocity.y =     platform.velocity.y;
         this.remainingJumps = this.jumps;
+        this.isGrounded =     true;
         
         // If the platform is invisible and player landed on it, set it to be visible
         if (platform.visible === false){
@@ -312,11 +315,10 @@ export class Character extends Entity {
     /*
       Every game character is under the influence of gravity.
       So, if a character is in the air, meaning if its bottom side is NOT
-      on some kind of platform, then apply the gravity effect.
+      on some kind of platform (isn't grounded), then apply the gravity effect.
     */
     if (this.top < CANVAS.height){
-      // Increase character velocity Y by GRAVITY amount
-      this.velocity.y = this.velocity.y + GRAVITY;
+      this.velocity.y = this.velocity.y + GRAVITY;          // Increase character velocity Y by GRAVITY amount
     }
     /*
       The character top side is less than the canvas height.
@@ -342,6 +344,7 @@ export class Character extends Entity {
     */
    if (this.isCrouching){
      this.size.h = this.crouch_height;
+     this.isGrounded = false;
    }
    else {
      this.size.h = PLAYER_SIZE.h;
@@ -371,12 +374,12 @@ export class Character extends Entity {
         this.currentSprite.src = this.sprite.crouch.left;
         this.currentState = "crouchingleft";
       }
-      else if (this.velocity.y < 0){
+      else if (this.velocity.y < 0 && !this.isGrounded){
         this.currentSprite.src = this.sprite.jump.left;
         this.currentState = "jumpingleft";
       }
-      else if (this.velocity.y > 0){
-        this.currentSprite.src = this.sprite.fall.right;
+      else if (this.velocity.y > 0 && !this.isGrounded){
+        this.currentSprite.src = this.sprite.fall.left;
         this.currentState = "fallingleft";
       }
       else if (this.velocity.x == 0){
@@ -393,11 +396,11 @@ export class Character extends Entity {
         this.currentSprite.src = this.sprite.crouch.right;
         this.currentState = "crouchingright";
       }
-      else if (this.velocity.y < 0){
-        this.currentSprite.src = this.sprite.jump.left;
+      else if (this.velocity.y < 0 && !this.isGrounded){
+        this.currentSprite.src = this.sprite.jump.right;
         this.currentState = "jumpingright";
       }
-      else if (this.velocity.y > 0){
+      else if (this.velocity.y > 0 && !this.isGrounded){
         this.currentSprite.src = this.sprite.fall.right;
         this.currentState = "fallingright";
       }

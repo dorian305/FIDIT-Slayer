@@ -35,14 +35,26 @@ export function level1(){
 	}
 	const ENEMY_SPRITE = {								// Setting sprites for the enemy characters
 		idle: {
-			left: `${PATH_SPRITES}/Player/PlayerIdleLeft.png`,
-			right: `${PATH_SPRITES}/Player/PlayerIdleRight.png`,
+			left: `${PATH_SPRITES}/Level 1/Enemies/EnemyIdleLeft.png`,
+			right: `${PATH_SPRITES}/Level 1/Enemies/EnemyIdleRight.png`,
 		},
 		move: {
-			left: `${PATH_SPRITES}/Player/PlayerMoveLeft.png`,
-			right: `${PATH_SPRITES}/Player/PlayerMoveRight.png`,
+			left: `${PATH_SPRITES}/Level 1/Enemies/EnemyMoveLeft.png`,
+			right: `${PATH_SPRITES}/Level 1/Enemies/EnemyMoveRight.png`,
 		},
-		default: `${PATH_SPRITES}/Player/PlayerIdleRight.png`,
+		crouch: {
+			left: `${PATH_SPRITES}/Player/PlayerCrouchLeft.png`,
+			right: `${PATH_SPRITES}/Player/PlayerCrouchRight.png`,
+		},
+		jump: {
+			left: `${PATH_SPRITES}/Player/PlayerJumpLeft.png`,
+			right: `${PATH_SPRITES}/Player/PlayerJumpRight.png`,
+		},
+		fall: {
+			left: `${PATH_SPRITES}/Player/PlayerFallLeft.png`,
+			right: `${PATH_SPRITES}/Player/PlayerFallRight.png`,
+		},
+		default: `${PATH_SPRITES}/Level 1/Enemies/EnemyIdleRight.png`,
 	}
 	// Clearing all timers
 	TIMERS.forEach(timer => {
@@ -198,6 +210,7 @@ export function level1(){
 			},
 		}),
 	});
+	
 	/*
 		Creating enemy characters.
 	*/
@@ -263,6 +276,12 @@ export function level1(){
 			healPercentage: 0.20,
 		});
 	});
+
+	/*
+		Playing level music
+	*/
+	LEVEL_MUSIC = createSound(`${PATH_AUDIO}/Level 1/Level1Music.mp3`);
+	setTimeout(() => LEVEL_MUSIC.play(), 1000); // Hack to allow userr to interact with webpage before sound starts playing (1 second)
 
 	/*
 		After done creating and setting up the level, begin gameplay.

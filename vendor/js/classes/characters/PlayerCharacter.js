@@ -25,14 +25,21 @@ export class PlayerCharacter extends Character {
     HP bar consists of HP shell and remaining HP which is reduced from left to right.
   */
   drawHPBar() {
+    // Health bar UI
+    Graphics.drawImage({
+      x: -CANVAS_EDGES.left + 50,
+      y: -CANVAS_EDGES.top + 25,
+      sprite: Graphics.createImage(`${PATH_IMAGES}/HealthBarUI.png`),
+    })
+
 		// HP Shell properties
-		const HPShellBorderSize = 	2;
-		const HPShellBorderColor =  "#d7d7d7";
+		const HPShellBorderSize = 	5;
+		const HPShellBorderColor =  "#23242d";
 		const HPShellWidth = 				this.maxHP - (HPShellBorderSize * 2);
-		const HPShellHeight = 			25 - (HPShellBorderSize * 2);
+		const HPShellHeight = 			35 - (HPShellBorderSize * 2);
 		const HPShellColor = 				"#262626";
-		const HPShellPositionX = 		-CANVAS_EDGES.left + 100;
-		const HPShellPositionY = 		-CANVAS_EDGES.top + 50;
+		const HPShellPositionX = 		-CANVAS_EDGES.left + 125;
+		const HPShellPositionY = 		-CANVAS_EDGES.top + 40;
 		// HP Bar properties
 		const HPScale = 						HPShellWidth / this.maxHP;
 		const HPBarWidth = 					this.currentHP * HPScale;
@@ -81,12 +88,13 @@ export class PlayerCharacter extends Character {
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 350, size: 15, color: "yellow", content: `Jumps =         ${this.jumps}`, align: "left", font: "Consolas"});
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 370, size: 15, color: "yellow", content: `Remaining =     ${this.remainingJumps}`, align: "left", font: "Consolas"});
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 390, size: 15, color: "yellow", content: `Crouching =     ${this.isCrouching}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 410, size: 15, color: "yellow", content: `Damaged =       ${this.damaged}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 430, size: 15, color: "yellow", content: `Keys =         (W: ${this.keys.W.pressed}, A: ${this.keys.A.pressed}, S: ${this.keys.S.pressed}, D: ${this.keys.D.pressed})`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 450, size: 15, color: "yellow", content: `Facing =       (Up: ${this.direction.up}, Left: ${this.direction.left}, Right: ${this.direction.right})`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 470, size: 15, color: "yellow", content: `Visible =       ${this.visible}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 490, size: 15, color: "yellow", content: `Weapon =        ${this.weapon.name}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 510, size: 15, color: "yellow", content: `Damage =        ${this.weapon.damage}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 530, size: 15, color: "yellow", content: `Missile speed = ${this.weapon.missileSpeed}`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 410, size: 15, color: "yellow", content: `Grounded =      ${this.isGrounded}`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 430, size: 15, color: "yellow", content: `Damaged =       ${this.damaged}`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 450, size: 15, color: "yellow", content: `Keys =         (W: ${this.keys.W.pressed}, A: ${this.keys.A.pressed}, S: ${this.keys.S.pressed}, D: ${this.keys.D.pressed})`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 470, size: 15, color: "yellow", content: `Facing =       (Up: ${this.direction.up}, Left: ${this.direction.left}, Right: ${this.direction.right})`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 490, size: 15, color: "yellow", content: `Visible =       ${this.visible}`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 510, size: 15, color: "yellow", content: `Weapon =        ${this.weapon.name}`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 530, size: 15, color: "yellow", content: `Damage =        ${this.weapon.damage}`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 550, size: 15, color: "yellow", content: `Missile speed = ${this.weapon.missileSpeed}`, align: "left", font: "Consolas"});
   }
 }

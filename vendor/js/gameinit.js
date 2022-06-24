@@ -32,6 +32,8 @@ const DIMMED_BACKGROUND_COLOR = "#000000b3";								 // Dimmed background color
 const GAME_FONT =				"Consolas";									 // Font which is used for the text in game
 const GAME_FPS =				75;											 // Animation FPS
 let CURRENT_LEVEL =				null;										 // Keeps track of current level
+let LEVEL_MUSIC =				null;										 // Current level music
+let GAME_OVER_MUSIC =			null;										 // Game over music
 
 /*
 	Disabling window zoom in / out.
