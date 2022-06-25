@@ -21,15 +21,14 @@ function pauseGame(){
 			color: DIMMED_BACKGROUND_COLOR
 		});
 		// Title
-		Graphics.drawText({
-			x: -CANVAS_EDGES.left + (innerWidth / 2),
-			y: -CANVAS_EDGES.top + (innerHeight / 2) - 200,
-			size: 100,
-			color: "White",
-			content: `Paused`,
-			align: "center",
-			font: GAME_FONT
-		});
+		const title = Graphics.createImage(`${PATH_IMAGES}/Paused.png`);
+		title.onload = () => {
+			Graphics.drawImage({
+				x: -CANVAS_EDGES.left + (innerWidth / 2) - title.width / 2,
+				y: -CANVAS_EDGES.top + (innerHeight / 2) - title.height / 2 - 200,
+				sprite: title
+			});
+		}
 		// Resume button
 		new Button({
 			w: 200,

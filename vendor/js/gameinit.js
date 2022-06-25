@@ -59,7 +59,7 @@ window.addEventListener("keydown", event => {
 	Player character attack.
 	Clicking left mouse click performs an attack.
 */
-window.addEventListener("click", e => {
+CANVAS.addEventListener("mousedown", e => {
 	if (e.button === 0 && INGAME && !GAME_PAUSED){
 		PLAYER.attack();
 	}

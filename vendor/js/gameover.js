@@ -35,15 +35,14 @@ export function gameOver(){
 		color: DIMMED_BACKGROUND_COLOR
 	});
 	// Title
-	Graphics.drawText({
-		x: -CANVAS_EDGES.left + (innerWidth / 2),
-		y: -CANVAS_EDGES.top + (innerHeight / 2) - 200,
-		size: 100,
-		color: "#940707",
-		content: `YOU DIED`,
-		align: "center",
-		font: GAME_FONT
-	});
+	const title = Graphics.createImage(`${PATH_IMAGES}/GameOver.png`);
+	title.onload = () => {
+		Graphics.drawImage({
+			x: -CANVAS_EDGES.left + (innerWidth / 2) - title.width / 2,
+			y: -CANVAS_EDGES.top + (innerHeight / 2) - title.height / 2 - 200,
+			sprite: title
+		});
+	}
 	// Restart button
 	new Button({
 		x: -CANVAS_EDGES.left + (innerWidth / 2) - 100,

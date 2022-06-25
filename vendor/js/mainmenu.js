@@ -25,7 +25,7 @@ export function MainMenu(){
 	LEVEL_MUSIC = null;
 
 	// Drawing logo
-	const logo = Graphics.createImage(`${PATH_IMAGES}/logo.png`);
+	const logo = Graphics.createImage(`${PATH_IMAGES}/Logo.png`);
 	logo.onload = () => {
 		Graphics.drawImage({
 			x: x - logo.width / 2,

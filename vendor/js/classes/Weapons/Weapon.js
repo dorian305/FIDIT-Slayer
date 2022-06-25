@@ -17,7 +17,7 @@ export class Weapon {
     }
 
     // Executing weapon's attack
-    attack({missileSprite, missilePosition, missileVelocity, missileSize}) {
+    attack({missileSprite, missilePosition, missileVelocity, missileSize, missileOwner}){
         // Creating the missile
         const missile = new Missile({
             x: missilePosition.x,
@@ -28,6 +28,7 @@ export class Weapon {
                 default: missileSprite
             },
             damage: this.damage,
+            owner: missileOwner,
         });
         missile.velocity.x = missileVelocity.x;
         missile.velocity.y = missileVelocity.y;

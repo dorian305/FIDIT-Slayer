@@ -71,7 +71,7 @@ export function level1(){
 		w: LEVEL_END_EDGE,
 		h: CANVAS.height,
 		sprite: {
-			default: `${PATH_SPRITES}/Level 1/Background.png`,
+			default: `${PATH_SPRITES}/Level 1/Background.jpg`,
 		},
 	});
 	
@@ -105,7 +105,11 @@ export function level1(){
 	Platform.generateRectangle({x: 4250, y: 0,	    w: 2500, h: 150,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_2500x150.png`}});
 	Platform.generateRectangle({x: 4250, y: 900,    w: 2500, h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_2500x100.png`}});
 	Platform.generateRectangle({x: 4750, y: 450,    w: 50,   h: 200,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_50x200.png`}});
+	Platform.generateRectangle({x: 4700, y: 750,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
+	Platform.generateRectangle({x: 4600, y: 600,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
+	Platform.generateRectangle({x: 4550, y: 450,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
 	Platform.generateRectangle({x: 4750, y: 650,    w: 1500, h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_1500x100.png`}});
+	Platform.generateRectangle({x: 6250, y: 650,	w: 50, 	 h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Spikes_50x100.png`}, killOnTouch: true});
 	Platform.generateRectangle({x: 6900, y: 0,      w: 200,  h: 750,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_200x750.png`}});
 	Platform.generateRectangle({x: 6900, y: 950,    w: 200,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_200x50.png`}});
 	Platform.generateRectangle({x: 7250, y: 0,      w: 100,  h: 650,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x650.png`}});
@@ -199,7 +203,7 @@ export function level1(){
 			name: "Izanagi",
 			damage: 20,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izanagi/Fire.mp3`),
-			missileSpeed: 15,
+			missileSpeed: 20,
 			missileSize: {w: 21, h: 10},
 			fireEffectSize: {w: 64, h: 64},
 			missileSprite: {
@@ -245,26 +249,32 @@ export function level1(){
 	/*
 		Creating Orb Of Health.
 	*/
-	new OrbOfHealth({
-		x: 600,
-		y: 120,
-		w: 30,
-		h: 30,
-		sprite: {
-			default: `${PATH_SPRITES}/Orbs/OrbOfHealth.png`,
-		},
-		HPIncrease: 50,
+	const ORB_HEALTH_POSITIONS = [
+		{x: 600, 	y: 120},
+		{x: 6220, 	y: 620},
+	];
+	ORB_HEALTH_POSITIONS.forEach(orb_position => {
+		new OrbOfHealth({
+			x: orb_position.x,
+			y: orb_position.y,
+			w: 30,
+			h: 30,
+			sprite: {
+				default: `${PATH_SPRITES}/Orbs/OrbOfHealth.png`,
+			},
+			HPIncrease: 10,
+		});
 	});
-
+		
 	/*
 		Creating Orbs Of Rejuvenation.
 	*/
-	const ORB_POSITIONS = [
+	const ORB_REJUVENATION_POSITIONS = [
 		{x: 3185, 	y: 250},
 		{x: 9610, 	y: 350},
 		{x: 10300, 	y: 850},
 	];
-	ORB_POSITIONS.forEach(orb_position => {
+	ORB_REJUVENATION_POSITIONS.forEach(orb_position => {
 		new OrbOfRejuvenation({
 			x: orb_position.x,
 			y: orb_position.y,

@@ -46,6 +46,7 @@ export class Character extends Entity {
       let missilePosition =  {x: 0, y: 0};
       let missileVelocity =  {x: 0, y: 0};
       let missileSize =      {w: 0, h: 0};
+      let missileOwner =     this;
 
       // Determine which way the missile is moving depending on the character direction
       if (this.direction.up && this.direction.left){
@@ -80,7 +81,7 @@ export class Character extends Entity {
           missileSize =         {w: this.weapon.missileSize.w, h: this.weapon.missileSize.h};
           missileSprite =       this.weapon.missileSprite.right;
       }
-      this.weapon.attack({missileSprite, missilePosition, missileVelocity, missileSize});
+      this.weapon.attack({missileSprite, missilePosition, missileVelocity, missileSize, missileOwner});
     }
   }
 
@@ -91,7 +92,7 @@ export class Character extends Entity {
     another jump can't be initiated).
   */
   jump() {
-    if (!this.isCrouching && !this.direction.up && this.remainingJumps > 0 && this.velocity.y <= 3){
+    if (!this.isCrouching && this.remainingJumps > 0 && this.velocity.y <= 3){
       this.isGrounded =       false;                                 // Character isn't grounded if it jumped.
       this.velocity.y =       0;                                     // Reset Y velocity whenever new jump is initiated (allows clean jump)
       this.velocity.y =       this.velocity.y - this.jumpHeight;     // Move character upwards
@@ -228,9 +229,9 @@ export class Character extends Entity {
 
     // Collision with missiles
     MISSILES.forEach(missile => {
-      if (this.checkCollision(missile)){
+      if (this.checkCollision(missile) && this !== missile.owner){
           /*
-            Check if the missile damage is greater than currenHP.
+            Check if the missile damage is greater than currentHP.
             If it is, set damage equal to currentHP.
           */
           if (this.currentHP - missile.damage < 0){

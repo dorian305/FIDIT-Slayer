@@ -4,9 +4,10 @@ import { createSound } 		from "../../functions/createsound.js";
 import { removeFromArray } 	from "../../functions/removefromarray.js";
 
 export class Missile extends Entity {
-    constructor({x, y, w, h, sprite, damage}){
+    constructor({x, y, w, h, sprite, damage, owner}){
         super({x, y, w, h, sprite});
         this.damage = damage;
+		this.owner = owner; 	// The owner of the missile isn't damaged by the missile
         MISSILES.push(this);
     }
 
@@ -21,8 +22,8 @@ export class Missile extends Entity {
 					}
 					platform.HP = platform.HP - this.damage;
 					/*
-					If the platform is destroyed, remove it from array and create a generic object
-					showing explosion from platform destruction and sound effect.
+						If the platform is destroyed, remove it from array and create a generic object
+						showing explosion from platform destruction and sound effect.
 					*/
 					if (platform.HP <= 0){
 						new Effect({
@@ -47,7 +48,7 @@ export class Missile extends Entity {
 
 	update() {
 		// Remove the missile if it gets beyond the screen top or screen bottom
-		if (this.top < 0 || this.bottom > CANVAS.height){
+		if (this.top < 0 || this.bottom > CANVAS.height || this.left < 0 || this.right > LEVEL_END_EDGE){
 			removeFromArray(MISSILES, this);
 		}
 
