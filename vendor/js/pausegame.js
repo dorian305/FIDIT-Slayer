@@ -2,9 +2,11 @@ import { Graphics }		  from "./classes/Graphics.js";
 import { Button }		  from "./classes/Button.js";
 import { MainMenu }		  from "./mainmenu.js";
 import { startRendering } from "./render.js";
+import { stopRendering }  from "./render.js";
 
 function pauseGame(){
 	GAME_PAUSED = !GAME_PAUSED;									// Update game paused flag
+	stopRendering();
 	/*
 		If flag is true, game has been paused.
 		Draw the overlay for paused game.

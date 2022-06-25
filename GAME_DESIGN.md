@@ -9,45 +9,38 @@
 The background will be dimmed and in front of it a large window with the following buttons:
 - [If it exists] Continue game
 - Start new game
-- Check stats
 
 #### Ingame UI Design
-- Time limit indicated on the top middle screen
-- To the right of the time limit is the medal (gold, silver, bronze)
+- Top left is the character health bar UI, enemy HP bars are displayed above the character
 
 #### Pause Screen UI Design
 The pause screen will dim the background and offer several buttons:
-- Resume (P)
-- Restart level
+- Resume
+- Restart
+- Main menu
 
 ### Level Design and Goals
-- The game is structured in levels
-- The levels are predesigned and loaded.
-- The goal is to reach the end of the level and kill enemies on the way
-- The player is rewarded for killing enemies
-- The player is rewarded for completing the level in proper timing: there is a gold, silver, and bronze medal for time completion; it is possible to get no medal.
+- Game is split up in 10 levels
+- The goal is to reach the end of the level
+- There are secret platforms and passageways that lead to certain powerups
+- Enemy placement makes finishing level challenging
+- You have to finish a level in order to unlock the next level
+
 
 ### Main Character Design
-- Character is a human dressed in black and body armor / bullet-proof vest
-- When player dies, character respawns at same spot 
-- The character can only hold one weapon at a time
-- The weapons can be melee or ranged
-- Weapons are found across level and are randomly generated
-- Weapons are found inside crates on the ground
-- There are various pick-ups that are randomly generated with a probability chance after killing each enemy
+- Character is a human dressed in black and body armor
+- When player dies, game is over and character spawns at the start of the level
+- Character is spawned with a ranged weapon which it can use to attack enemies from afar
 
 ### Enemy Design
-- There are regular enemies and then boss enemies
-- Enemies can fly or walk according to type
-- Some enemies have immunity to weapon types; sometimes the player will not have the means to kill them -- in that scenario, he is to avoid them
+- Enemies are scattered throughout the level, making it challenging to finish the level
+- At the end of the level, there is a boss which has to be defeated in order to finish the level
 - Every level contains a boss
-- Enemies become incrementally harder to kill after each boss defeat
+- Each next level, enemies are becoming harder to kill
 
 ### Enemy Types
 - Melee
-- Ranged
-- Kamikaze
-- 
+- Damaging obstacles such as fireballs
 
 ### Enemy List
 - Enemies are mostly level-exclusive, though some might reappear at further levels.
@@ -60,6 +53,3 @@ The pause screen will dim the background and offer several buttons:
 ### Pick-up List
 - Orb of Rejuvenation (Health refill) | [Common]
 - Orb of Health (Health increase)     | [Rare]
-- Double damage                | [Rare], [Time-limited] 
-- Double jump                  | [Rare], [Time-limited] 
-- Immunity                     | [Rare], [Time-limited]

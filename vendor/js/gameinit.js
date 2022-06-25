@@ -11,7 +11,7 @@ let PLAYER =                    null;                                        // 
 let PLAYER_SIZE =               {w: 63, h: 78};                              // Player character size
 const PLAYER_DAMAGED_DELAY =    2000;                                        // Delay between player taking damages
 let PLAYER_INITIATED_JUMP =     false;                                       // Flag to prevent jump to trigger when holding down spacebar
-let CANVAS_EDGES =				{};                                       	 // CANVAS edge positions
+let CANVAS_EDGES =				{left: 0, top: 0};                         	 // CANVAS edge positions
 let GAME_PAUSED =               false;                                       // Game state flag (Paused / Resumed)
 let INGAME =					false;										 // Playing a level or not
 let DEBUG_MODE =                false;                                       // Flag for when debug mode is enabled
@@ -110,38 +110,31 @@ window.addEventListener("click", e => {
 
 /*
 	Event listener that tracks whether mouse click has happened on an UI button.
-	Also mouseover
 */
-["mousemove", "click"].forEach(event => {
-	window.addEventListener(event, e => {
-		if (BUTTONS){
-			let mouse = {x: e.clientX, y: e.clientY};	// Getting mouse coordinates
-			/*
-				Looping through each button and checking whether the coordinates of the mouse pointer
-				were inside any of the buttons when the mouse click occured.
-			*/
-			BUTTONS.forEach(button => {
-				// -CANVAS_EDGES offset is added to the mouse coordinates because the overlay is drawn with the offset aswell
-				if (!(mouse.x - CANVAS_EDGES.left < button.position.x || mouse.x - CANVAS_EDGES.left > button.position.x + button.size.w || mouse.y - CANVAS_EDGES.top < button.position.y || mouse.y - CANVAS_EDGES.top > button.position.y + button.size.h)){
-					if (event === "click"){
-						/*
-							The click occured on a button, which means the button was clicked.
-							Perform the button's action, clear the BUTTONS array and exit forEach.
-						*/
-						button.action();
-						BUTTONS.length = 0;
-						return;
-					}
-					else if (event === "mouseover"){
-						/*
-							Mouse is hovering over button, add visual feedback.
-						*/
-						
-					}
-				}
-			});
-		}
-	});
+window.addEventListener("click", e => {
+	if (BUTTONS){
+		let mouse = {x: e.clientX, y: e.clientY};	// Getting mouse coordinates
+		/*
+		Looping through each button and checking whether the coordinates of the mouse pointer
+		were inside any of the buttons when the mouse click occured.
+		*/
+		BUTTONS.forEach(button => {
+			// -CANVAS_EDGES offset is added to the mouse coordinates because the overlay is drawn with the offset aswell
+			if (
+					mouse.x - CANVAS_EDGES.left > button.position.x &&
+					mouse.x - CANVAS_EDGES.left < button.position.x + button.size.w &&
+					mouse.y - CANVAS_EDGES.top > button.position.y &&
+					mouse.y - CANVAS_EDGES.top < button.position.y + button.size.h
+				){
+				/*
+					The click occured on a button, which means the button was clicked.
+					Perform the button's action and exit forEach.
+				*/
+				button.action();
+				return;
+			}
+		});
+	}
 });
 
 /*

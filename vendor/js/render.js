@@ -5,6 +5,7 @@ import { gameOver } from "./gameover.js";
 */
 let stop = false;
 let fpsInterval, startTime, now, then, elapsed;
+let requestID = null;
 
 function Render(){
 	/*
@@ -15,7 +16,7 @@ function Render(){
 		Keep the game running as long as the player character is alive.
 	*/
 	if (!PLAYER.isDead){
-		requestAnimationFrame(Render);
+		requestID = requestAnimationFrame(Render);
 	}
 	/*
 		Player character has died.
@@ -132,4 +133,11 @@ export function startRendering() {
     then = Date.now();
     startTime = then;
     Render();
+}
+/*
+	CALL THIS FUNCTION WHEN YOU WANT TO STOP RENDERING GAME
+*/
+export function stopRendering() {
+	cancelAnimationFrame(requestID);
+	requestID = null;
 }

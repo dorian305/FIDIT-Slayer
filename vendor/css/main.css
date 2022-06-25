@@ -3,6 +3,9 @@ body {
   padding: 0;
 	position: relative;
   overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
 }
 
 canvas {
@@ -10,4 +13,20 @@ canvas {
   position: absolute;
   left: 0;
   top: 0;
+  z-index: 0;
+}
+
+div#introWrapper {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+  width: 600px;
+  height: 600px;
+  color: white;
+  font-size: 2rem;
+  overflow: hidden;
+  font-family: "Consolas";
 }

@@ -8,6 +8,7 @@ import { OrbOfHealth } 				from "../../classes/Orbs/OrbOfHealth.js";
 import { OrbOfRejuvenation } 		from "../../classes/Orbs/OrbOfRejuvenation.js";
 import { createSound } 				from "../../functions/createsound.js";
 import { spawnFireballs }			from "./fireballs.js";
+import { stopSound } 				from "../../functions/stopsound.js";
 
 export function level1(){
 	/*
@@ -280,8 +281,16 @@ export function level1(){
 	/*
 		Playing level music
 	*/
-	LEVEL_MUSIC = createSound(`${PATH_AUDIO}/Level 1/Level1Music.mp3`);
-	setTimeout(() => LEVEL_MUSIC.play(), 1000); // Hack to allow userr to interact with webpage before sound starts playing (1 second)
+	// If music already defined, stop it
+	if (LEVEL_MUSIC){
+		stopSound(LEVEL_MUSIC);
+	}
+	// Create new music instance
+	else {
+		LEVEL_MUSIC = createSound(`${PATH_AUDIO}/Level 1/Level1Music.mp3`);
+		LEVEL_MUSIC.loop = true;
+	}
+	LEVEL_MUSIC.play();
 
 	/*
 		After done creating and setting up the level, begin gameplay.
