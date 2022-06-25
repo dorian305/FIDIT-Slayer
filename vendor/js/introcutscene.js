@@ -23,8 +23,8 @@ export const introCutscene = () => {
         Now, a century later, humans have begun growing in power once again as the control of TVRTKO rots and fractures into chaos and disorder, an otherwise natural resolution to his rule. 
 
         In this period, one of the formidable heroes and leaders of humans is POBAR. At present, he is imprisoned inside what used to be the Palace of OIRI, a place corrupted in an appalling and despicable act of revenge and reduced to a mere ghastly dungeon. He is here because one of his previous missions had failed and resulted in his capture; but, as fate is about to reveal, his role will become legendary.`;
-        text.style.marginTop = `600px`;
     document.body.insertAdjacentElement('beforeend', wrapper);
+    text.style.marginTop = `600px`;
 
     // Intro sequence audio
     const cutsceneAudio = createSound(`${PATH_AUDIO}/Intro/Intro.mp3`);

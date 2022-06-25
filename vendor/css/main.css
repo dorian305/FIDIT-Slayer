@@ -22,10 +22,10 @@ div#introWrapper {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-align: left;
+  text-align: center;
   width: 600px;
   height: 600px;
-  color: white;
+  color: #5a1717;
   font-size: 2rem;
   overflow: hidden;
   font-family: "Consolas";
