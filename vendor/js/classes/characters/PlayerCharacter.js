@@ -33,19 +33,19 @@ export class PlayerCharacter extends Character {
     })
 
 		// HP Shell properties
-		const HPShellBorderSize = 	5;
-		const HPShellBorderColor =  "#23242d";
-		const HPShellWidth = 				this.maxHP - (HPShellBorderSize * 2);
-		const HPShellHeight = 			35 - (HPShellBorderSize * 2);
-		const HPShellColor = 				"#262626";
-		const HPShellPositionX = 		-CANVAS_EDGES.left + 125;
-		const HPShellPositionY = 		-CANVAS_EDGES.top + 40;
+		const HPShellBorderSize = 	0;
+		const HPShellBorderColor =  "#552f2f";
+		const HPShellWidth = 				(this.maxHP * 2) - (HPShellBorderSize * 2);
+		const HPShellHeight = 			27 - (HPShellBorderSize * 2);
+		const HPShellColor = 				"#552f2f";
+		const HPShellPositionX = 		-CANVAS_EDGES.left + 127;
+		const HPShellPositionY = 		-CANVAS_EDGES.top + 39;
 		// HP Bar properties
 		const HPScale = 						HPShellWidth / this.maxHP;
 		const HPBarWidth = 					this.currentHP * HPScale;
     const HPBarHealthNumber =   this.currentHP;
 		const HPBarHeight = 				HPShellHeight;
-		const HPBarColors = 				{healthy: "#09de25", weakened: "#deb009", critical: "#de1709"};
+		const HPBarColors = 				{healthy: "#226d34", weakened: "#6d6c22", critical: "#a92d2d"};
 		let 	HPBarColor = 					null;
 		const HPBarPositionX = 			HPShellPositionX;
 		const HPBarPositionY = 			HPShellPositionY;
@@ -54,7 +54,7 @@ export class PlayerCharacter extends Character {
 		if (HPRatio > 0.66 && HPRatio <= 1){
 			HPBarColor = HPBarColors.healthy;					// Heath percentage is in healthy range
 		}
-    else if (HPRatio > 0.33 && HPRatio < 0.66){
+    else if (HPRatio > 0.33 && HPRatio <= 0.66){
 			HPBarColor = HPBarColors.weakened;				// Heath percentage is in weakened range
 		}
     else {

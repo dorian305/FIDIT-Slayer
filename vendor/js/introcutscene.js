@@ -41,7 +41,7 @@ export const introCutscene = () => {
             endCutscene();
             setTimeout(() => {
                 startLevel1();
-            }, 3000);
+            }, 0);
         }
     }, 50);
 
@@ -51,21 +51,24 @@ export const introCutscene = () => {
             w: 200,
             h: 50,
             x: CANVAS.width / 2 - 100,
-            y: CANVAS.height / 2 + 375,
+            y: CANVAS.height / 2 + 325,
             sprite: `${PATH_IMAGES}/Button.png`,
             text: "Skip intro",
             action: () => {
                 endCutscene();
             }
         });
-    }, 5000);
+    }, 0);
 
     // Skip cutscene
     const endCutscene = () => {
         clearInterval(interval);
         wrapper.remove();
+        Graphics.clearScreen();
         stopSound(cutsceneAudio);
-        startLevel1();
+        setTimeout(() => {
+            startLevel1();
+        }, 0);
     }
 
     // Start level 1

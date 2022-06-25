@@ -11,7 +11,7 @@ let PLAYER =                    null;                                        // 
 let PLAYER_SIZE =               {w: 63, h: 78};                              // Player character size
 const PLAYER_DAMAGED_DELAY =    2000;                                        // Delay between player taking damages
 let PLAYER_INITIATED_JUMP =     false;                                       // Flag to prevent jump to trigger when holding down spacebar
-let CANVAS_EDGES =				{left: 0, top: 0};                         	 // CANVAS edge positions
+let CANVAS_EDGES =				{left: 0, top: 0, right: 0, bottom: 0};		 // CANVAS edge positions
 let GAME_PAUSED =               false;                                       // Game state flag (Paused / Resumed)
 let INGAME =					false;										 // Playing a level or not
 let DEBUG_MODE =                false;                                       // Flag for when debug mode is enabled
@@ -111,9 +111,18 @@ window.addEventListener("click", e => {
 /*
 	Event listener that tracks whether mouse click has happened on an UI button.
 */
-window.addEventListener("click", e => {
+CANVAS.addEventListener("click", e => {
 	if (BUTTONS){
-		let mouse = {x: e.clientX, y: e.clientY};	// Getting mouse coordinates
+		// Getting mouse coordinates
+		// const CANVASBoundingBox = CANVAS.getBoundingClientRect(); // Getting CANVAS distances from window edges
+		// let mouse = {
+		// 	x: e.clientX - CANVASBoundingBox.left,
+		// 	y: e.clientY - CANVASBoundingBox.top
+		// };
+		let mouse = {
+			x: e.clientX,
+			y: e.clientY
+		};
 		/*
 		Looping through each button and checking whether the coordinates of the mouse pointer
 		were inside any of the buttons when the mouse click occured.

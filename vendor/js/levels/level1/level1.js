@@ -27,7 +27,6 @@ export function level1(){
 	INGAME = 						true;				// Setting INGAME flag to true when starting level
 	GAME_PAUSED = 					false;				// Setting GAME_PAUSED flag to false when starting level
 	CANVAS.width =                  LEVEL_END_EDGE;		// Setting width of the canvas to the level width
-	CANVAS.height =                 1000;				// Setting height of the canvas to 1080
 	CANVAS_EDGES = {									// Resetting the canvas edge positions
 		left: LEVEL_BEGINNING_EDGE,
 		right: LEVEL_END_EDGE,
