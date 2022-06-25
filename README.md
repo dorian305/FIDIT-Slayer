@@ -8,10 +8,8 @@ A game about REVENGE.
 | Movement               | <kbd>A</kbd> <kbd>D</kbd>                                                                      |
 | Jumping                | <kbd>Spacebar</kbd>                                                                            |
 | Crouching              | <kbd>S</kbd>                                                                                   |
-| Pick up weapon         | <kbd>E</kbd>                                                                                   |
-| Drop weapon            | <kbd>R</kbd>                                                                                   |
 | Attack                 | <kbd>![LMB](https://raw.githubusercontent.com/emre-aki/raycast.js/master/images/lmb.png)</kbd> |
-| Pause/resume           | <kbd>P</kbd>                                                                                   |
+| Pause/resume           | <kbd>Esc</kbd>                                                                                   |
 | Toggle debug mode      | <kbd>Z</kbd>                                                                                   |
 
 ## Credits
@@ -22,10 +20,11 @@ A game about REVENGE.
 ### Voicing
 - `NARRATOR`: Marino Linic
 - `POBAR`: Dorian Manjaric
-- `TVRTKO`: Tvrtko Kaurinovica
+- `TVRTKO`: Tvrtko Kaurinovia
 
-### Sound
-- 
+### Music and Sounds
+- [Marino Linic](https://github.com/MarinoLinic)
 
 ### Art
-- 
+- [Marino Linic](https://github.com/MarinoLinic)
+- [Dorian Manjaric](https://manjaric.com)
