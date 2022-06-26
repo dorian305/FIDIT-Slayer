@@ -67,7 +67,8 @@ export class EnemyCharacter extends Character {
       if (
           PLAYER.right >= this.patrolDistanceEdge.left &&
           PLAYER.left <= this.patrolDistanceEdge.right &&
-          (PLAYER.bottom >= this.top - 100 || PLAYER.top <= this.bottom + 100) &&
+          PLAYER.bottom >= this.top - 100 &&
+          PLAYER.top <= this.bottom + 100 &&
           this.allowAttack
       ){
         this.rangedAttack();

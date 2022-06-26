@@ -16,6 +16,7 @@ export class Character extends Entity {
     if (this.constructor === Character){
       throw new Error(`Cannot instantiate an abstract class "Character"!`);
     }
+    this.originalHeight = this.size.h;                   // Original height of the character
     this.movespeed =      movespeed;                     // How fast is the character moving (Velocity on the X axis)
     this.maxHP =          HP;                            // Max HP of a character
 		this.currentHP = 			this.maxHP;										 // Current HP of a character
@@ -92,6 +93,8 @@ export class Character extends Entity {
     another jump can't be initiated).
   */
   jump() {
+    if (this.isDead) return;
+    
     if (!this.isCrouching && this.remainingJumps > 0 && this.velocity.y <= 3){
       this.isGrounded =       false;                                 // Character isn't grounded if it jumped.
       this.velocity.y =       0;                                     // Reset Y velocity whenever new jump is initiated (allows clean jump)
@@ -230,15 +233,17 @@ export class Character extends Entity {
     // Collision with missiles
     MISSILES.forEach(missile => {
       if (this.checkCollision(missile) && this !== missile.owner){
+        if ((missile.owner === PLAYER && this.isEnemy) || (missile.owner.isEnemy && !this.isEnemy)){
           /*
-            Check if the missile damage is greater than currentHP.
-            If it is, set damage equal to currentHP.
+          Check if the missile damage is greater than currentHP.
+          If it is, set damage equal to currentHP.
           */
-          if (this.currentHP - missile.damage < 0){
-            missile.damage = this.currentHP;
+         if (this.currentHP - missile.damage < 0){
+           missile.damage = this.currentHP;
           }
           this.currentHP = this.currentHP - missile.damage;
           removeFromArray(MISSILES, missile);
+        }
       }
     });
 
@@ -348,7 +353,7 @@ export class Character extends Entity {
      this.isGrounded = false;
    }
    else {
-     this.size.h = PLAYER_SIZE.h;
+     this.size.h = this.originalHeight;
    }
 
     // Perform collision detection for each character

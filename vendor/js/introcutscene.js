@@ -138,8 +138,16 @@ export const introCutscene = () => {
 
     // Start level 1
     const startLevel1 = () => {
+        Graphics.clearScreen();
+        const loading = Graphics.createImage(`${PATH_SPRITES}/Level 1/Loading.png`);
+        loading.onload = () => {
+            Graphics.drawImage({
+                x: CANVAS.width / 2 - loading.width / 2,
+                y: CANVAS.height / 2 - loading.height / 2,
+                sprite: loading
+            });
+        }
         setTimeout(() => {
-
             CURRENT_LEVEL = level1;
             CURRENT_LEVEL();
         }, 0);

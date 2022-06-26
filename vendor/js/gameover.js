@@ -35,7 +35,7 @@ export function gameOver(){
 		color: DIMMED_BACKGROUND_COLOR
 	});
 	// Title
-	const title = Graphics.createImage(`${PATH_IMAGES}/GameOver.png`);
+	const title = Graphics.createImage(`${PATH_IMAGES}/YouDied.png`);
 	title.onload = () => {
 		Graphics.drawImage({
 			x: -CANVAS_EDGES.left + (innerWidth / 2) - title.width / 2,
