@@ -1,6 +1,6 @@
 import { Graphics } from "./classes/Graphics.js";
-import { createSound } from "./functions/createSound.js";
-import { stopSound } from "./functions/stopSound.js";
+import { createSound } from "./functions/createsound.js";
+import { stopSound } from "./functions/stopsound.js";
 import { level1 } from "./levels/level1/level1.js";
 import { Button } from "./classes/Button.js";
 
