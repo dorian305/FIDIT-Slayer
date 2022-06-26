@@ -34,6 +34,7 @@ export class Fireball extends Entity {
         this.position.y =       this.position.y + this.velocity.y;
         this.top =              this.position.y;
         this.bottom =           this.position.y + this.size.h;
+        this.center = 			this.left + this.size.w / 2;
 
         // Draw character at new coordinates
         this.draw();

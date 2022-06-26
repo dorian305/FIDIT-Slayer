@@ -5,12 +5,11 @@ import { level1 } from "./levels/level1/level1.js";
 import { Button } from "./classes/Button.js";
 
 export const introCutscene = () => {
-    Graphics.clearScreen();
-
     // Creating intro textbox
     const wrapper = document.createElement("div");
     const text = document.createElement("div");
     wrapper.id = "introWrapper";
+    wrapper.setAttribute("data-scene", "Scene1");
     wrapper.appendChild(text);
     text.innerText = `Once upon a time, the OIRI clan ruled the land of UNIRI. It was an auspicious period with an idyllic symbiosis between man and nature.
 
@@ -33,23 +32,75 @@ export const introCutscene = () => {
     cutsceneAudio.volume = 0.5;
     cutsceneAudio.play();
 
-    // Scrolling text upwards
+    // Cutscene background images
+    let scene = Graphics.createImage(`${PATH_SPRITES}/Intro/Scene1.jpg`);
+    scene.onload = () => {
+        Graphics.drawImage({
+            x: CANVAS.width / 2 - scene.width / 2,
+            y: CANVAS.height / 2 - scene.height / 2,
+            sprite: scene
+        });
+        drawSkipCutsceneButton();
+    }
+
+    // Running intro cutscene
     const interval = setInterval(() => {
         let margin = parseFloat(text.style.marginTop);
         if (margin > -1950){
             margin -= 1;
             text.style.marginTop = `${margin}px`;
+
+            // Scene 2
+            if (margin <= 290 && margin > -70 && wrapper.getAttribute("data-scene") !== "Scene2"){
+                Graphics.clearScreen();
+                wrapper.setAttribute("data-scene", "Scene2");
+                drawScene(`${PATH_SPRITES}/Intro/Scene2.jpg`);
+            }
+
+            // Scene 3
+            else if (margin <= -70 && margin > -490 && wrapper.getAttribute("data-scene") !== "Scene3"){
+                Graphics.clearScreen();
+                wrapper.setAttribute("data-scene", "Scene3");
+                drawScene(`${PATH_SPRITES}/Intro/Scene3.jpg`);
+            }
+
+            // Scene 4
+            else if (margin <= -490 && margin > -930 && wrapper.getAttribute("data-scene") !== "Scene4"){
+                Graphics.clearScreen();
+                wrapper.setAttribute("data-scene", "Scene4");
+                drawScene(`${PATH_SPRITES}/Intro/Scene4.jpg`);
+            }
+
+            // Scene 5
+            else if (margin <= -930 && margin > -1230 && wrapper.getAttribute("data-scene") !== "Scene5"){
+                Graphics.clearScreen();
+                wrapper.setAttribute("data-scene", "Scene5");
+                drawScene(`${PATH_SPRITES}/Intro/Scene5.jpg`);
+            }
+
+            // Scene 6
+            else if (margin <= -1230 && margin > -1620 && wrapper.getAttribute("data-scene") !== "Scene6"){
+                Graphics.clearScreen();
+                wrapper.setAttribute("data-scene", "Scene6");
+                drawScene(`${PATH_SPRITES}/Intro/Scene6.jpg`);
+            }
+
+            // Scene 7
+            else if (margin <= -1620 && margin > -1950 && wrapper.getAttribute("data-scene") !== "Scene7"){
+                Graphics.clearScreen();
+                wrapper.setAttribute("data-scene", "Scene7");
+                drawScene(`${PATH_SPRITES}/Intro/Scene7.jpg`);
+            }
         }
         else {
             endCutscene();
-            setTimeout(() => {
-                startLevel1();
-            }, 0);
+            startLevel1();
         }
     }, 50);
 
     // Creating skip cutscene button
-    setTimeout(() => {
+    const drawSkipCutsceneButton = () => {
+        BUTTONS.length = 0;
         new Button({
             w: 200,
             h: 50,
@@ -61,7 +112,7 @@ export const introCutscene = () => {
                 endCutscene();
             }
         });
-    }, 0);
+    }
 
     // Skip cutscene
     const endCutscene = () => {
@@ -69,14 +120,28 @@ export const introCutscene = () => {
         wrapper.remove();
         Graphics.clearScreen();
         stopSound(cutsceneAudio);
-        setTimeout(() => {
-            startLevel1();
-        }, 0);
+        startLevel1();
+    }
+
+    // Draw scene
+    const drawScene = imgSrc => {
+        const img = Graphics.createImage(imgSrc);
+        img.onload = () => {
+            Graphics.drawImage({
+            x: CANVAS.width / 2 - img.width / 2,
+            y: CANVAS.height / 2 - img.height / 2,
+            sprite: img
+          });
+          drawSkipCutsceneButton();
+        }
     }
 
     // Start level 1
     const startLevel1 = () => {
-        CURRENT_LEVEL = level1;
-        CURRENT_LEVEL();
+        setTimeout(() => {
+
+            CURRENT_LEVEL = level1;
+            CURRENT_LEVEL();
+        }, 0);
     }
 }

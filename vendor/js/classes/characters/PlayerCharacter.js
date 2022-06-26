@@ -30,7 +30,7 @@ export class PlayerCharacter extends Character {
       x: -CANVAS_EDGES.left + 50,
       y: -CANVAS_EDGES.top + 25,
       sprite: Graphics.createImage(`${PATH_IMAGES}/HealthBarUI.png`),
-    })
+    });
 
 		// HP Shell properties
 		const HPShellBorderSize = 	0;
@@ -96,5 +96,6 @@ export class PlayerCharacter extends Character {
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 510, size: 15, color: "yellow", content: `Weapon =        ${this.weapon.name}`, align: "left", font: "Consolas"});
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 530, size: 15, color: "yellow", content: `Damage =        ${this.weapon.damage}`, align: "left", font: "Consolas"});
     Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 550, size: 15, color: "yellow", content: `Missile speed = ${this.weapon.missileSpeed}`, align: "left", font: "Consolas"});
+    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 570, size: 15, color: "yellow", content: `Center =        ${this.center}`, align: "left", font: "Consolas"});
   }
 }

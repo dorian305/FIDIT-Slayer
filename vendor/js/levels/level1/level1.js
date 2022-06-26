@@ -42,20 +42,13 @@ export function level1(){
 			left: `${PATH_SPRITES}/Level 1/Enemies/EnemyMoveLeft.png`,
 			right: `${PATH_SPRITES}/Level 1/Enemies/EnemyMoveRight.png`,
 		},
-		crouch: {
-			left: `${PATH_SPRITES}/Player/PlayerCrouchLeft.png`,
-			right: `${PATH_SPRITES}/Player/PlayerCrouchRight.png`,
-		},
-		jump: {
-			left: `${PATH_SPRITES}/Player/PlayerJumpLeft.png`,
-			right: `${PATH_SPRITES}/Player/PlayerJumpRight.png`,
-		},
-		fall: {
-			left: `${PATH_SPRITES}/Player/PlayerFallLeft.png`,
-			right: `${PATH_SPRITES}/Player/PlayerFallRight.png`,
+		fire: {
+			left: `${PATH_SPRITES}/Level 1/Enemies/EnemyFireLeft.png`,
+			right: `${PATH_SPRITES}Level 1/Enemies/EnemyFireRight.png`,
 		},
 		default: `${PATH_SPRITES}/Level 1/Enemies/EnemyIdleRight.png`,
 	}
+
 	// Clearing all timers
 	TIMERS.forEach(timer => {
 		if (timer) timer.destroy();
@@ -106,8 +99,8 @@ export function level1(){
 	Platform.generateRectangle({x: 4250, y: 900,    w: 2500, h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_2500x100.png`}});
 	Platform.generateRectangle({x: 4750, y: 450,    w: 50,   h: 200,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_50x200.png`}});
 	Platform.generateRectangle({x: 4700, y: 750,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
-	Platform.generateRectangle({x: 4600, y: 600,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
-	Platform.generateRectangle({x: 4550, y: 450,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
+	Platform.generateRectangle({x: 4600, y: 650,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
+	Platform.generateRectangle({x: 4550, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
 	Platform.generateRectangle({x: 4750, y: 650,    w: 1500, h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_1500x100.png`}});
 	Platform.generateRectangle({x: 6250, y: 650,	w: 50, 	 h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Spikes_50x100.png`}, killOnTouch: true});
 	Platform.generateRectangle({x: 6900, y: 0,      w: 200,  h: 750,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_200x750.png`}});
@@ -154,8 +147,9 @@ export function level1(){
 	Platform.generateRectangle({x: 9850, y: 0,		w: 100,  h: 400,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x400.png`}});
 	Platform.generateRectangle({x: 9950, y: 0,		w: 2050, h: 150,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_2050x150.png`}});
 	Platform.generateRectangle({x: 9950, y: 900,	w: 2050, h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_2050x100.png`}});
-	Platform.generateRectangle({x: 11900, y: 150,	w: 100,  h: 550,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x550.png`}});
-	Platform.generateRectangle({x: 11950, y: 700,	w: 50,   h: 200,  sprite: {default: `${PATH_SPRITES}/Level 1/WallDestroy_50x200.png`}, destroyable: true, HP: 200});
+	Platform.generateRectangle({x: 11900,y: 150,	w: 100,  h: 550,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x550.png`}});
+	Platform.generateRectangle({x: 9870, y: 950,	w: 100,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x50.png`}});
+	Platform.generateRectangle({x: 11950,y: 700,	w: 50,   h: 200,  sprite: {default: `${PATH_SPRITES}/Level 1/WallDestroy_50x200.png`}, destroyable: true, HP: 200});
 
 	/*
 		Starting fireball spawning.
@@ -218,6 +212,41 @@ export function level1(){
 	/*
 		Creating enemy characters.
 	*/
+	// Meele enemies
+	new EnemyCharacter({
+		x: 950 - PLAYER_SIZE.w / 2,
+		y: 70,
+		w: PLAYER_SIZE.w,
+		h: PLAYER_SIZE.h,
+		jumpHeight: 0,
+		jumps: 0,
+		enemyType: "meele",
+		movespeed: 3,
+		seekingMovespeedFactor: 1.5,
+		HP: 150,
+		sprite: ENEMY_SPRITE,
+		contactDamage: 30,
+		patrolDistance: 500,
+		attackCooldown: 3000,
+	});
+	new EnemyCharacter({
+		x: 1650 - PLAYER_SIZE.w / 2,
+		y: 70,
+		w: PLAYER_SIZE.w,
+		h: PLAYER_SIZE.h,
+		jumpHeight: 0,
+		jumps: 0,
+		enemyType: "meele",
+		movespeed: 3,
+		seekingMovespeedFactor: 1.5,
+		HP: 150,
+		sprite: ENEMY_SPRITE,
+		contactDamage: 30,
+		patrolDistance: 500,
+		attackCooldown: 3000,
+	});
+
+	// Ranged enemies
 	new EnemyCharacter({
 		x: 1700 - PLAYER_SIZE.w,
 		y: 650,
@@ -225,12 +254,27 @@ export function level1(){
 		h: PLAYER_SIZE.h,
 		jumpHeight: 10,
 		jumps: 1,
-		movespeed: 3,
+		enemyType: "range",
+		weapon: new Weapon({
+			name: "Izazgrabi",
+			damage: 10,
+			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
+			missileSpeed: 10,
+			missileSize: {w: 21, h: 10},
+			fireEffectSize: {w: 64, h: 64},
+			missileSprite: {
+				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
+				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
+				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
+				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+			},
+		}),
+		movespeed: 0,
 		HP: 300,
 		sprite: ENEMY_SPRITE,
-		contactDamage: 18,
-		patrolDistance: 300,
-		attackCooldown: 3000,
+		contactDamage: 10,
+		patrolDistance: 1000,
+		attackCooldown: 500,
 	});
 	new EnemyCharacter({
 		x: 3200 - PLAYER_SIZE.w,
@@ -239,12 +283,27 @@ export function level1(){
 		h: PLAYER_SIZE.h,
 		jumpHeight: 10,
 		jumps: 1,
-		movespeed: 2,
+		enemyType: "range",
+		weapon: new Weapon({
+			name: "Izazgrabi",
+			damage: 10,
+			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
+			missileSpeed: 10,
+			missileSize: {w: 21, h: 10},
+			fireEffectSize: {w: 64, h: 64},
+			missileSprite: {
+				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
+				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
+				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
+				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+			},
+		}),
+		movespeed: 0,
 		HP: 300,
 		sprite: ENEMY_SPRITE,
 		contactDamage: 18,
-		patrolDistance: 200 - PLAYER_SIZE.w,
-		attackCooldown: 3000,
+		patrolDistance: 1750,
+		attackCooldown: 500,
 	});
 	/*
 		Creating Orb Of Health.

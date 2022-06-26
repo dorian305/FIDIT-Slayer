@@ -64,6 +64,7 @@ export class Missile extends Entity {
 		this.position.y =       this.position.y + this.velocity.y;			// Update Y coordinate
 		this.top =              this.position.y;							// Update current top to new Y coordinate
 		this.bottom =           this.position.y + this.size.h;				// Update current bottom to new Y coordinate + height
+		this.center = 			this.left + this.size.w / 2;
 
 		// Draw entity at updated coordinates
 		this.draw();

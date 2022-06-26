@@ -46,7 +46,7 @@ export function MainMenu(){
 		x: x - 100,
 		y: y + 125,
 		sprite: `${PATH_IMAGES}/Button.png`,
-		text: "Start new game",
+		text: "New game",
 		action: () => {
 			// Starting intro sequence
 			introCutscene();

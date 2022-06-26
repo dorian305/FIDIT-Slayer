@@ -371,45 +371,45 @@ export class Character extends Entity {
       Updating character's sprites.
     */
     if (this.direction.left){
-      if (this.isCrouching){
+      if (this.sprite.crouch && this.isCrouching){
         this.currentSprite.src = this.sprite.crouch.left;
         this.currentState = "crouchingleft";
       }
-      else if (this.velocity.y < 0 && !this.isGrounded){
+      else if (this.sprite.jump && this.velocity.y < 0 && !this.isGrounded){
         this.currentSprite.src = this.sprite.jump.left;
         this.currentState = "jumpingleft";
       }
-      else if (this.velocity.y > 0 && !this.isGrounded){
+      else if (this.sprite.fall && this.velocity.y > 0 && !this.isGrounded){
         this.currentSprite.src = this.sprite.fall.left;
         this.currentState = "fallingleft";
       }
-      else if (this.velocity.x == 0){
+      else if (this.sprite.idle && this.velocity.x == 0){
         this.currentSprite.src = this.sprite.idle.left;
         this.currentState = "idleleft";
       }
-      else if (this.velocity.x != 0 && this.currentState != "moveleft"){
+      else if (this.sprite.move && this.velocity.x != 0 && this.currentState != "moveleft"){
         this.currentSprite.src = this.sprite.move.left;
         this.currentState = "moveleft";
       }
     }
     else if (this.direction.right){
-      if (this.isCrouching){
+      if (this.sprite.crouch && this.isCrouching){
         this.currentSprite.src = this.sprite.crouch.right;
         this.currentState = "crouchingright";
       }
-      else if (this.velocity.y < 0 && !this.isGrounded){
+      else if (this.sprite.jump && this.velocity.y < 0 && !this.isGrounded){
         this.currentSprite.src = this.sprite.jump.right;
         this.currentState = "jumpingright";
       }
-      else if (this.velocity.y > 0 && !this.isGrounded){
+      else if (this.sprite.fall && this.velocity.y > 0 && !this.isGrounded){
         this.currentSprite.src = this.sprite.fall.right;
         this.currentState = "fallingright";
       }
-      else if (this.velocity.x == 0){
+      else if (this.sprite.idle && this.velocity.x == 0){
         this.currentSprite.src = this.sprite.idle.right;
         this.currentState = "idleright";
       }
-      else if (this.velocity.x != 0 && this.currentState != "moveright"){
+      else if (this.sprite.move && this.velocity.x != 0 && this.currentState != "moveright"){
         this.currentSprite.src = this.sprite.move.right;
         this.currentState = "moveright";
       }
@@ -420,7 +420,14 @@ export class Character extends Entity {
       Perform these operations only if the character is an enemy.
     */
     if (this.isEnemy){
-      this.patrol();
+      // Only meele enemies patrol
+      if (this.enemyType === "meele"){
+        this.meelePatrol();
+      }
+      // Ranged enemies patrol
+      else if (this.enemyType === "range") {
+        this.rangePatrol();
+      }
     }
     
     /*
@@ -438,6 +445,7 @@ export class Character extends Entity {
     this.position.y =       this.position.y + this.velocity.y;
     this.top =              this.position.y;
     this.bottom =           this.position.y + this.size.h;
+    this.center = 				  this.left + this.size.w / 2;
 
     // Draw character at new coordinates
     this.draw();

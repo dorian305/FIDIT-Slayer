@@ -1,38 +1,50 @@
 import { Character }  from "./Character.js";
 import { Timer }      from "../Timer.js";
+import { randomNumber } from "../../functions/randomnumber.js";
 /*
   Enemy characters class.
   Instantiating this class will create new enemy unit
 	Inherits from character class.
 */
 export class EnemyCharacter extends Character {
-    constructor({x, y, w, h, jumpHeight, jumps, weapon, movespeed, HP, sprite, contactDamage, patrolDistance, attackCooldown}){
+    constructor({x, y, w, h, jumpHeight, jumps, enemyType, weapon, movespeed, seekingMovespeedFactor, HP, sprite, contactDamage, patrolDistance, attackCooldown}){
       super({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, weapon});
       this.isEnemy =            true;                          // Used for determining whether a character is an enemy
+      this.origin =             this.center;                   // The origin point from which the character patrols
       this.patrolDistance =     patrolDistance;                // The maximum distance an enemy will go on one side before moving to the other side
-      this.origin =             this.left + this.size.w / 2;   // The origin point from which the character patrols
+      this.patrolDistanceEdge = {                             // Left and right edges of the enemy patrol area
+        left: this.origin - this.patrolDistance / 2,
+        right: this.origin + this.patrolDistance / 2,
+      }
+      this.enemyType =          enemyType;                     // Type of the enemy (Ranged, meele)
       this.contactDamage =      contactDamage;                 // Damage amount upon touching an enemy
       this.attackCooldown =     attackCooldown;                // Amount of time enemy will wait between attacks in milliseconds
       this.chaseDuration =      3000;                          // Amount of time enemy will stop chasing after you and go back to its origin point
       this.allowAttack =        true;                          // Flag to determine whether the character is allowed to perform an attack
+      this.seekingMovespeedFactor = seekingMovespeedFactor;    // The speed factor increase at which the meele enemy will seek player
+
+      // // Randomizing direction
+      // const rand = randomNumber(1, 2);
+      // rand === 1 ? this.direction.left = true : this.direction.right = true;
+
       ENEMIES.push(this);
     }
 
-    // Enemy patrol
-    patrol() {
+    // Enemy meele patrol
+    meelePatrol() {
       // Check if player character is within enemy patrol area. If it is, attack it
       if (
-          PLAYER.position.x + PLAYER.size.w >= this.origin - this.patrolDistance &&
-          PLAYER.position.x <= this.origin + this.patrolDistance &&
-          PLAYER.position.y + PLAYER.size.h >= this.position.y &&
-          PLAYER.position.y <= this.position.y + this.size.h &&
+          PLAYER.right >= this.patrolDistanceEdge.left &&
+          PLAYER.left <= this.patrolDistanceEdge.right &&
+          PLAYER.bottom >= this.top &&
+          PLAYER.top <= this.bottom &&
           this.allowAttack
         ){
-        this.attack();
+        this.meeleAttack();
       }
       else if (this.direction.right){
         // If the enemy has reached the rightmost patrol edge, start moving to the left side
-        if (this.position.x >= this.origin + this.patrolDistance){
+        if (this.right >= this.patrolDistanceEdge.right){
           this.velocity.x = -this.movespeed;
         }
         else {
@@ -41,7 +53,7 @@ export class EnemyCharacter extends Character {
       }
       else if (this.direction.left){
         // If the enemy has reached the leftmost patrol edge, start moving to the right side
-        if (this.position.x <= this.origin - this.patrolDistance){
+        if (this.left <= this.patrolDistanceEdge.left){
           this.velocity.x = this.movespeed;
         }
         else {
@@ -50,20 +62,56 @@ export class EnemyCharacter extends Character {
       }
     }
 
-    // Enemy attack
-    attack() {
-      if (this.checkCollision(PLAYER)){
+    // Enemy range patrol
+    rangePatrol() {
+      if (
+          PLAYER.right >= this.patrolDistanceEdge.left &&
+          PLAYER.left <= this.patrolDistanceEdge.right &&
+          (PLAYER.bottom >= this.top - 100 || PLAYER.top <= this.bottom + 100) &&
+          this.allowAttack
+      ){
+        this.rangedAttack();
         this.allowAttack = false;
+        const timer = new Timer(() => this.allowAttack = true, this.attackCooldown * randomNumber(1, 2));
+        timer.start();
+
+        // 50% chance for the enemy to jump
+        if (randomNumber(1, 10) > 5){
+          this.jump();
+        }
+      }
+    }
+
+    // Enemy meele attack
+    meeleAttack() {
+      // Check if the enemy collided with a player
+      if (this.checkCollision(PLAYER)){
+        this.allowAttack = false; // disable attacking until the cooldown expires
+        // Wait until attack cooldown expires to perform another attack
         const timer = new Timer(() => this.allowAttack = true, this.attackCooldown);
         timer.start();
       }
+      // Attack the player
       else {
-        if (PLAYER.position.x <= this.position.x){
-          this.velocity.x = -this.movespeed * 2;
+        if (PLAYER.center < this.center){
+          this.velocity.x = -this.movespeed * this.seekingMovespeedFactor;
         }
-        else if (PLAYER.position.x >= this.position.x){
-          this.velocity.x = this.movespeed * 2;
+        else if (PLAYER.center > this.center){
+          this.velocity.x = this.movespeed * this.seekingMovespeedFactor;
         }
       }
+    }
+
+    // Ranged attack (shooting)
+    rangedAttack() {
+      if (PLAYER.center < this.center){
+        this.direction.left = true;
+        this.direction.right = false;
+      }
+      else if (PLAYER.center > this.center){
+        this.direction.right = true;
+        this.direction.left = false;
+      }
+      this.attack();
     }
 }
