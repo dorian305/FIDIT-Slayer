@@ -425,9 +425,9 @@ export class Character extends Entity {
       Perform these operations only if the character is an enemy.
     */
     if (this.isEnemy){
-      // Only meele enemies patrol
-      if (this.enemyType === "meele"){
-        this.meelePatrol();
+      // Only melee enemies patrol
+      if (this.enemyType === "melee"){
+        this.meleePatrol();
       }
       // Ranged enemies patrol
       else if (this.enemyType === "range") {

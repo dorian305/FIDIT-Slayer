@@ -16,12 +16,12 @@ export class EnemyCharacter extends Character {
         left: this.origin - this.patrolDistance / 2,
         right: this.origin + this.patrolDistance / 2,
       }
-      this.enemyType =          enemyType;                     // Type of the enemy (Ranged, meele)
+      this.enemyType =          enemyType;                     // Type of the enemy (Ranged, melee)
       this.contactDamage =      contactDamage;                 // Damage amount upon touching an enemy
       this.attackCooldown =     attackCooldown;                // Amount of time enemy will wait between attacks in milliseconds
       this.chaseDuration =      3000;                          // Amount of time enemy will stop chasing after you and go back to its origin point
       this.allowAttack =        true;                          // Flag to determine whether the character is allowed to perform an attack
-      this.seekingMovespeedFactor = seekingMovespeedFactor;    // The speed factor increase at which the meele enemy will seek player
+      this.seekingMovespeedFactor = seekingMovespeedFactor;    // The speed factor increase at which the melee enemy will seek player
 
       // // Randomizing direction
       // const rand = randomNumber(1, 2);
@@ -30,8 +30,8 @@ export class EnemyCharacter extends Character {
       ENEMIES.push(this);
     }
 
-    // Enemy meele patrol
-    meelePatrol() {
+    // Enemy melee patrol
+    meleePatrol() {
       // Check if player character is within enemy patrol area. If it is, attack it
       if (
           PLAYER.right >= this.patrolDistanceEdge.left &&
@@ -40,7 +40,7 @@ export class EnemyCharacter extends Character {
           PLAYER.top <= this.bottom &&
           this.allowAttack
         ){
-        this.meeleAttack();
+        this.meleeAttack();
       }
       else if (this.direction.right){
         // If the enemy has reached the rightmost patrol edge, start moving to the left side
@@ -83,8 +83,8 @@ export class EnemyCharacter extends Character {
       }
     }
 
-    // Enemy meele attack
-    meeleAttack() {
+    // Enemy melee attack
+    meleeAttack() {
       // Check if the enemy collided with a player
       if (this.checkCollision(PLAYER)){
         this.allowAttack = false; // disable attacking until the cooldown expires

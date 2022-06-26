@@ -50,8 +50,8 @@ export function level1(){
 		},
 		default: `${PATH_SPRITES}/Level 1/Enemies/EnemyIdleRight.png`,
 	}
-	// Meele enemy sprites
-	const ENEMY_MEELE = {
+	// Melee enemy sprites
+	const ENEMY_MELEE = {
 		idle: {
 			left: `${PATH_SPRITES}/Level 1/Enemies/ShieldDroneIdleLeft.png`,
 			right: `${PATH_SPRITES}/Level 1/Enemies/ShieldDroneIdleRight.png`,
@@ -117,14 +117,17 @@ export function level1(){
 	Platform.generateRectangle({x: 5300, y: 500,    w: 200,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_200x50.png`}});
 	Platform.generateRectangle({x: 6050, y: 450,    w: 100,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x50.png`}});
 	Platform.generateRectangle({x: 4700, y: 750,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
-	Platform.generateRectangle({x: 4600, y: 650,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
-	Platform.generateRectangle({x: 4550, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
+	Platform.generateRectangle({x: 4500, y: 650,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
+	Platform.generateRectangle({x: 4500, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
 	Platform.generateRectangle({x: 4750, y: 650,    w: 1500, h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_1500x100.png`}});
 	Platform.generateRectangle({x: 6250, y: 650,	w: 50, 	 h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Spikes_50x100.png`}, killOnTouch: true});
 	Platform.generateRectangle({x: 6900, y: 0,      w: 200,  h: 750,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_200x750.png`}});
 	Platform.generateRectangle({x: 6900, y: 950,    w: 200,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_200x50.png`}});
 	Platform.generateRectangle({x: 7250, y: 0,      w: 100,  h: 650,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x650.png`}});
 	Platform.generateRectangle({x: 7250, y: 900,    w: 800,  h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_800x100.png`}});
+	Platform.generateRectangle({x: 7450, y: 650,    w: 100,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x50.png`}});
+	Platform.generateRectangle({x: 7450, y: 500,    w: 100,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x50.png`}});
+	Platform.generateRectangle({x: 7450, y: 350,    w: 100,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x50.png`}});
 	Platform.generateRectangle({x: 7350, y: 0,      w: 1750, h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_1750x100.png`}});
 	Platform.generateRectangle({x: 8150, y: 300,    w: 150,  h: 700,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_150x700.png`}});
 	Platform.generateRectangle({x: 8100, y: 800,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundLeft_50x50.png`}});
@@ -230,84 +233,41 @@ export function level1(){
 	/*
 		Creating enemy characters.
 	*/
-	// Meele enemies
-	const meeleWidth = 21;
-	const meeleHeight = 25;
-	new EnemyCharacter({
-		x: 950 - meeleWidth / 2,
-		y: 70,
-		w: meeleWidth,
-		h: meeleHeight,
-		jumpHeight: 0,
-		jumps: 0,
-		enemyType: "meele",
-		movespeed: 3,
-		seekingMovespeedFactor: 1.5,
-		HP: 75,
-		sprite: ENEMY_MEELE,
-		contactDamage: 30,
-		patrolDistance: 500,
-		attackCooldown: 3000,
-	});
-	new EnemyCharacter({
-		x: 1650 - meeleWidth / 2,
-		y: 70,
-		w: meeleWidth,
-		h: meeleHeight,
-		jumpHeight: 0,
-		jumps: 0,
-		enemyType: "meele",
-		movespeed: 3,
-		seekingMovespeedFactor: 1.5,
-		HP: 75,
-		sprite: ENEMY_MEELE,
-		contactDamage: 30,
-		patrolDistance: 500,
-		attackCooldown: 3000,
-	});
-	new EnemyCharacter({
-		x: 5400 - meeleWidth / 2,
-		y: 400,
-		w: meeleWidth,
-		h: meeleHeight,
-		jumpHeight: 0,
-		jumps: 0,
-		enemyType: "meele",
-		movespeed: 3,
-		seekingMovespeedFactor: 1.5,
-		HP: 75,
-		sprite: ENEMY_MEELE,
-		contactDamage: 30,
-		patrolDistance: 200,
-		attackCooldown: 3000,
-	});
-	new EnemyCharacter({
-		x: 5550 - meeleWidth / 2,
-		y: 550,
-		w: meeleWidth,
-		h: meeleHeight,
-		jumpHeight: 0,
-		jumps: 0,
-		enemyType: "meele",
-		movespeed: 3,
-		seekingMovespeedFactor: 1.5,
-		HP: 75,
-		sprite: ENEMY_MEELE,
-		contactDamage: 30,
-		patrolDistance: 900,
-		attackCooldown: 3000,
+	// Melee enemies
+	const meele_enemy_properties = [
+		{x: 950, y: 70, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 500, attackCooldown: 3000},
+		{x: 1650, y: 70, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 500, attackCooldown: 3000},
+		{x: 5400, y: 400, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 200, attackCooldown: 1000},
+		{x: 5550, y: 550, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 900, attackCooldown: 2000},
+		{x: 4625, y: 840, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 750, attackCooldown: 3000},
+		{x: 5375, y: 840, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 750, attackCooldown: 3000},
+		{x: 6375, y: 840, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 750, attackCooldown: 3000},
+		{x: 7000, y: 850, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 1, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 200, attackCooldown: 3000},
+		{x: 8225, y: 200, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 1, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 150, attackCooldown: 3000},
+		{x: 9350, y: 350, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 500, attackCooldown: 3000},
+	];
+	meele_enemy_properties.forEach(prop => {
+		new EnemyCharacter({
+			x: prop.x - prop.meleeWidth / 2,
+			y: prop.y,
+			w: prop.meleeWidth,
+			h: prop.meleeHeight,
+			jumpHeight: prop.jumpHeight,
+			jumps: prop.jumps,
+			movespeed: prop.movespeed,
+			seekingMovespeedFactor: prop.seekingMovespeedFactor,
+			HP: prop.HP,
+			contactDamage: prop.contactDamage,
+			patrolDistance: prop.patrolDistance,
+			attackCooldown: prop.attackCooldown,
+			enemyType: "melee",
+			sprite: ENEMY_MELEE,
+		});
 	});
 
 	// Ranged enemies
-	new EnemyCharacter({
-		x: 1700 - PLAYER_SIZE.w / 2,
-		y: 650,
-		w: PLAYER_SIZE.w,
-		h: PLAYER_SIZE.h,
-		jumpHeight: 10,
-		jumps: 1,
-		enemyType: "range",
-		weapon: new Weapon({
+	const ranged_enemy_properties = [
+		{x: 1700, y: 650, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 10, jumps: 1, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 1000, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
 			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
@@ -320,23 +280,8 @@ export function level1(){
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
 				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
 			},
-		}),
-		movespeed: 0,
-		HP: 50,
-		sprite: ENEMY_RANGED,
-		contactDamage: 10,
-		patrolDistance: 1000,
-		attackCooldown: 500,
-	});
-	new EnemyCharacter({
-		x: 3200 - PLAYER_SIZE.w / 2,
-		y: 450,
-		w: PLAYER_SIZE.w,
-		h: PLAYER_SIZE.h,
-		jumpHeight: 10,
-		jumps: 1,
-		enemyType: "range",
-		weapon: new Weapon({
+		})},
+		{x: 3200, y: 450, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 10, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 1750, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
 			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
@@ -349,23 +294,8 @@ export function level1(){
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
 				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
 			},
-		}),
-		movespeed: 0,
-		HP: 50,
-		sprite: ENEMY_RANGED,
-		contactDamage: 18,
-		patrolDistance: 1750,
-		attackCooldown: 500,
-	});
-	new EnemyCharacter({
-		x: 6100 - PLAYER_SIZE.w / 2,
-		y: 350,
-		w: PLAYER_SIZE.w,
-		h: PLAYER_SIZE.h,
-		jumpHeight: 0,
-		jumps: 0,
-		enemyType: "range",
-		weapon: new Weapon({
+		})},
+		{x: 6100, y: 350, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 3000, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
 			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
@@ -378,23 +308,8 @@ export function level1(){
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
 				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
 			},
-		}),
-		movespeed: 0,
-		HP: 50,
-		sprite: ENEMY_RANGED,
-		contactDamage: 18,
-		patrolDistance: 1800,
-		attackCooldown: 500,
-	});
-	new EnemyCharacter({
-		x: 6100 - PLAYER_SIZE.w / 2,
-		y: 550,
-		w: PLAYER_SIZE.w,
-		h: PLAYER_SIZE.h,
-		jumpHeight: 0,
-		jumps: 0,
-		enemyType: "range",
-		weapon: new Weapon({
+		})},
+		{x: 6150, y: 550, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 2500, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
 			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
@@ -407,13 +322,81 @@ export function level1(){
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
 				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
 			},
-		}),
-		movespeed: 0,
-		HP: 50,
-		sprite: ENEMY_RANGED,
-		contactDamage: 18,
-		patrolDistance: 1800,
-		attackCooldown: 500,
+		})},
+		{x: 7500, y: 550, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 1500, attackCooldown: 1000, weapon: new Weapon({
+			name: "Izazgrabi",
+			damage: 10,
+			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
+			missileSpeed: 10,
+			missileSize: {w: 21, h: 10},
+			fireEffectSize: {w: 64, h: 64},
+			missileSprite: {
+				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
+				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
+				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
+				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+			},
+		})},
+		{x: 7500, y: 400, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 1500, attackCooldown: 1000, weapon: new Weapon({
+			name: "Izazgrabi",
+			damage: 10,
+			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
+			missileSpeed: 10,
+			missileSize: {w: 21, h: 10},
+			fireEffectSize: {w: 64, h: 64},
+			missileSprite: {
+				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
+				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
+				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
+				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+			},
+		})},
+		{x: 7500, y: 250, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 1500, attackCooldown: 1000, weapon: new Weapon({
+			name: "Izazgrabi",
+			damage: 10,
+			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
+			missileSpeed: 10,
+			missileSize: {w: 21, h: 10},
+			fireEffectSize: {w: 64, h: 64},
+			missileSprite: {
+				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
+				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
+				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
+				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+			},
+		})},
+		{x: 9625, y: 300, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 1200, attackCooldown: 500, weapon: new Weapon({
+			name: "Izazgrabi",
+			damage: 10,
+			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
+			missileSpeed: 10,
+			missileSize: {w: 21, h: 10},
+			fireEffectSize: {w: 64, h: 64},
+			missileSprite: {
+				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
+				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
+				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
+				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+			},
+		})},
+	];
+	ranged_enemy_properties.forEach(prop => {
+		new EnemyCharacter({
+			x: prop.x - prop.w / 2,
+			y: prop.y,
+			w: prop.w,
+			h: prop.h,
+			jumpHeight: prop.jumpHeight,
+			jumps: prop.jumps,
+			weapon: prop.weapon,
+			movespeed: prop.movespeed,
+			HP: prop.HP,
+			contactDamage: prop.contactDamage,
+			patrolDistance: prop.patrolDistance,
+			attackCooldown: prop.attackCooldown,
+			enemyType: "range",
+			sprite: ENEMY_RANGED,
+		});
 	});
 
 	/*
@@ -441,7 +424,7 @@ export function level1(){
 	*/
 	const ORB_REJUVENATION_POSITIONS = [
 		{x: 3185, 	y: 250},
-		{x: 9610, 	y: 350},
+		{x: 9610, 	y: 200},
 		{x: 10300, 	y: 850},
 	];
 	ORB_REJUVENATION_POSITIONS.forEach(orb_position => {
