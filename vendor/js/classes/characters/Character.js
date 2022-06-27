@@ -361,18 +361,23 @@ export class Character extends Entity {
       this.isDead = true;
       if (this !== PLAYER){
         // Creating death animation upon enemy death
-        new Effect({
-          x: this.center.x - this.sprite.death.w / 2,
-          y: this.center.y - this.sprite.death.h / 2,
-          w: this.sprite.death.w,
-          h: this.sprite.death.h,
-          sprite: {
-            default: this.sprite.death.src,
-          },
-        });
+        if (this.sprite.death){
+          new Effect({
+            x: this.center.x - this.sprite.death.w / 2,
+            y: this.center.y - this.sprite.death.h / 2,
+            w: this.sprite.death.w,
+            h: this.sprite.death.h,
+            sprite: {
+              default: this.sprite.death.src,
+            },
+          });
+        }
         // Playing death sound
-        const deathSound = createSound(this.deathSound);
-        deathSound.play();
+        if (this.deathSound){
+          const deathSound = createSound(this.deathSound);
+          deathSound.play();
+        }
+        
         removeFromArray(ENEMIES, this);
       }
     }

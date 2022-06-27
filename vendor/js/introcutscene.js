@@ -114,7 +114,7 @@ export const introCutscene = () => {
         });
     }
 
-    // Skip cutscene
+    // End cutscene
     const endCutscene = () => {
         clearInterval(interval);
         wrapper.remove();
@@ -148,8 +148,32 @@ export const introCutscene = () => {
             });
         }
         setTimeout(() => {
-            CURRENT_LEVEL = level1;
-            CURRENT_LEVEL();
+            displayGameControls();
         }, 1000);
+    }
+
+    // Display game controls
+    const displayGameControls = () => {
+        Graphics.clearScreen();
+        const gameControls = Graphics.createImage(`${PATH_IMAGES}/GameControls.png`);
+        gameControls.onload = () => {
+            Graphics.drawImage({
+                x: CANVAS.width / 2 - gameControls.width / 2,
+                y: CANVAS.height / 2 - gameControls.height / 2,
+                sprite: gameControls,
+            });
+            new Button({
+                w: 200,
+                h: 50,
+                x: CANVAS.width / 2 - 100,
+                y: CANVAS.height / 2 + 325,
+                sprite: `${PATH_IMAGES}/Button.png`,
+                text: "Skip",
+                action: () => {
+                    CURRENT_LEVEL = level1;
+                    CURRENT_LEVEL();
+                }
+            });
+        }
     }
 }

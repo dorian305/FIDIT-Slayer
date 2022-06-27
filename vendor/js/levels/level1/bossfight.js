@@ -68,8 +68,9 @@ const bossFightRender = () => {
     }
 
     // Death of the boss
-    if (BOSS.HP <= 0){
+    if (BOSS.currentHP <= 0){
         BOSS = null;
+        stopSound(LEVEL_MUSIC);
         // Endgame
         // ...
     }
@@ -85,7 +86,6 @@ const bossAttack = () => {
     // If player is outside of the boss area, always use attack 1
     if (PLAYER.center.x < BOSS_AREA.left || PLAYER.center.x > BOSS_AREA.right){
         attack1();
-        console.log("PLAYER outside boss area");
     }
     else {
         // Randomizing attack
@@ -100,8 +100,10 @@ const bossAttack = () => {
     }
 
     // Queueing next attack
-    const attackTimer = new Timer(bossAttack, BOSS.attackCooldown);
-    attackTimer.start();
+    if (BOSS){
+        const attackTimer = new Timer(bossAttack, BOSS.attackCooldown);
+        attackTimer.start();
+    }
 }
 
 /*

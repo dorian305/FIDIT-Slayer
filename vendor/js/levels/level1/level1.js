@@ -170,7 +170,7 @@ export function level1(){
 		crouch_height: 62,
 		jumpHeight: 15,
 		jumps: 1,
-		movespeed: 5,
+		movespeed: 25,
 		HP: 100.0,
 		sprite: {
 			idle: {
