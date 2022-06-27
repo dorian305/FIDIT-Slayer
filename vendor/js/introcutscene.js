@@ -149,7 +149,7 @@ export const introCutscene = () => {
         }
         setTimeout(() => {
             displayGameControls();
-        }, 1000);
+        }, 5000);
     }
 
     // Display game controls
