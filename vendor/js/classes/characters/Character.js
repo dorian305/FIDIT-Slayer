@@ -1,7 +1,9 @@
 import { Entity }           from "../Entity.js";
+import { Effect }           from "../Effect.js";
 import { Graphics }         from "../Graphics.js";
 import { removeFromArray }  from "../../functions/removefromarray.js";
 import { stopSound }        from "../../functions/stopsound.js";
+import { createSound } 		  from "../../functions/createsound.js";
 import { randomNumber }     from "../../functions/randomnumber.js";
 import { Timer }            from "../Timer.js";
 
@@ -11,7 +13,7 @@ import { Timer }            from "../Timer.js";
 	It inherits from Entity class.
 */
 export class Character extends Entity {
-  constructor({x, y, w, h, crouch_height, sprite, movespeed, HP, jumpHeight, jumps, weapon}){
+  constructor({x, y, w, h, crouch_height, sprite, movespeed, HP, jumpHeight, jumps, weapon, deathSound}){
     super({x, y, w, h, sprite});												 // Calling constructor from the extended class Entity
     if (this.constructor === Character){
       throw new Error(`Cannot instantiate an abstract class "Character"!`);
@@ -30,6 +32,7 @@ export class Character extends Entity {
     this.damaged =        false;                         // Character can be damaged only when this is false
     this.weapon =         weapon;                        // Character's weapon
     this.currentState =   "idle";                        // Character's current animation state
+    this.deathSound =     deathSound;                    // The sound of character's death
     this.direction = {
       up:     false,
       left:   false,
@@ -44,6 +47,7 @@ export class Character extends Entity {
     // If character owns weapon, fire from a weapon.
     if (this.weapon){
       let missileSprite =    "";
+      let missileFireEffectSprite = "";
       let missilePosition =  {x: 0, y: 0};
       let missileVelocity =  {x: 0, y: 0};
       let missileSize =      {w: 0, h: 0};
@@ -51,38 +55,42 @@ export class Character extends Entity {
 
       // Determine which way the missile is moving depending on the character direction
       if (this.direction.up && this.direction.left){
-          missilePosition.x =   this.left - this.weapon.missileSize.w - 10;
-          missilePosition.y =   this.top - this.weapon.missileSize.h + 60;
+          missilePosition.x =   this.left - this.weapon.missileSize.w / 2;
+          missilePosition.y =   this.top + this.size.h / 2 + this.weapon.missileSize.h / 2;
           missileVelocity.x =   0;
           missileVelocity.y =  -this.weapon.missileSpeed;
           missileSize =         {w: this.weapon.missileSize.h, h: this.weapon.missileSize.w};
           missileSprite =       this.weapon.missileSprite.up;
+          missileFireEffectSprite = this.weapon.missileSprite.fire.left;
       }
       else if (this.direction.up && this.direction.right){
-          missilePosition.x =   this.right + 10;
-          missilePosition.y =   this.top - this.weapon.missileSize.h + 60;
+          missilePosition.x =   this.right + this.weapon.missileSize.w / 2;
+          missilePosition.y =   this.top + this.size.h / 2 + this.weapon.missileSize.h / 2;
           missileVelocity.x =   0;
           missileVelocity.y =  -this.weapon.missileSpeed;
           missileSize =         {w: this.weapon.missileSize.h, h: this.weapon.missileSize.w};
           missileSprite =       this.weapon.missileSprite.up;
+          missileFireEffectSprite = this.weapon.missileSprite.fire.right;
       }
       else if (this.direction.left){
-          missilePosition.x =   this.left - this.weapon.missileSize.w;
-          missilePosition.y =   this.top - this.weapon.missileSize.h + 60;
+          missilePosition.x =   this.left + this.weapon.missileSize.w / 2;
+          missilePosition.y =   this.top + this.size.h / 2 + this.weapon.missileSize.h / 2;
           missileVelocity.x =  -this.weapon.missileSpeed;
           missileVelocity.y =   0;
           missileSize =         {w: this.weapon.missileSize.w, h: this.weapon.missileSize.h};
           missileSprite =       this.weapon.missileSprite.left;
+          missileFireEffectSprite = this.weapon.missileSprite.fire.left;
           }
       else if (this.direction.right){
-          missilePosition.x =   this.right + 10;
-          missilePosition.y =   this.top - this.weapon.missileSize.h + 60;
+          missilePosition.x =   this.right - this.weapon.missileSize.w / 2;
+          missilePosition.y =   this.top + this.size.h / 2 + this.weapon.missileSize.h / 2;
           missileVelocity.x =   this.weapon.missileSpeed;
           missileVelocity.y =   0;
           missileSize =         {w: this.weapon.missileSize.w, h: this.weapon.missileSize.h};
           missileSprite =       this.weapon.missileSprite.right;
+          missileFireEffectSprite = this.weapon.missileSprite.fire.right
       }
-      this.weapon.attack({missileSprite, missilePosition, missileVelocity, missileSize, missileOwner});
+      this.weapon.attack({missileSprite, missileFireEffectSprite, missilePosition, missileVelocity, missileSize, missileOwner});
     }
   }
 
@@ -165,8 +173,11 @@ export class Character extends Entity {
      else if (this.oldLeft > platform.oldRight){
        // Platforms which become visible once you land on them do not cause collision from left side
        if (platform.visible !== false){
-         this.position.x = platform.right + 0.1;
-         this.velocity.x = platform.velocity.x;
+        // Platforms that are "landingOnly" do not cause left side collision
+        if (platform.landingOnly !== true){
+          this.position.x = platform.right + 0.1;
+          this.velocity.x = platform.velocity.x;
+        }
        }
       
         // In debug mode, display red vertical line whenever collision occurs
@@ -179,8 +190,11 @@ export class Character extends Entity {
       else if (this.oldRight < platform.oldLeft){
         // Platforms which become visible once you land on them do not cause collision from right side
         if (platform.visible !== false){
-          this.position.x = platform.left - this.size.w - 0.1;
-          this.velocity.x = platform.velocity.x;
+          // Platforms that are "landingOnly" do not cause left side collision
+          if (platform.landingOnly !== true){
+            this.position.x = platform.left - this.size.w - 0.1;
+            this.velocity.x = platform.velocity.x;
+          }
         }
 
         // In debug mode, display red vertical line whenever collision occurs
@@ -193,8 +207,11 @@ export class Character extends Entity {
       else if (this.oldTop > platform.oldBottom){
         // Platforms which become visible once you land on them do not cause collision from below
         if (platform.visible !== false){
-          this.position.y = platform.bottom + 0.1;
-          this.velocity.y = -this.velocity.y;
+          // Platforms that are "landingOnly" do not cause left side collision
+          if (platform.landingOnly !== true){
+            this.position.y = platform.bottom + 0.1;
+            this.velocity.y = -this.velocity.y;
+          }
         }
 
         // In debug mode, display red vertical line whenever collision occurs
@@ -205,7 +222,7 @@ export class Character extends Entity {
     });
 
     // Collision with an enemy character if this === PLAYER
-    if (this === PLAYER && !this.damaged){
+    if (this === PLAYER && !this.damaged && !DEBUG_MODE){
       ENEMIES.forEach(enemy => {
         if (this.checkCollision(enemy)){
           this.damaged = 				true;
@@ -248,11 +265,13 @@ export class Character extends Entity {
     });
 
     // Collision with Fireballs
-    FIREBALLS.forEach(fireball => {
-      if (this.checkCollision(fireball)){
-        this.currentHP = 0;
-      }
-    });
+    if (!DEBUG_MODE){
+      FIREBALLS.forEach(fireball => {
+        if (!this.isEnemy && this.checkCollision(fireball)){
+          this.currentHP = 0;
+        }
+      });
+    }
   }
 
   /*
@@ -264,11 +283,11 @@ export class Character extends Entity {
       const HPOffsetFromTop = 		10;
 
       // HP Shell properties
-      const HPShellBorderSize = 	2;
-      const HPShellBorderColor =  "#d7d7d7";
+      const HPShellBorderSize = 	0;
+      const HPShellBorderColor =  "#552f2f";
       const HPShellWidth = 				(this.size.w * 2) - (HPShellBorderSize * 2);
       const HPShellHeight = 			15 - (HPShellBorderSize * 2);
-      const HPShellColor = 				"#262626";
+      const HPShellColor = 				"#552f2f";
       const HPShellPositionX = 		this.left - (this.size.w / 2) + HPShellBorderSize;
       const HPShellPositionY = 		this.top - HPOffsetFromTop - HPShellHeight;
 
@@ -276,7 +295,7 @@ export class Character extends Entity {
       const HPScale = 						HPShellWidth / this.maxHP;
       const HPBarWidth = 					this.currentHP * HPScale;
       const HPBarHeight = 				HPShellHeight;
-      const HPBarColors = 				{healthy: "#09de25", weakened: "#deb009", critical: "#de1709"};
+      const HPBarColors = 				{healthy: "#226d34", weakened: "#6d6c22", critical: "#a92d2d"};
       let 	HPBarColor = 					null;
       const HPBarPositionX = 			HPShellPositionX;
       const HPBarPositionY = 			HPShellPositionY;
@@ -286,7 +305,7 @@ export class Character extends Entity {
       if (HPRatio > 0.66 && HPRatio <= 1){
         HPBarColor = HPBarColors.healthy;					// Heath percentage is in healthy range
       }
-      else if (HPRatio > 0.33 && HPRatio < 0.66){
+      else if (HPRatio > 0.33 && HPRatio <= 0.66){
         HPBarColor = HPBarColors.weakened;				// Heath percentage is in weakened range
       }
       else {
@@ -341,6 +360,19 @@ export class Character extends Entity {
     if (this.currentHP <= 0){
       this.isDead = true;
       if (this !== PLAYER){
+        // Creating death animation upon enemy death
+        new Effect({
+          x: this.center.x - this.sprite.death.w / 2,
+          y: this.center.y - this.sprite.death.h / 2,
+          w: this.sprite.death.w,
+          h: this.sprite.death.h,
+          sprite: {
+            default: this.sprite.death.src,
+          },
+        });
+        // Playing death sound
+        const deathSound = createSound(this.deathSound);
+        deathSound.play();
         removeFromArray(ENEMIES, this);
       }
     }
@@ -426,11 +458,11 @@ export class Character extends Entity {
     */
     if (this.isEnemy){
       // Only melee enemies patrol
-      if (this.enemyType === "melee"){
+      if (this.enemyType === "melee" && this.meleePatrol){
         this.meleePatrol();
       }
       // Ranged enemies patrol
-      else if (this.enemyType === "range") {
+      else if (this.enemyType === "range" && this.rangePatrol){
         this.rangePatrol();
       }
     }
@@ -450,7 +482,8 @@ export class Character extends Entity {
     this.position.y =       this.position.y + this.velocity.y;
     this.top =              this.position.y;
     this.bottom =           this.position.y + this.size.h;
-    this.center = 				  this.left + this.size.w / 2;
+    this.center.x = 				this.left + this.size.w / 2;
+    this.center.y = 				this.top + this.size.h / 2;
 
     // Draw character at new coordinates
     this.draw();

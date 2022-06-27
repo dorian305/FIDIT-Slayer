@@ -32,9 +32,6 @@ function Render(){
 
 		// Player is playing a game and the game is not paused
 	  	if (INGAME && !GAME_PAUSED){
-			/*
-				This piece of code handles player character movement and camera following the player.
-			*/
 			// Player holds down A key (Moves left)
 			if (PLAYER.keys.A.pressed && !PLAYER.keys.D.pressed && !PLAYER.isCrouching){
 				PLAYER.velocity.x =	-PLAYER.movespeed;		// Set player X velocity to negative movespeed
@@ -87,7 +84,15 @@ function Render(){
 			PLAYER.direction.up = PLAYER.keys.W.pressed || false;
 
 			/*
-				Render the game objects and update their properties every frame.
+				Player has entered boss area
+			*/
+			if (PLAYER.center.x >= BOSS_AREA.left && !PLAYER_ENTERED_BOSS_AREA){
+				PLAYER_ENTERED_BOSS_AREA = true;
+				BOSS_FIGHT();
+			}
+
+			/*
+				Render the game objects and other game logic
 			*/
 			CANVAS.style.marginLeft = 	`${CANVAS_EDGES.left}px`;
 			CANVAS.style.marginTop =	`${CANVAS_EDGES.top}px`;

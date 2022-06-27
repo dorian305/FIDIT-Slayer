@@ -4,8 +4,9 @@ import { createSound } 		from "../../functions/createsound.js";
 import { removeFromArray } 	from "../../functions/removefromarray.js";
 
 export class Missile extends Entity {
-    constructor({x, y, w, h, sprite, damage, owner}){
+    constructor({x, y, w, h, sprite, velocity, damage, owner}){
         super({x, y, w, h, sprite});
+		this.velocity = velocity;
         this.damage = damage;
 		this.owner = owner; 	// The owner of the missile isn't damaged by the missile
         MISSILES.push(this);
@@ -14,7 +15,7 @@ export class Missile extends Entity {
 	// Missiles collision with platforms
 	collider2D(){
 		PLATFORMS.forEach(platform => {
-			if (this.checkCollision(platform)){
+			if (this.checkCollision(platform) && platform.visible && !platform.landingOnly){
 				// Check if platform is destroyable. If it is, damage it
 				if (platform.destroyable){
 					if (platform.HP - this.damage < 0){
@@ -27,12 +28,12 @@ export class Missile extends Entity {
 					*/
 					if (platform.HP <= 0){
 						new Effect({
-							x: platform.left - 37.5,
-							y: platform.top - 37.5,
-							w: 150,
-							h: 150,
+							x: platform.center.x - platform.destroyExplosionSpriteSize.w / 2,
+							y: platform.center.y - platform.destroyExplosionSpriteSize.h / 2,
+							w: platform.destroyExplosionSpriteSize.w,
+							h: platform.destroyExplosionSpriteSize.h,
 							sprite: {
-								default: `${PATH_SPRITES}/Effects/PlatformDestroyExplosion.png`,
+								default: platform.destroyExplosionSprite,
 							},
 						});
 						let explosionSound = createSound(`${PATH_AUDIO}/Effects/PlatformDestructionSound.mp3`);
@@ -47,10 +48,12 @@ export class Missile extends Entity {
 	}
 
 	update() {
-		// Remove the missile if it gets beyond the screen top or screen bottom
-		if (this.top < 0 || this.bottom > CANVAS.height || this.left < 0 || this.right > LEVEL_END_EDGE){
+		// Remove the missile if it gets beyond the viewport
+		if (this.top < 0 || this.bottom > CANVAS.height || this.left < Math.abs(CANVAS_EDGES.left) || this.right > Math.abs(CANVAS_EDGES.left) + window.innerWidth){
 			removeFromArray(MISSILES, this);
 		}
+		
+		this.updateSpriteFrame();
 
 		this.collider2D();
 
@@ -64,7 +67,8 @@ export class Missile extends Entity {
 		this.position.y =       this.position.y + this.velocity.y;			// Update Y coordinate
 		this.top =              this.position.y;							// Update current top to new Y coordinate
 		this.bottom =           this.position.y + this.size.h;				// Update current bottom to new Y coordinate + height
-		this.center = 			this.left + this.size.w / 2;
+		this.center.x =			this.left + this.size.w / 2;
+		this.center.y =			this.top + this.size.h / 2;
 
 		// Draw entity at updated coordinates
 		this.draw();

@@ -17,21 +17,23 @@ export class Weapon {
     }
 
     // Executing weapon's attack
-    attack({missileSprite, missilePosition, missileVelocity, missileSize, missileOwner}){
+    attack({missileSprite, missileFireEffectSprite, missilePosition, missileVelocity, missileSize, missileOwner}){
         // Creating the missile
-        const missile = new Missile({
-            x: missilePosition.x,
-            y: missilePosition.y,
+        new Missile({
+            x: missilePosition.x - missileSize.w / 2,
+            y: missilePosition.y - missileSize.h / 2,
             w: missileSize.w,
             h: missileSize.h,
+            velocity: {
+                x: missileVelocity.x,
+                y: missileVelocity.y,
+            },
             sprite: {
                 default: missileSprite
             },
             damage: this.damage,
             owner: missileOwner,
         });
-        missile.velocity.x = missileVelocity.x;
-        missile.velocity.y = missileVelocity.y;
 
         // Create missile fire effect on missile creation
 		new Effect({
@@ -40,7 +42,7 @@ export class Weapon {
 			w: this.fireEffectSize.w,
 			h: this.fireEffectSize.h,
 			sprite: {
-				default: this.missileSprite.fire,
+				default: missileFireEffectSprite,
 			},
 		});
 

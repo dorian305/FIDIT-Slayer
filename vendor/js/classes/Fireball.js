@@ -23,6 +23,8 @@ export class Fireball extends Entity {
         else {
             this.currentSprite.src = this.sprite.down;
         }
+
+        this.updateSpriteFrame();
         
         this.oldLeft =          this.left;
         this.oldRight =         this.right;
@@ -34,7 +36,8 @@ export class Fireball extends Entity {
         this.position.y =       this.position.y + this.velocity.y;
         this.top =              this.position.y;
         this.bottom =           this.position.y + this.size.h;
-        this.center = 			this.left + this.size.w / 2;
+        this.center.x = 		this.left + this.size.w / 2;
+        this.center.y = 		this.top + this.size.h / 2;
 
         // Draw character at new coordinates
         this.draw();

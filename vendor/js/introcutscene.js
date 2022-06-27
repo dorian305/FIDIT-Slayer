@@ -150,6 +150,6 @@ export const introCutscene = () => {
         setTimeout(() => {
             CURRENT_LEVEL = level1;
             CURRENT_LEVEL();
-        }, 0);
+        }, 1000);
     }
 }

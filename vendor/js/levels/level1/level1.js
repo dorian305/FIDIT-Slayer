@@ -9,6 +9,7 @@ import { OrbOfRejuvenation } 		from "../../classes/Orbs/OrbOfRejuvenation.js";
 import { createSound } 				from "../../functions/createsound.js";
 import { spawnFireballs }			from "./fireballs.js";
 import { stopSound } 				from "../../functions/stopsound.js";
+import { bossFight }				from "./bossfight.js";
 
 export function level1(){
 	/*
@@ -24,7 +25,10 @@ export function level1(){
 	FIREBALLS.length = 				0;					// Emptying array of fireballs
 	LEVEL_BEGINNING_EDGE = 			0;					// Setting beginning of the level
 	LEVEL_END_EDGE = 				12000;				// Setting end of the level
+	BOSS_AREA.left = 				10500;
+	BOSS_AREA.right = 				11800;
 	INGAME = 						true;				// Setting INGAME flag to true when starting level
+	PLAYER_ENTERED_BOSS_AREA = 		false;
 	GAME_PAUSED = 					false;				// Setting GAME_PAUSED flag to false when starting level
 	CANVAS.height =					1000;
 	CANVAS.width =                  LEVEL_END_EDGE;		// Setting width of the canvas to the level width
@@ -34,34 +38,7 @@ export function level1(){
 		top: 0,
 		bottom: CANVAS.height,
 	}
-	// Ranged enemy sprites
-	const ENEMY_RANGED = {
-		idle: {
-			left: `${PATH_SPRITES}/Level 1/Enemies/EnemyIdleLeft.png`,
-			right: `${PATH_SPRITES}/Level 1/Enemies/EnemyIdleRight.png`,
-		},
-		move: {
-			left: `${PATH_SPRITES}/Level 1/Enemies/EnemyMoveLeft.png`,
-			right: `${PATH_SPRITES}/Level 1/Enemies/EnemyMoveRight.png`,
-		},
-		fire: {
-			left: `${PATH_SPRITES}/Level 1/Enemies/EnemyFireLeft.png`,
-			right: `${PATH_SPRITES}Level 1/Enemies/EnemyFireRight.png`,
-		},
-		default: `${PATH_SPRITES}/Level 1/Enemies/EnemyIdleRight.png`,
-	}
-	// Melee enemy sprites
-	const ENEMY_MELEE = {
-		idle: {
-			left: `${PATH_SPRITES}/Level 1/Enemies/ShieldDroneIdleLeft.png`,
-			right: `${PATH_SPRITES}/Level 1/Enemies/ShieldDroneIdleRight.png`,
-		},
-		move: {
-			left: `${PATH_SPRITES}/Level 1/Enemies/ShieldDroneMoveLeft.png`,
-			right: `${PATH_SPRITES}/Level 1/Enemies/ShieldDroneMoveRight.png`,
-		},
-		default: `${PATH_SPRITES}/Level 1/Enemies/ShieldDroneIdleRight.png`,
-	}
+	BOSS_FIGHT = bossFight;								// Saving boss fight function handler to global variable (accessed in render.js)
 
 	// Clearing all timers
 	TIMERS.forEach(timer => {
@@ -103,10 +80,10 @@ export function level1(){
 	Platform.generateRectangle({x: 1350, y: 750,	w: 700,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_700x50.png`}});
 	Platform.generateRectangle({x: 2300, y: 650,	w: 1750, h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_1750x50.png`}});
 	Platform.generateRectangle({x: 3000, y: 550,	w: 400,  h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_400x100.png`}});
-	Platform.generateRectangle({x: 3175, y: 400,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
-	Platform.generateRectangle({x: 2875, y: 300,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
-	Platform.generateRectangle({x: 2575, y: 350,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
-	Platform.generateRectangle({x: 2300, y: 250,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false});
+	Platform.generateRectangle({x: 3175, y: 400,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false, landingOnly: true});
+	Platform.generateRectangle({x: 2875, y: 300,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false, landingOnly: true});
+	Platform.generateRectangle({x: 2575, y: 350,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false, landingOnly: true});
+	Platform.generateRectangle({x: 2300, y: 250,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}, visible: false, landingOnly: true});
 	Platform.generateRectangle({x: 2150, y: 950,	w: 2100, h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Spikes_2100x50.png`}, killOnTouch: true});
 	Platform.generateRectangle({x: 2300, y: 700,	w: 1750, h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Spikes_1750x50.png`}, killOnTouch: true});
 	Platform.generateRectangle({x: 4250, y: 0,	    w: 2500, h: 150,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_2500x150.png`}});
@@ -171,6 +148,11 @@ export function level1(){
 	Platform.generateRectangle({x: 11900,y: 150,	w: 100,  h: 550,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x550.png`}});
 	Platform.generateRectangle({x: 9870, y: 950,	w: 100,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x50.png`}});
 	Platform.generateRectangle({x: 11950,y: 700,	w: 50,   h: 200,  sprite: {default: `${PATH_SPRITES}/Level 1/WallDestroy_50x200.png`}, destroyable: true, HP: 200});
+	Platform.generateRectangle({x: 11900,y: 700,	w: 50,   h: 200,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_50x200_2.png`}});
+	Platform.generateRectangle({x: 10500,y: 750,	w: 200,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_200x50.png`}, landingOnly: true});
+	Platform.generateRectangle({x: 10500,y: 600,	w: 100,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x50.png`}, landingOnly: true});
+	Platform.generateRectangle({x: 11600,y: 600,	w: 100,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_100x50.png`}, landingOnly: true});
+	Platform.generateRectangle({x: 11500,y: 750,	w: 200,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Ground_200x50.png`}, landingOnly: true});
 
 	/*
 		Starting fireball spawning.
@@ -216,7 +198,7 @@ export function level1(){
 		playerName: "Dorian",
 		weapon: new Weapon({
 			name: "Izanagi",
-			damage: 20,
+			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izanagi/Fire.mp3`),
 			missileSpeed: 20,
 			missileSize: {w: 21, h: 10},
@@ -225,7 +207,10 @@ export function level1(){
 				left: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/MissileLeft.png`,
 				right: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/MissileRight.png`,
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/MissileUp.png`,
-				fire: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/FiredLeft.png`,
+				fire: {
+					left: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/FiredLeft.png`,	
+					right: `${PATH_SPRITES}/Weapons/Ranged/Izanagi/FiredRight.png`,
+				},
 			},
 		}),
 	});
@@ -233,28 +218,75 @@ export function level1(){
 	/*
 		Creating enemy characters.
 	*/
+	// Ranged enemy sprites
+	const ENEMY_RANGED = {
+		idle: {
+			left: `${PATH_SPRITES}/Level 1/Enemies/RottenKauIdleLeft.png`,
+			right: `${PATH_SPRITES}/Level 1/Enemies/RottenKauIdleRight.png`,
+		},
+		move: {
+			left: `${PATH_SPRITES}/Level 1/Enemies/RottenKauMoveLeft.png`,
+			right: `${PATH_SPRITES}/Level 1/Enemies/RottenKauMoveRight.png`,
+		},
+		jump: {
+			left: `${PATH_SPRITES}/Level 1/Enemies/RottenKauJumpLeft.png`,
+			right: `${PATH_SPRITES}/Level 1/Enemies/RottenKauJumpRight.png`,
+		},
+		fall: {
+			left: `${PATH_SPRITES}/Level 1/Enemies/RottenKauFallLeft.png`,
+			right: `${PATH_SPRITES}/Level 1/Enemies/RottenKauFallRight.png`,
+		},
+		fire: {
+			left: `${PATH_SPRITES}/Level 1/Enemies/RottenKauFireLeft.png`,
+			right: `${PATH_SPRITES}Level 1/Enemies/RottenKauFireRight.png`,
+		},
+		death: {
+			src: `${PATH_SPRITES}/Level 1/Enemies/Death.png`,
+			w: 150,
+			h: 150,
+		},
+		default: `${PATH_SPRITES}/Level 1/Enemies/RottenKauIdleRight.png`,
+	}
+	// Melee enemy sprites
+	const ENEMY_MELEE = {
+		idle: {
+			left: `${PATH_SPRITES}/Level 1/Enemies/ShieldDroneIdleLeft.png`,
+			right: `${PATH_SPRITES}/Level 1/Enemies/ShieldDroneIdleRight.png`,
+		},
+		move: {
+			left: `${PATH_SPRITES}/Level 1/Enemies/ShieldDroneMoveLeft.png`,
+			right: `${PATH_SPRITES}/Level 1/Enemies/ShieldDroneMoveRight.png`,
+		},
+		death: {
+			src: `${PATH_SPRITES}/Level 1/Enemies/Death.png`,
+			w: 150,
+			h: 150,
+		},
+		default: `${PATH_SPRITES}/Level 1/Enemies/ShieldDroneIdleRight.png`,
+	}
 	// Melee enemies
 	const meele_enemy_properties = [
-		{x: 950, y: 70, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 500, attackCooldown: 3000},
-		{x: 1650, y: 70, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 500, attackCooldown: 3000},
-		{x: 5400, y: 400, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 200, attackCooldown: 1000},
-		{x: 5550, y: 550, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 900, attackCooldown: 2000},
-		{x: 4625, y: 840, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 750, attackCooldown: 3000},
-		{x: 5375, y: 840, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 750, attackCooldown: 3000},
-		{x: 6375, y: 840, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 750, attackCooldown: 3000},
-		{x: 7000, y: 850, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 1, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 200, attackCooldown: 3000},
-		{x: 8225, y: 200, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 1, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 150, attackCooldown: 3000},
-		{x: 9350, y: 350, meleeWidth: 21, meleeHeight: 25, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 75, contactDamage: 30, patrolDistance: 500, attackCooldown: 3000},
+		{x: 950, y: 70, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 10, patrolDistance: 500, attackCooldown: 3000},
+		{x: 1650, y: 70, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 10, patrolDistance: 500, attackCooldown: 3000},
+		{x: 5400, y: 400, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 15, patrolDistance: 200, attackCooldown: 1000},
+		{x: 5550, y: 550, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 15, patrolDistance: 900, attackCooldown: 2000},
+		{x: 4625, y: 840, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 10, patrolDistance: 750, attackCooldown: 3000},
+		{x: 5375, y: 840, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 10, patrolDistance: 750, attackCooldown: 3000},
+		{x: 6375, y: 840, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 10, patrolDistance: 750, attackCooldown: 3000},
+		{x: 7000, y: 850, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 1, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 5, patrolDistance: 200, attackCooldown: 3000},
+		{x: 8225, y: 200, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 1, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 5, patrolDistance: 150, attackCooldown: 3000},
+		{x: 9350, y: 350, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 5, patrolDistance: 500, attackCooldown: 3000},
 	];
 	meele_enemy_properties.forEach(prop => {
 		new EnemyCharacter({
-			x: prop.x - prop.meleeWidth / 2,
+			x: prop.x - prop.w / 2,
 			y: prop.y,
-			w: prop.meleeWidth,
-			h: prop.meleeHeight,
+			w: prop.w,
+			h: prop.h,
 			jumpHeight: prop.jumpHeight,
 			jumps: prop.jumps,
 			movespeed: prop.movespeed,
+			deathSound: `${PATH_AUDIO}/Level 1/EnemyDeath.mp3`,
 			seekingMovespeedFactor: prop.seekingMovespeedFactor,
 			HP: prop.HP,
 			contactDamage: prop.contactDamage,
@@ -267,116 +299,140 @@ export function level1(){
 
 	// Ranged enemies
 	const ranged_enemy_properties = [
-		{x: 1700, y: 650, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 10, jumps: 1, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 1000, attackCooldown: 500, weapon: new Weapon({
+		{x: 1700, y: 650, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 10, jumps: 1, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 1000, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 10,
+			damage: 20,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
-			missileSpeed: 10,
-			missileSize: {w: 21, h: 10},
+			missileSpeed: 7,
+			missileSize: {w: 30, h: 15},
 			fireEffectSize: {w: 64, h: 64},
 			missileSprite: {
 				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
 				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
-				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+				fire: {
+					left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,	
+					right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredRight.png`,
+				}
 			},
 		})},
-		{x: 3200, y: 450, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 10, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 1750, attackCooldown: 500, weapon: new Weapon({
+		{x: 3200, y: 450, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 10, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 1750, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 10,
+			damage: 20,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
-			missileSpeed: 10,
-			missileSize: {w: 21, h: 10},
+			missileSpeed: 7,
+			missileSize: {w: 30, h: 15},
 			fireEffectSize: {w: 64, h: 64},
 			missileSprite: {
 				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
 				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
-				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+				fire: {
+					left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,	
+					right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredRight.png`,
+				}
 			},
 		})},
-		{x: 6100, y: 350, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 3000, attackCooldown: 500, weapon: new Weapon({
+		{x: 6100, y: 350, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 3000, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 10,
+			damage: 20,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
-			missileSpeed: 10,
-			missileSize: {w: 21, h: 10},
+			missileSpeed: 7,
+			missileSize: {w: 30, h: 15},
 			fireEffectSize: {w: 64, h: 64},
 			missileSprite: {
 				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
 				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
-				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+				fire: {
+					left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,	
+					right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredRight.png`,
+				}
 			},
 		})},
-		{x: 6150, y: 550, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 2500, attackCooldown: 500, weapon: new Weapon({
+		{x: 6150, y: 550, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 2500, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 10,
+			damage: 20,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
-			missileSpeed: 10,
-			missileSize: {w: 21, h: 10},
+			missileSpeed: 7,
+			missileSize: {w: 30, h: 15},
 			fireEffectSize: {w: 64, h: 64},
 			missileSprite: {
 				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
 				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
-				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+				fire: {
+					left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,	
+					right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredRight.png`,
+				}
 			},
 		})},
-		{x: 7500, y: 550, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 1500, attackCooldown: 1000, weapon: new Weapon({
+		{x: 7500, y: 550, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 1500, attackCooldown: 1000, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 10,
+			damage: 20,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
-			missileSpeed: 10,
-			missileSize: {w: 21, h: 10},
+			missileSpeed: 7,
+			missileSize: {w: 30, h: 15},
 			fireEffectSize: {w: 64, h: 64},
 			missileSprite: {
 				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
 				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
-				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+				fire: {
+					left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,	
+					right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredRight.png`,
+				}
 			},
 		})},
-		{x: 7500, y: 400, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 1500, attackCooldown: 1000, weapon: new Weapon({
+		{x: 7500, y: 400, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 1500, attackCooldown: 1000, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 10,
+			damage: 20,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
-			missileSpeed: 10,
-			missileSize: {w: 21, h: 10},
+			missileSpeed: 7,
+			missileSize: {w: 30, h: 15},
 			fireEffectSize: {w: 64, h: 64},
 			missileSprite: {
 				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
 				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
-				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+				fire: {
+					left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,	
+					right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredRight.png`,
+				}
 			},
 		})},
-		{x: 7500, y: 250, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 1500, attackCooldown: 1000, weapon: new Weapon({
+		{x: 7500, y: 250, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 1500, attackCooldown: 1000, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 10,
+			damage: 20,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
-			missileSpeed: 10,
-			missileSize: {w: 21, h: 10},
+			missileSpeed: 7,
+			missileSize: {w: 30, h: 15},
 			fireEffectSize: {w: 64, h: 64},
 			missileSprite: {
 				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
 				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
-				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+				fire: {
+					left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,	
+					right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredRight.png`,
+				}
 			},
 		})},
-		{x: 9625, y: 300, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 50, contactDamage: 10, patrolDistance: 1200, attackCooldown: 500, weapon: new Weapon({
+		{x: 9625, y: 300, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 1200, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 10,
+			damage: 20,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
-			missileSpeed: 10,
-			missileSize: {w: 21, h: 10},
+			missileSpeed: 7,
+			missileSize: {w: 30, h: 15},
 			fireEffectSize: {w: 64, h: 64},
 			missileSprite: {
 				left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileLeft.png`,
 				right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileRight.png`,
 				up: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/MissileUp.png`,
-				fire: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,
+				fire: {
+					left: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredLeft.png`,	
+					right: `${PATH_SPRITES}/Weapons/Ranged/Izazgrabi/FiredRight.png`,
+				}
 			},
 		})},
 	];
@@ -390,6 +446,7 @@ export function level1(){
 			jumps: prop.jumps,
 			weapon: prop.weapon,
 			movespeed: prop.movespeed,
+			deathSound: `${PATH_AUDIO}/Level 1/EnemyDeath.mp3`,
 			HP: prop.HP,
 			contactDamage: prop.contactDamage,
 			patrolDistance: prop.patrolDistance,
@@ -425,7 +482,8 @@ export function level1(){
 	const ORB_REJUVENATION_POSITIONS = [
 		{x: 3185, 	y: 250},
 		{x: 9610, 	y: 200},
-		{x: 10300, 	y: 850},
+		{x: 10525,	y: 450},
+		{x: 11645,	y: 450},
 	];
 	ORB_REJUVENATION_POSITIONS.forEach(orb_position => {
 		new OrbOfRejuvenation({
@@ -436,7 +494,7 @@ export function level1(){
 			sprite: {
 				default: `${PATH_SPRITES}/Orbs/OrbOfRejuvenation.png`,
 			},
-			healPercentage: 0.20,
+			healPercentage: 0.25,
 		});
 	});
 

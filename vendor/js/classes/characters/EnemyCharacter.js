@@ -7,10 +7,10 @@ import { randomNumber } from "../../functions/randomnumber.js";
 	Inherits from character class.
 */
 export class EnemyCharacter extends Character {
-    constructor({x, y, w, h, jumpHeight, jumps, enemyType, weapon, movespeed, seekingMovespeedFactor, HP, sprite, contactDamage, patrolDistance, attackCooldown}){
-      super({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, weapon});
+    constructor({x, y, w, h, jumpHeight, jumps, enemyType, weapon, movespeed, seekingMovespeedFactor, HP, sprite, contactDamage, patrolDistance, attackCooldown, deathSound}){
+      super({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, weapon, deathSound});
       this.isEnemy =            true;                          // Used for determining whether a character is an enemy
-      this.origin =             this.center;                   // The origin point from which the character patrols
+      this.origin =             this.center.x;                   // The origin point from which the character patrols
       this.patrolDistance =     patrolDistance;                // The maximum distance an enemy will go on one side before moving to the other side
       this.patrolDistanceEdge = {                             // Left and right edges of the enemy patrol area
         left: this.origin - this.patrolDistance / 2,
@@ -22,10 +22,6 @@ export class EnemyCharacter extends Character {
       this.chaseDuration =      3000;                          // Amount of time enemy will stop chasing after you and go back to its origin point
       this.allowAttack =        true;                          // Flag to determine whether the character is allowed to perform an attack
       this.seekingMovespeedFactor = seekingMovespeedFactor;    // The speed factor increase at which the melee enemy will seek player
-
-      // // Randomizing direction
-      // const rand = randomNumber(1, 2);
-      // rand === 1 ? this.direction.left = true : this.direction.right = true;
 
       ENEMIES.push(this);
     }
@@ -94,10 +90,10 @@ export class EnemyCharacter extends Character {
       }
       // Attack the player
       else {
-        if (PLAYER.center < this.center){
+        if (PLAYER.center.x < this.center.x){
           this.velocity.x = -this.movespeed * this.seekingMovespeedFactor;
         }
-        else if (PLAYER.center > this.center){
+        else if (PLAYER.center.x > this.center.x){
           this.velocity.x = this.movespeed * this.seekingMovespeedFactor;
         }
       }
@@ -105,11 +101,11 @@ export class EnemyCharacter extends Character {
 
     // Ranged attack (shooting)
     rangedAttack() {
-      if (PLAYER.center < this.center){
+      if (PLAYER.center.x < this.center.x){
         this.direction.left = true;
         this.direction.right = false;
       }
-      else if (PLAYER.center > this.center){
+      else if (PLAYER.center.x > this.center.x){
         this.direction.right = true;
         this.direction.left = false;
       }

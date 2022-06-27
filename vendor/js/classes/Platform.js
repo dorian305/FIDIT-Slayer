@@ -5,8 +5,15 @@ import { Entity } from "./Entity.js";
   Causes collision!
 */
 export class Platform extends Entity {
-  constructor({x, y, w, h, sprite, visible, destroyable, HP, killOnTouch}){
+  constructor({x, y, w, h, sprite, visible, destroyable, HP, killOnTouch, landingOnly, destroyExplosion}){
 		super({x, y, w, h, sprite, visible});
+
+    // Platform explosion sprite if destroyable
+    this.destroyExplosionSprite = destroyExplosion ? destroyExplosion.sprite : `${PATH_SPRITES}/Effects/PlatformDestroyExplosion.png`;
+    this.destroyExplosionSpriteSize = {
+      w: destroyExplosion ? destroyExplosion.w : 150,
+      h: destroyExplosion ? destroyExplosion.h : 150,
+    }
     
     // If platform can be destroyed, create additional properties
     if (destroyable){
@@ -16,7 +23,12 @@ export class Platform extends Entity {
 
     // If platforms kill entity that touches it
     if (killOnTouch){
-      this.killOnTouch = killOnTouch;;  // Kill any entity that touches the platform immediately
+      this.killOnTouch = killOnTouch;  // Kill any entity that touches the platform immediately
+    }
+
+    // Flag if the platform collides only when landing on it
+    if (landingOnly){
+      this.landingOnly = landingOnly;
     }
 
     // Push platform into array of all platforms
@@ -29,7 +41,7 @@ export class Platform extends Entity {
     So rectangle with width: 5 and height: 5 is going to the the rectangle
     made of 5 units of ground platform along the X and 5 units along the Y axis.
   */
-  static generateRectangle({x, y, w, h, sprite, visible, destroyable, HP, killOnTouch}) {
+  static generateRectangle({x, y, w, h, sprite, visible, destroyable, HP, killOnTouch, landingOnly, destroyExplosion}) {
     new Platform({x: x,
       y: y,
       w: w,
@@ -39,6 +51,7 @@ export class Platform extends Entity {
       destroyable: destroyable,
       HP: HP,
       killOnTouch: killOnTouch,
+      landingOnly: landingOnly,
     });
   }
 

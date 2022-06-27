@@ -20,7 +20,10 @@ export class Entity {
 		this.oldRight =       		this.right;                    						// Keeps track of the old right edge of the entity
 		this.oldTop =         		this.top;                     					 	// Keeps track of the old top edge of the entity
 		this.oldBottom =      		this.bottom;                   						// Keeps track of the old bottom edge of the entity
-		this.center = 				this.left + this.size.w / 2;						// Centerpoint of the entity
+		this.center = 				{													// Centerpoint of the entity
+			x: this.left + this.size.w / 2,
+			y: this.left + this.size.h / 2,
+		}
 		this.velocity =       		{x: 0, y: 0};                  						// X and Y components of entity velocity (+ = right and down, - = left and up)
 		this.sprite =         		sprite;												// Character sprite
 		this.currentSprite =  		Graphics.createImage(this.sprite.default); 			// Image handler for sprite that will currently be displayed for a character
@@ -30,7 +33,6 @@ export class Entity {
 			this.spriteWidth =	  		this.currentSprite.width;		 					// Width of character sprite
 			this.spriteLength =	  		Math.floor(this.spriteWidth / this.size.w); 		// Number of frames sprite animation consists of
 			this.spriteFrameWidth = 	Math.floor(this.spriteWidth / this.spriteLength);	// Width of one sprite frame
-			this.currentSpriteSrc = 	this.sprite.default;								// Current sprite src
 		}
 	}
 
@@ -88,7 +90,8 @@ export class Entity {
 		this.position.y =       this.position.y + this.velocity.y;			// Update Y coordinate
 		this.top =              this.position.y;							// Update current top to new Y coordinate
 		this.bottom =           this.position.y + this.size.h;				// Update current bottom to new Y coordinate + height
-		this.center = 			this.left + this.size.w / 2;				// Update current entity center point
+		this.center.x =			this.left + this.size.w / 2;
+		this.center.y =			this.top + this.size.h / 2;
 
 		// Periodically updating entity sprite
 		this.updateSpriteFrame();
