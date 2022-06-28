@@ -41,7 +41,7 @@ export const introCutscene = () => {
             y: CANVAS.height / 2 - scene.height / 2,
             sprite: scene
         });
-        const timer = new Timer(drawSkipCutsceneButton, 2500);
+        const timer = new Timer(drawSkipCutsceneButton, 0);
         timer.start();
     }
 
@@ -161,7 +161,7 @@ export const introCutscene = () => {
                 font: "Roboto Slab"
             })
 
-            const timer = new Timer(displayGameControls, 5000);
+            const timer = new Timer(displayGameControls, 0);
             timer.start();
         }
     }
@@ -189,7 +189,7 @@ export const introCutscene = () => {
                         CURRENT_LEVEL();
                     }
                 });
-            }, 2000);
+            }, 0);
             timer.start();
         }
     }

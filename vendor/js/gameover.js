@@ -1,9 +1,12 @@
 import { MainMenu } from "./mainmenu.js";
 import { Graphics } from "./classes/Graphics.js";
-import { Button }   from "./classes/Button.js";
+import { Button } from "./classes/Button.js";
+import { createSound } from "./functions/createsound.js"
 import { stopSound } from "./functions/stopsound.js";
+import { stopRendering }  from "./render.js";
 
 export function gameOver(){
+	stopRendering();
 	/*
 		Removing existing level data.
 	*/
@@ -69,7 +72,8 @@ export function gameOver(){
 	LEVEL_MUSIC = null;
 
 	// Playing game over music
-	// GAME_OVER_MUSIC = createSound(`${PATH_AUDIO}/)
+	GAME_OVER_MUSIC = createSound(`${PATH_AUDIO}/YouDied.mp3`);
+	GAME_OVER_MUSIC.play();
 
 	// Destroy any remaining timers
 	TIMERS.forEach(timer => {

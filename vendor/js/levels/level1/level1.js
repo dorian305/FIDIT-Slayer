@@ -198,7 +198,7 @@ export function level1(){
 		playerName: "Dorian",
 		weapon: new Weapon({
 			name: "Izanagi",
-			damage: 10,
+			damage: 100,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izanagi/Fire.mp3`),
 			missileSpeed: 20,
 			missileSize: {w: 21, h: 10},
@@ -496,6 +496,13 @@ export function level1(){
 		});
 	});
 
+	/*
+		Stopping game over music
+	*/
+	if (GAME_OVER_MUSIC){
+		stopSound(GAME_OVER_MUSIC);
+		GAME_OVER_MUSIC = null;
+	}
 	/*
 		Playing level music
 	*/

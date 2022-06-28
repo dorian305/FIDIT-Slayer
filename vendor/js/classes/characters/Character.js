@@ -300,6 +300,9 @@ export class Character extends Entity {
     HP bar consists of HP shell and remaining HP which is reduced from left to right.
   */
   drawHPBar() {
+
+    // Non BOSS health bars
+    if (this !== BOSS){
       // Common
       const HPOffsetFromTop = 		10;
 
@@ -338,6 +341,7 @@ export class Character extends Entity {
       Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY + HPShellHeight, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});    // Bottom border
       Graphics.drawRectangle({x: HPShellPositionX, y: HPShellPositionY, w: HPShellWidth, h: HPShellHeight, color: HPShellColor}); // Drawing HP Shell
       Graphics.drawRectangle({x: HPBarPositionX, y: HPBarPositionY, w: HPBarWidth, h: HPBarHeight, color: HPBarColor});           // Drawing HP Bar
+    }
   }
 
   // Draws the character and their HP bars

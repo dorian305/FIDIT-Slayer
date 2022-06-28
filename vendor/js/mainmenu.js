@@ -21,8 +21,14 @@ export function MainMenu(){
 	const y = CANVAS.height / 2;
 	INGAME = false;
 	GAME_PAUSED = false;
-	if (LEVEL_MUSIC) stopSound(LEVEL_MUSIC);
-	LEVEL_MUSIC = null;
+	if (LEVEL_MUSIC){
+		stopSound(LEVEL_MUSIC);
+		LEVEL_MUSIC = null;
+	}
+	if (GAME_OVER_MUSIC){
+		stopSound(GAME_OVER_MUSIC);
+		GAME_OVER_MUSIC = null;
+	}
 
 	// Drawing logo
 	const logo = Graphics.createImage(`${PATH_IMAGES}/Logo.png`);
