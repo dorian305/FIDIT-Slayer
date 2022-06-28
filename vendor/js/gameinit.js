@@ -92,7 +92,7 @@ CANVAS.addEventListener("mousedown", e => {
 				Why? To prevent the spacebar being pressed down to continuously trigger jumping action.
 				This way, you have to release and press spacebar to trigger another jump.
 			*/
-			if (e.key === " "){
+			if (e.key === " " && INGAME && !GAME_PAUSED){
 				if (event === "keydown" && !PLAYER_INITIATED_JUMP){
 					PLAYER_INITIATED_JUMP = true;
 					PLAYER.jump();
