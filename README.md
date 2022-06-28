@@ -1,3 +1,14 @@
+## -- HOW TO RUN FIDIT Slayer --
+# - VS Code edition -
+1.) Install Visual Studio Code for your system
+2.) Install an extension for VS Code called "Live Server" (VS Code extensions)
+3.) Open the game folder "FIDIT Slayer" in VS Code
+4.) In the lower right corner inside VS Code UI, click on "Go Live" Button
+5.) DISABLE ADBLOCKER IN YOUR BROWSER
+
+- The game loads up.
+- Recommended to use chromium based browsers (Chrome, Edge, Opera...)
+
 # FIDIT Slayer
 A game about REVENGE.
 - Genre: Platformer, Adventure, 2D
