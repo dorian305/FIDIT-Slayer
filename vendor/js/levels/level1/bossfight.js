@@ -114,9 +114,10 @@ const bossFightRender = () => {
             stopRendering();
             Graphics.clearScreen();
 
-            // Resetting canvas dimensions
+            // Resetting canvas
             CANVAS.width = window.innerWidth
 	        CANVAS.height = window.innerHeight;
+            CANVAS_EDGES = {left: 0, top: 0, right: 0, bottom: 0};
             CANVAS.setAttribute("style", "");
                         
             // Drawing endscreen
@@ -225,7 +226,7 @@ const drawBossHealthBar = () => {
     const HPBarHealthNumber =       BOSS.currentHP;
     const HPBarHeight = 			HPShellHeight;
     const HPBarColors = 			{healthy: "#226d34", weakened: "#6d6c22", critical: "#a92d2d"};
-    let 	HPBarColor = 			null;
+    let   HPBarColor = 			    null;
     const HPBarPositionX = 			HPShellPositionX;
     const HPBarPositionY = 			HPShellPositionY;
     // Determining HP bar color based on current health percentage
