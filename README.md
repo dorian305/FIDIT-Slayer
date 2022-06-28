@@ -20,7 +20,8 @@ A game about REVENGE.
 | Jumping                | <kbd>Spacebar</kbd>                                                                            |
 | Crouching              | <kbd>S</kbd>                                                                                   |
 | Attack                 | <kbd>![LMB](https://raw.githubusercontent.com/emre-aki/raycast.js/master/images/lmb.png)</kbd> |
-| Pause/resume           | <kbd>Esc</kbd>                                                                                   |
+| Up aim                 | <kbd>W</kbd> |
+| Pause/resume           | <kbd>Esc</kbd>                                                                                 |
 | Toggle debug mode      | <kbd>Z</kbd>                                                                                   |
 
 ## Credits
