@@ -117,6 +117,21 @@ const bossAttack = () => {
     }
 }
 
+// Spawning orbs of rejuvenation every 30 seconds
+const spawnOrbOfRejuvenation = () => {
+    const randomPos = randomNumber(1, 2) === 1 ? {x: 10525,	y: 450} : {x: 11645, y: 450};
+    new OrbOfRejuvenation({
+        x: randomPos.x,
+        y: randomPos.y,
+        w: 30,
+        h: 30,
+        sprite: {
+            default: `${PATH_SPRITES}/Orbs/OrbOfRejuvenation.png`,
+        },
+        healPercentage: 0.25,
+    });
+}
+
 /*
     Attack 1
 */
@@ -143,7 +158,7 @@ const attack1 = () => {
         x: BOSS.direction.left ? BOSS.left + BOSS.shurikenSize.w / 2 : BOSS.right - BOSS.shurikenSize.w / 2,
         y: BOSS.top + BOSS.shurikenSize.h / 2,
     }
-    BOSS.shurikenDamage = 45;           // Shuriken damage
+    BOSS.shurikenDamage = 15;           // Shuriken damage
     BOSS.shurikenLifeDuration = 4000;   // How long will shuriken exist before it dissapears
 
     // Creating the shuriken
@@ -172,7 +187,7 @@ const attack1 = () => {
     const timer = new Timer(() => {
         removeFromArray(BOSS.shurikens, shuriken);
         removeFromArray(MISSILES, shuriken);
-    }, BOSS.shurikenLifespan);
+    }, BOSS.shurikenLifeDuration);
     timer.start();
 }
 const attack1Check = () => {

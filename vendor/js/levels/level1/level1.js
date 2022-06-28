@@ -170,7 +170,7 @@ export function level1(){
 		crouch_height: 62,
 		jumpHeight: 15,
 		jumps: 1,
-		movespeed: 5,
+		movespeed: 25,
 		HP: 100.0,
 		sprite: {
 			idle: {
@@ -482,8 +482,6 @@ export function level1(){
 	const ORB_REJUVENATION_POSITIONS = [
 		{x: 3185, 	y: 250},
 		{x: 9610, 	y: 200},
-		{x: 10525,	y: 450},
-		{x: 11645,	y: 450},
 	];
 	ORB_REJUVENATION_POSITIONS.forEach(orb_position => {
 		new OrbOfRejuvenation({
