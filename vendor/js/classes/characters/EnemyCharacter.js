@@ -10,9 +10,9 @@ export class EnemyCharacter extends Character {
     constructor({x, y, w, h, jumpHeight, jumps, enemyType, weapon, movespeed, seekingMovespeedFactor, HP, sprite, contactDamage, patrolDistance, attackCooldown, deathSound}){
       super({x, y, w, h, jumpHeight, jumps, movespeed, HP, sprite, weapon, deathSound});
       this.isEnemy =            true;                          // Used for determining whether a character is an enemy
-      this.origin =             this.center.x;                   // The origin point from which the character patrols
+      this.origin =             this.center.x;                 // The origin point from which the character patrols
       this.patrolDistance =     patrolDistance;                // The maximum distance an enemy will go on one side before moving to the other side
-      this.patrolDistanceEdge = {                             // Left and right edges of the enemy patrol area
+      this.patrolDistanceEdge = {                              // Left and right edges of the enemy patrol area
         left: this.origin - this.patrolDistance / 2,
         right: this.origin + this.patrolDistance / 2,
       }
