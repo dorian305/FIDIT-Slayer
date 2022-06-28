@@ -4,8 +4,9 @@ import { removeFromArray }      from '../functions/removefromarray.js';
     Fireballs are entities in level which cause lethal damage when in contact with.
 */
 export class Fireball extends Entity {
-    constructor({x, y, w, h, sprite}){
+    constructor({x, y, w, h, sprite, damage}){
         super({x, y, w, h, sprite});
+        this.damage  = damage;
         FIREBALLS.push(this);
     }
 

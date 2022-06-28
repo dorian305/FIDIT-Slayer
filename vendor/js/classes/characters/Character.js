@@ -144,7 +144,7 @@ export class Character extends Entity {
         Check whether the character has collided with a deadly platform.
         If it has, kill it instantly.
       */
-      if (platform.killOnTouch){
+      if (platform.killOnTouch && !DEBUG_MODE){
         this.currentHP = 0;
       }
 
@@ -222,14 +222,15 @@ export class Character extends Entity {
     });
 
     // Collision with an enemy character if this === PLAYER
-    if (this === PLAYER && !this.damaged && !DEBUG_MODE){
+
+    if (this === PLAYER && !DEBUG_MODE && !this.damaged){
       ENEMIES.forEach(enemy => {
         if (this.checkCollision(enemy)){
-          this.damaged = 				true;
-          this.currentHP = 			this.currentHP - enemy.contactDamage;
-          if (this.currentHP < 0){
-            this.currentHP = 		0;
+          if (this.currentHP - enemy.contactDamage < 0){
+            enemy.contactDamage = this.currentHP;
           }
+          this.damaged = true;
+          this.currentHP = this.currentHP - enemy.contactDamage;
 
           // When the player gets damaged, give PLAYER_DAMAGED_DELAY time before allowing another damage.
           const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
@@ -249,26 +250,46 @@ export class Character extends Entity {
 
     // Collision with missiles
     MISSILES.forEach(missile => {
-      if (this.checkCollision(missile) && this !== missile.owner){
-        if ((missile.owner === PLAYER && this.isEnemy) || (missile.owner.isEnemy && !this.isEnemy)){
-          /*
-          Check if the missile damage is greater than currentHP.
-          If it is, set damage equal to currentHP.
-          */
-         if (this.currentHP - missile.damage < 0){
-           missile.damage = this.currentHP;
-          }
-          this.currentHP = this.currentHP - missile.damage;
-          removeFromArray(MISSILES, missile);
+      if (this.checkCollision(missile)){
+        // Missile owner is PLAYER and damaged entity is enemy
+        if (missile.owner === PLAYER && this.isEnemy){
+          if (this.currentHP - missile.damage < 0){
+            missile.damage = this.currentHP;
+           }
+           this.currentHP = this.currentHP - missile.damage;
+           removeFromArray(MISSILES, missile);
+        }
+
+        // Missile owner is enemy and damaged entity is PLAYER
+        else if (missile.owner.isEnemy && this === PLAYER){
+          //  When debug mode is on, PLAYER character doesn't take any damage
+          if (!DEBUG_MODE){
+             if (this.currentHP - missile.damage < 0){
+               missile.damage = this.currentHP;
+              }
+              if (!this.damaged){
+                this.damaged = true;
+                this.currentHP = this.currentHP - missile.damage;
+                const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
+                timer.start();
+              }
+           }
+           removeFromArray(MISSILES, missile);
         }
       }
     });
 
     // Collision with Fireballs
-    if (!DEBUG_MODE){
+    if (this === PLAYER && !this.damaged && !DEBUG_MODE){
       FIREBALLS.forEach(fireball => {
-        if (!this.isEnemy && this.checkCollision(fireball)){
-          this.currentHP = 0;
+        if (this.checkCollision(fireball)){
+          if (this.currentHP - fireball.damage < 0){
+            fireball.damage = this.currentHP;
+          }
+          this.damaged = true;
+          this.currentHP = this.currentHP - fireball.damage;
+          const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
+          timer.start();
         }
       });
     }
@@ -285,10 +306,10 @@ export class Character extends Entity {
       // HP Shell properties
       const HPShellBorderSize = 	0;
       const HPShellBorderColor =  "#552f2f";
-      const HPShellWidth = 				(this.size.w * 2) - (HPShellBorderSize * 2);
+      const HPShellWidth = 				(this.size.w * 2) - (HPShellBorderSize * 2) < 500 ? (this.size.w * 2) - (HPShellBorderSize * 2): 500; // If HP bar becomes bigger than 500, then cap it to 500
       const HPShellHeight = 			15 - (HPShellBorderSize * 2);
       const HPShellColor = 				"#552f2f";
-      const HPShellPositionX = 		this.left - (this.size.w / 2) + HPShellBorderSize;
+      const HPShellPositionX = 		this.center.x - HPShellWidth / 2 + HPShellBorderSize;
       const HPShellPositionY = 		this.top - HPOffsetFromTop - HPShellHeight;
 
       // HP Bar properties

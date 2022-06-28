@@ -8,7 +8,7 @@
 #### Main Menu UI Design
 The background will be dimmed and in front of it a large window with the following buttons:
 - [If it exists] Continue game
-- Start new game
+- New game
 
 #### Ingame UI Design
 - Top left is the character health bar UI, enemy HP bars are displayed above the character
@@ -33,22 +33,24 @@ The pause screen will dim the background and offer several buttons:
 - Character is spawned with a ranged weapon which it can use to attack enemies from afar
 
 ### Enemy Design
-- Enemies are scattered throughout the level, making it challenging to finish the level
+- Enemies are tactically scattered throughout the level, making certain level section harder to pass
 - At the end of the level, there is a boss which has to be defeated in order to finish the level
 - Every level contains a boss
-- Each next level, enemies are becoming harder to kill
+- Enemies are incrementally getting tougher with levels
 
 ### Enemy Types
 - Melee
+- Ranged
 - Damaging obstacles such as fireballs
 
 ### Enemy List
 - Enemies are mostly level-exclusive, though some might reappear at further levels.
 
-- `Studum`: This is the simplest enemy and the first one that shows up. It is as large as the main character and likewise humanoid but looks like a zombie or something. Health: 1; Attack: 1; Speed: 1.
+- `ShieldDrone`: This is a simple melee enemy unit. It is similar in size to the main character. It patrols around the area, and when main character gets within its attack range, it increases in movespeed and seeks it, damaging it upon contact. Health: 50, Damage: 5 - 15, Movespeed: 1 - 3.
+- `RottenKau`: This is a simple ranged enemy unit. It is as large as the main character and likewise humanoid but looks like a zombie or something. It has a ranged weapon with which it attacks you. Health: 30; Damage: 10, Movespeed: 0 (Stationary).
 
 ### Boss List
-- `Name1`   [Levels 1-6]: 
+- `TVRTKO`   [Levels 1]: 
 
 ### Pick-up List
 - Orb of Rejuvenation (Health refill) | [Common]

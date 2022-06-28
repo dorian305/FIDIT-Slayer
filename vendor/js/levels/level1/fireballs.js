@@ -18,6 +18,7 @@ export const spawnFireballs = () => {
                 down: `${PATH_SPRITES}/Level 1/FireballDown.png`,
                 default: `${PATH_SPRITES}/Level 1/FireballUp.png`,
             },
+            damage: 30,
         });
         fireball.velocity.y = -10 * randomNumber(2, 3);
         

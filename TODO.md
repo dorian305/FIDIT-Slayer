@@ -1,14 +1,8 @@
 ## TO DO list
 - Break the game story into levels, and design levels accordingly
-- Add level music
 - Add sound effects for:
-  - jumping
-  - melee weapon attack
-  - ranged weapon shooting
   - taking damage,
   - dying,
-  - ...
-- Secret body armor collecting pieces scattered throughout the levels
 - Implement dash
 - Krule weapon
 - Dialogue boxes

@@ -3,6 +3,7 @@ import { createSound } from "./functions/createsound.js";
 import { stopSound } from "./functions/stopsound.js";
 import { level1 } from "./levels/level1/level1.js";
 import { Button } from "./classes/Button.js";
+import { Timer } from "./classes/Timer.js";
 
 export const introCutscene = () => {
     // Creating intro textbox
@@ -40,7 +41,8 @@ export const introCutscene = () => {
             y: CANVAS.height / 2 - scene.height / 2,
             sprite: scene
         });
-        drawSkipCutsceneButton();
+        const timer = new Timer(drawSkipCutsceneButton, 2500);
+        timer.start();
     }
 
     // Running intro cutscene
@@ -94,7 +96,7 @@ export const introCutscene = () => {
         }
         else {
             endCutscene();
-            startLevel1();
+            BUTTONS.length = 0;
         }
     }, 50);
 
@@ -110,6 +112,7 @@ export const introCutscene = () => {
             text: "Skip cutscene",
             action: () => {
                 endCutscene();
+                BUTTONS.length = 0;
             }
         });
     }
@@ -139,17 +142,28 @@ export const introCutscene = () => {
     // Start level 1
     const startLevel1 = () => {
         Graphics.clearScreen();
-        const loading = Graphics.createImage(`${PATH_SPRITES}/Level 1/Loading.png`);
+        const loading = Graphics.createImage(`${PATH_SPRITES}/Level 1/Loading.jpg`);
         loading.onload = () => {
             Graphics.drawImage({
                 x: CANVAS.width / 2 - loading.width / 2,
                 y: CANVAS.height / 2 - loading.height / 2,
                 sprite: loading
             });
+
+            // Drawing a tip
+            Graphics.drawText({
+                x: CANVAS.width / 2,
+                y: CANVAS.height / 2 + 325,
+                size: 20,
+                color: "white",
+                content: "TIP: your character won't take damage when debug mode is enabled (Z).",
+                align: "center",
+                font: "Consolas"
+            })
+
+            const timer = new Timer(displayGameControls, 5000);
+            timer.start();
         }
-        setTimeout(() => {
-            displayGameControls();
-        }, 5000);
     }
 
     // Display game controls
@@ -162,18 +176,21 @@ export const introCutscene = () => {
                 y: CANVAS.height / 2 - gameControls.height / 2,
                 sprite: gameControls,
             });
-            new Button({
-                w: 200,
-                h: 50,
-                x: CANVAS.width / 2 - 100,
-                y: CANVAS.height / 2 + 325,
-                sprite: `${PATH_IMAGES}/Button.png`,
-                text: "Skip",
-                action: () => {
-                    CURRENT_LEVEL = level1;
-                    CURRENT_LEVEL();
-                }
-            });
+            const timer = new Timer(() => {
+                new Button({
+                    w: 200,
+                    h: 50,
+                    x: CANVAS.width / 2 - 100,
+                    y: CANVAS.height / 2 + 325,
+                    sprite: `${PATH_IMAGES}/Button.png`,
+                    text: "Skip",
+                    action: () => {
+                        CURRENT_LEVEL = level1;
+                        CURRENT_LEVEL();
+                    }
+                });
+            }, 2000);
+            timer.start();
         }
     }
 }

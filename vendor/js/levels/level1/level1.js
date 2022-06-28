@@ -266,13 +266,13 @@ export function level1(){
 	}
 	// Melee enemies
 	const meele_enemy_properties = [
-		{x: 950, y: 70, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 10, patrolDistance: 500, attackCooldown: 3000},
-		{x: 1650, y: 70, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 10, patrolDistance: 500, attackCooldown: 3000},
+		{x: 950, y: 70, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 15, patrolDistance: 500, attackCooldown: 3000},
+		{x: 1650, y: 70, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 15, patrolDistance: 500, attackCooldown: 3000},
 		{x: 5400, y: 400, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 15, patrolDistance: 200, attackCooldown: 1000},
 		{x: 5550, y: 550, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 15, patrolDistance: 900, attackCooldown: 2000},
-		{x: 4625, y: 840, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 10, patrolDistance: 750, attackCooldown: 3000},
-		{x: 5375, y: 840, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 10, patrolDistance: 750, attackCooldown: 3000},
-		{x: 6375, y: 840, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 10, patrolDistance: 750, attackCooldown: 3000},
+		{x: 4625, y: 840, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 5, patrolDistance: 750, attackCooldown: 3000},
+		{x: 5375, y: 840, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 5, patrolDistance: 750, attackCooldown: 3000},
+		{x: 6375, y: 840, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 5, patrolDistance: 750, attackCooldown: 3000},
 		{x: 7000, y: 850, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 1, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 5, patrolDistance: 200, attackCooldown: 3000},
 		{x: 8225, y: 200, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 1, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 5, patrolDistance: 150, attackCooldown: 3000},
 		{x: 9350, y: 350, w: 50, h: 58, jumpHeight: 0, jumps: 0, movespeed: 3, seekingMovespeedFactor: 1.5, HP: 50, contactDamage: 5, patrolDistance: 500, attackCooldown: 3000},
@@ -301,7 +301,7 @@ export function level1(){
 	const ranged_enemy_properties = [
 		{x: 1700, y: 650, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 10, jumps: 1, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 1000, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 20,
+			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
 			missileSpeed: 7,
 			missileSize: {w: 30, h: 15},
@@ -318,7 +318,7 @@ export function level1(){
 		})},
 		{x: 3200, y: 450, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 10, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 1750, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 20,
+			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
 			missileSpeed: 7,
 			missileSize: {w: 30, h: 15},
@@ -335,7 +335,7 @@ export function level1(){
 		})},
 		{x: 6100, y: 350, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 3000, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 20,
+			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
 			missileSpeed: 7,
 			missileSize: {w: 30, h: 15},
@@ -352,7 +352,7 @@ export function level1(){
 		})},
 		{x: 6150, y: 550, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 2500, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 20,
+			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
 			missileSpeed: 7,
 			missileSize: {w: 30, h: 15},
@@ -369,7 +369,7 @@ export function level1(){
 		})},
 		{x: 7500, y: 550, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 1500, attackCooldown: 1000, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 20,
+			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
 			missileSpeed: 7,
 			missileSize: {w: 30, h: 15},
@@ -386,7 +386,7 @@ export function level1(){
 		})},
 		{x: 7500, y: 400, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 1500, attackCooldown: 1000, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 20,
+			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
 			missileSpeed: 7,
 			missileSize: {w: 30, h: 15},
@@ -403,7 +403,7 @@ export function level1(){
 		})},
 		{x: 7500, y: 250, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 1500, attackCooldown: 1000, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 20,
+			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
 			missileSpeed: 7,
 			missileSize: {w: 30, h: 15},
@@ -420,7 +420,7 @@ export function level1(){
 		})},
 		{x: 9625, y: 300, w: PLAYER_SIZE.w, h: PLAYER_SIZE.h, jumpHeight: 0, jumps: 0, movespeed: 0, HP: 30, contactDamage: 5, patrolDistance: 1200, attackCooldown: 500, weapon: new Weapon({
 			name: "Izazgrabi",
-			damage: 20,
+			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izazgrabi/Fire.mp3`),
 			missileSpeed: 7,
 			missileSize: {w: 30, h: 15},
