@@ -158,7 +158,7 @@ export const introCutscene = () => {
                 color: "white",
                 content: "TIP: your character won't take damage when debug mode is enabled (Z).",
                 align: "center",
-                font: "Consolas"
+                font: "Roboto Slab"
             })
 
             const timer = new Timer(displayGameControls, 5000);
