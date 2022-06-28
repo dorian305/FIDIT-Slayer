@@ -170,7 +170,7 @@ export function level1(){
 		crouch_height: 62,
 		jumpHeight: 15,
 		jumps: 1,
-		movespeed: 25,
+		movespeed: 5,
 		HP: 100.0,
 		sprite: {
 			idle: {
@@ -198,7 +198,7 @@ export function level1(){
 		playerName: "Dorian",
 		weapon: new Weapon({
 			name: "Izanagi",
-			damage: 100,
+			damage: 10,
 			sound: createSound(`${PATH_AUDIO}/Weapons/Ranged/Izanagi/Fire.mp3`),
 			missileSpeed: 20,
 			missileSize: {w: 21, h: 10},

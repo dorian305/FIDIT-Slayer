@@ -150,6 +150,30 @@ CANVAS.addEventListener("click", e => {
 	}
 });
 
+CANVAS.addEventListener('mousemove', e => {
+	if (BUTTONS){
+		let mouse = {
+			x: e.clientX,
+			y: e.clientY
+		};
+		/*
+		Looping through each button and checking whether the coordinates of the mouse pointer
+		were inside any of the buttons when the mouse click occured.
+		*/
+		BUTTONS.forEach(button => {
+			// -CANVAS_EDGES offset is added to the mouse coordinates because the overlay is drawn with the offset aswell
+			if (
+					mouse.x - CANVAS_EDGES.left > button.position.x &&
+					mouse.x - CANVAS_EDGES.left < button.position.x + button.size.w &&
+					mouse.y - CANVAS_EDGES.top > button.position.y &&
+					mouse.y - CANVAS_EDGES.top < button.position.y + button.size.h
+				){
+				console.log("Mouse over button");
+			}
+		});
+	}
+});
+
 /*
 	Pausing all the timers when the game window is not in focus.
 */

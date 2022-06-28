@@ -101,7 +101,7 @@ const bossFightRender = () => {
         drawBossHealthBar();
 
     // Death of the boss
-    if (BOSS.currentHP <= 0){
+    if (BOSS.isDead){
         BOSS = null;
         stopSound(LEVEL_MUSIC);
         cancelAnimationFrame(bossRenderFrame);
@@ -109,10 +109,17 @@ const bossFightRender = () => {
         orbHealTimer.destroy();
 
         // Endgame
-        const timer = new Timer(() => {
+        const cigan = new Timer(() => {
             INGAME = false;
             stopRendering();
-            
+            Graphics.clearScreen();
+
+            // Resetting canvas dimensions
+            CANVAS.width = window.innerWidth
+	        CANVAS.height = window.innerHeight;
+            CANVAS.setAttribute("style", "");
+                        
+            // Drawing endscreen
             const endscreen = Graphics.createImage(`${PATH_SPRITES}/Level 1/Endscreen.jpg`);
             endscreen.onload = () => {
                 Graphics.drawImage({
@@ -120,24 +127,30 @@ const bossFightRender = () => {
                     y: CANVAS.height / 2 - endscreen.height / 2,
                     sprite: endscreen,
                 });
-                new Button({
-                    w: 200,
-                    h: 50,
-                    x: CANVAS.width / 2 - 100,
-                    y: CANVAS.height / 2 + 325,
-                    sprite: `${PATH_IMAGES}/Button.png`,
-                    text: "Skip",
-                    action: () => {
-                        MainMenu();
-                    }
-                });
+
+                // Drawing endscreen button
+                const timer = new Timer(() => {
+                    new Button({
+                        w: 200,
+                        h: 50,
+                        x: CANVAS.width / 2 - 100,
+                        y: CANVAS.height / 2 + 325,
+                        sprite: `${PATH_IMAGES}/Button.png`,
+                        text: "Main menu",
+                        action: () => {
+                            console.log("clicked");
+                            MainMenu();
+                        }  
+                    });
+                }, 2000);
+                timer.start();
 
                 // Playing endscreen music
                 LEVEL_MUSIC.src = `${PATH_AUDIO}/Level 1/Endscreen.mp3`;
                 LEVEL_MUSIC.play();
             }
         }, 2000);
-        timer.start();
+        cigan.start();
     }
 
     // Death of the player
@@ -316,8 +329,10 @@ const attack1 = () => {
 
     // Removing shuriken after some time
     const timer = new Timer(() => {
-        removeFromArray(BOSS.shurikens, shuriken);
-        removeFromArray(MISSILES, shuriken);
+        if (BOSS){
+            removeFromArray(BOSS.shurikens, shuriken);
+            removeFromArray(MISSILES, shuriken);
+        }
     }, BOSS.shurikenLifeDuration);
     timer.start();
 }
