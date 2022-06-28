@@ -1,5 +1,5 @@
 ## -- HOW TO RUN FIDIT Slayer --
-# - VS Code edition -
+### - VS Code edition -
 1.) Install Visual Studio Code for your system
 2.) Install an extension for VS Code called "Live Server" (VS Code extensions)
 3.) Open the game folder "FIDIT Slayer" in VS Code
