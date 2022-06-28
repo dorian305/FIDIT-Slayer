@@ -302,8 +302,8 @@ const attack1 = () => {
         x: BOSS.direction.left ? BOSS.left + BOSS.shurikenSize.w / 2 : BOSS.right - BOSS.shurikenSize.w / 2,
         y: BOSS.top + BOSS.shurikenSize.h / 2,
     }
-    BOSS.shurikenDamage = 25;           // Shuriken damage
-    BOSS.shurikenLifeDuration = 4000;   // How long will shuriken exist before it dissapears
+    BOSS.shurikenDamage = 20;           // Shuriken damage
+    BOSS.shurikenLifeDuration = 2500;   // How long will shuriken exist before it dissapears
 
     // Creating the shuriken
     const shuriken = new Missile({

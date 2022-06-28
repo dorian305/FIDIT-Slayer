@@ -41,14 +41,14 @@ export const introCutscene = () => {
             y: CANVAS.height / 2 - scene.height / 2,
             sprite: scene
         });
-        const timer = new Timer(drawSkipCutsceneButton, 0);
+        const timer = new Timer(drawSkipCutsceneButton, 2500);
         timer.start();
     }
 
     // Running intro cutscene
     const interval = setInterval(() => {
         let margin = parseFloat(text.style.marginTop);
-        if (margin > -1950){
+        if (margin > -2000){
             margin -= 1;
             text.style.marginTop = `${margin}px`;
 
@@ -161,7 +161,7 @@ export const introCutscene = () => {
                 font: "Roboto Slab"
             })
 
-            const timer = new Timer(displayGameControls, 0);
+            const timer = new Timer(displayGameControls, 5000);
             timer.start();
         }
     }
@@ -189,7 +189,7 @@ export const introCutscene = () => {
                         CURRENT_LEVEL();
                     }
                 });
-            }, 0);
+            }, 2500);
             timer.start();
         }
     }
