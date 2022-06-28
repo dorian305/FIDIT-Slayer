@@ -255,7 +255,6 @@ let orbHeal = null;
 let orbHealTimer = null;
 let orbHealSpawnTime = 30000;
 const createOrbOfRejuvenation = () => {
-    console.log(orbHeal);
     // Create new orb if the old one was collected
     if (!orbHeal){
         // Randomizing location where the orb will spawn
@@ -273,7 +272,7 @@ const createOrbOfRejuvenation = () => {
     }
 
     orbHealTimer = new Timer(createOrbOfRejuvenation, orbHealSpawnTime);
-    orbCreateTimer.start();
+    orbHealTimer.start();
 }
 
 /*
