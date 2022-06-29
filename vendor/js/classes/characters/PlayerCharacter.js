@@ -6,8 +6,8 @@ import { createSound }  from "../../functions/createsound.js";
   Class for character which will be controlled by the player
 */
 export class PlayerCharacter extends Character {
-  constructor({x, y, w, h, crouch_height, jumpHeight, jumps, movespeed, HP, sprite, playerName, weapon}){
-    super({x, y, w, h, crouch_height, jumpHeight, jumps, movespeed, HP, sprite, weapon});
+  constructor({x, y, w, h, crouchHeight, jumpHeight, jumps, movespeed, HP, sprite, playerName, weapon}){
+    super({x, y, w, h, crouchHeight, jumpHeight, jumps, movespeed, HP, sprite, weapon});
     this.name =           playerName;                                       // Name of the player character
     // this.deathSound =  createSound(`${PATH_AUDIO}/sounds/death.mp3`);
     this.jumpSound1 =      createSound(`${PATH_AUDIO}/Player/Jumping/Jump1.mp3`);
@@ -69,33 +69,56 @@ export class PlayerCharacter extends Character {
     // Graphics.drawText({x: HPShellPositionX + HPShellWidth / 2 - 10, y: HPShellPositionY + HPShellHeight / 2 + 4, size: 15, color: "White", content: HPBarHealthNumber, align: "Center", font: GAME_FONT});
   }
 
+  /*
+    DEBUG Mode
+    In this mode, some player properties are displayed on a screen, collision lines and other things.
+  */
   printDebugText() {
-    /*
-      DEBUG MODE
-      When this is enabled, player character properties are displayed on the screen.
-    */
-    Graphics.drawText({x: -CANVAS_EDGES.left + 100, y: -CANVAS_EDGES.top + 125, size: 20, color: "yellow", content: `DEBUG MODE ENABLED`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 150, size: 15, color: "yellow", content: `Position =     (${this.position.x}, ${this.position.y})`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 170, size: 15, color: "yellow", content: `Velocity =     (${this.velocity.x}, ${this.velocity.y})`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 190, size: 15, color: "yellow", content: `W and H =      (${this.size.w}, ${this.size.h})`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 210, size: 15, color: "yellow", content: `Left =          ${this.left}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 230, size: 15, color: "yellow", content: `Right =         ${this.right}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 250, size: 15, color: "yellow", content: `Top =           ${this.top}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 270, size: 15, color: "yellow", content: `Bottom =        ${this.bottom}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 290, size: 15, color: "yellow", content: `Movespeed =     ${this.movespeed}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 310, size: 15, color: "yellow", content: `Max HP =        ${this.maxHP}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 330, size: 15, color: "yellow", content: `Jump height =   ${this.jumpHeight}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 350, size: 15, color: "yellow", content: `Jumps =         ${this.jumps}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 370, size: 15, color: "yellow", content: `Remaining =     ${this.remainingJumps}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 390, size: 15, color: "yellow", content: `Crouching =     ${this.isCrouching}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 410, size: 15, color: "yellow", content: `Grounded =      ${this.isGrounded}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 430, size: 15, color: "yellow", content: `Damaged =       ${this.damaged}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 450, size: 15, color: "yellow", content: `Keys =         (W: ${this.keys.W.pressed}, A: ${this.keys.A.pressed}, S: ${this.keys.S.pressed}, D: ${this.keys.D.pressed})`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 470, size: 15, color: "yellow", content: `Facing =       (Up: ${this.direction.up}, Left: ${this.direction.left}, Right: ${this.direction.right})`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 490, size: 15, color: "yellow", content: `Visible =       ${this.visible}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 510, size: 15, color: "yellow", content: `Weapon =        ${this.weapon.name}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 530, size: 15, color: "yellow", content: `Damage =        ${this.weapon.damage}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 550, size: 15, color: "yellow", content: `Missile speed = ${this.weapon.missileSpeed}`, align: "left", font: "Consolas"});
-    Graphics.drawText({x: -CANVAS_EDGES.left + 110, y: -CANVAS_EDGES.top + 570, size: 15, color: "yellow", content: `Center =       (${this.center.x}, ${this.center.y})`, align: "left", font: "Consolas"});
+
+    // Drawing debug backdrop
+    Graphics.drawRectangle({
+      x: -CANVAS_EDGES.left + 50,
+      y: -CANVAS_EDGES.top + 100,
+      w: 750,
+      h: 550,
+      color: DIMMED_BACKGROUND_COLOR
+    });
+
+    // Debug title
+    Graphics.drawText({x: -CANVAS_EDGES.left + 100, y: -CANVAS_EDGES.top + 150, size: 25, color: "yellow", content: `DEBUG MODE ENABLED`, align: "left", font: "Consolas"});
+
+    const debugContent = [
+      `Name:          ${this.name}`,
+      `Position:      { x: ${this.position.x}, y: ${this.position.y} }`,
+      `Center:        { x: ${this.center.x}, y: ${this.center.y} }`,
+      `Size:          { w: ${this.size.w}, h: ${this.size.h} }`,
+      `Velocity:      { x: ${this.velocity.x}, y: ${this.velocity.y} }`,
+      `Keys:          { A: ${this.keys.A.pressed}, D: ${this.keys.D.pressed}, W: ${this.keys.W.pressed}, S: ${this.keys.S.pressed} }`,
+      `Direction:     { Left: ${this.direction.left}, Right: ${this.direction.left}, Up: ${this.direction.left}}`,
+      `State:         ${this.currentState}`,
+      `Speed:         ${this.movespeed}`,
+      `HP:            ${this.maxHP}`,
+      `Height:        { Original: ${this.originalHeight}, Crouching: ${this.crouchHeight} }`,
+      `Jump:          { Jumps: ∞, Remaining: ∞, Jump height: ${this.jumpHeight} }`,
+      `Crouching:     ${this.isCrouching}`,
+      `Grounded:      ${this.isGrounded}`,
+      `Damaged:       ${this.damaged}`,
+      `Visible:       ${this.visible}`,
+      `Weapon:        { Name: ${this.weapon.name}, Damage: ${this.weapon.damage}, Missile speed: ${this.weapon.missileSpeed} }`,
+    ];
+    debugContent.forEach((content, index) => {
+      Graphics.drawText({
+        x: -CANVAS_EDGES.left + 110,
+        y: -CANVAS_EDGES.top + 150 + (25 * (index + 1)),
+        size: 18,
+        color: "yellow",
+        content: content,
+        align: "left",
+        font: "Consolas"
+      });
+    });
+
+    Graphics.drawLine({x1: 0, y1: this.center.y, x2: CANVAS.width, y2: this.center.y, thickness: 1, color: 'red'});   // Horizontal line
+    Graphics.drawLine({x1: this.center.x, y1: 0, x2: this.center.x, y2: CANVAS.height, thickness: 1, color: 'red'});  // Vertical line
   }
 }

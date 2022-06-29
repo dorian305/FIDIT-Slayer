@@ -167,7 +167,7 @@ export function level1(){
 		y: 0,
 		w: PLAYER_SIZE.w,
 		h: PLAYER_SIZE.h,
-		crouch_height: 62,
+		crouchHeight: 62,
 		jumpHeight: 15,
 		jumps: 1,
 		movespeed: 5,

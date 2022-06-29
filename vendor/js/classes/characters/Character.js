@@ -13,17 +13,17 @@ import { Timer }            from "../Timer.js";
 	It inherits from Entity class.
 */
 export class Character extends Entity {
-  constructor({x, y, w, h, crouch_height, sprite, movespeed, HP, jumpHeight, jumps, weapon, deathSound}){
+  constructor({x, y, w, h, crouchHeight, sprite, movespeed, HP, jumpHeight, jumps, weapon, deathSound}){
     super({x, y, w, h, sprite});												 // Calling constructor from the extended class Entity
     if (this.constructor === Character){
       throw new Error(`Cannot instantiate an abstract class "Character"!`);
     }
-    this.originalHeight = this.size.h;                   // Original height of the character
     this.movespeed =      movespeed;                     // How fast is the character moving (Velocity on the X axis)
     this.maxHP =          HP;                            // Max HP of a character
 		this.currentHP = 			this.maxHP;										 // Current HP of a character
     this.isDead =         false;                         // Flag tracking whether character died in any way
-    this.crouch_height =  crouch_height;                 // Height of the character while crouching
+    this.originalHeight = this.size.h;                   // Original height of the character
+    this.crouchHeight =   crouchHeight;                  // Height of the character while crouching
 		this.jumpHeight =     jumpHeight;                    // How high the character can jump
     this.jumps =          jumps;                         // How many times can character jump in a row
     this.remainingJumps = this.jumps;                    // Remaining jumps
@@ -167,23 +167,25 @@ export class Character extends Entity {
 
         // In debug mode, display red horizontal line whenever collision occurs
         if (this === PLAYER && DEBUG_MODE){
+          console.log("Bottom side collision detected");
           Graphics.drawLine({x1: 0, y1: this.position.y + this.size.h, x2: CANVAS.width, y2: this.position.y + this.size.h, thickness: 1, color: 'red'});
         }
       }
 
-     // Check if collision occured from the left side.
-     else if (this.oldLeft > platform.oldRight){
-       // Platforms which become visible once you land on them do not cause collision from left side
-       if (platform.visible !== false){
-        // Platforms that are "landingOnly" do not cause left side collision
-        if (platform.landingOnly !== true){
-          this.position.x = platform.right + 0.1;
-          this.velocity.x = platform.velocity.x;
+      // Check if collision occured from the left side.
+      else if (this.oldLeft > platform.oldRight){
+        // Platforms which become visible once you land on them do not cause collision from left side
+        if (platform.visible !== false){
+          // Platforms that are "landingOnly" do not cause left side collision
+          if (platform.landingOnly !== true){
+            this.position.x = platform.right + 0.1;
+            this.velocity.x = platform.velocity.x;
+          }
         }
-       }
       
         // In debug mode, display red vertical line whenever collision occurs
         if (this === PLAYER && DEBUG_MODE){
+          console.log("Left side collision detected");
           Graphics.drawLine({x1: this.position.x, y1: 0, x2: this.position.x, y2: CANVAS.height, thickness: 1, color: 'red'});
         }
       }
@@ -201,6 +203,7 @@ export class Character extends Entity {
 
         // In debug mode, display red vertical line whenever collision occurs
         if (this === PLAYER && DEBUG_MODE){
+          console.log("Right side collision detected");
           Graphics.drawLine({x1: this.position.x + this.size.w, y1: 0, x2: this.position.x + this.size.w, y2: CANVAS.height, thickness: 1, color: 'red'});
         }
       }
@@ -218,13 +221,14 @@ export class Character extends Entity {
 
         // In debug mode, display red horizontal line whenever collision occurs
         if (this === PLAYER && DEBUG_MODE){
+          console.log("Top side collision detected");
           Graphics.drawLine({x1: 0, y1: this.position.y, x2: CANVAS.width, y2: this.position.y, thickness: 1, color: 'red'});
         }
       }
     });
 
     // Collision with an enemy character if this === PLAYER
-    if (this === PLAYER && !DEBUG_MODE && !this.damaged){
+    if (this === PLAYER && !this.damaged){
       ENEMIES.forEach(enemy => {
         if (!this.checkCollision(enemy)) return;
 
@@ -236,7 +240,9 @@ export class Character extends Entity {
         }
 
         this.damaged = true;
-        this.currentHP = this.currentHP - enemy.contactDamage;
+        if (!DEBUG_MODE){
+          this.currentHP = this.currentHP - enemy.contactDamage;
+        }
 
         // When the player gets damaged, give PLAYER_DAMAGED_DELAY time before allowing another damage.
         const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
@@ -271,9 +277,6 @@ export class Character extends Entity {
 
       // Missile owner is enemy and damaged entity is PLAYER
       else if (this === PLAYER && missile.owner.isEnemy){
-        //  When debug mode is on, PLAYER character doesn't take any damage
-        if (DEBUG_MODE) return;
-
         // Lethal damage
         if (this.currentHP - missile.damage < 0){
           missile.damage = this.currentHP;
@@ -282,7 +285,9 @@ export class Character extends Entity {
         // If PLAYER is currently in damaged state, do not damage it again
         if (!this.damaged){
           this.damaged = true;
-          this.currentHP = this.currentHP - missile.damage;
+          if (!DEBUG_MODE){
+            this.currentHP = this.currentHP - missile.damage;
+          }
           const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
           timer.start();
         }
@@ -291,7 +296,7 @@ export class Character extends Entity {
     });
 
     // Collision with Fireballs
-    if (this === PLAYER && !this.damaged && !DEBUG_MODE){
+    if (this === PLAYER && !this.damaged){
       FIREBALLS.forEach(fireball => {
         if (!this.checkCollision(fireball)) return;
 
@@ -303,7 +308,9 @@ export class Character extends Entity {
         }
         
         this.damaged = true;
-        this.currentHP = this.currentHP - fireball.damage;
+        if (!DEBUG_MODE){
+          this.currentHP = this.currentHP - fireball.damage;
+        }
         const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
         timer.start();
       });
@@ -426,7 +433,7 @@ export class Character extends Entity {
       Checking if character is crouching
     */
    if (this.isCrouching){
-     this.size.h = this.crouch_height;
+     this.size.h = this.crouchHeight;
      this.isGrounded = false;
    }
    else {
