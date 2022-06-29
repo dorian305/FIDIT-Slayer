@@ -153,25 +153,6 @@ export class Character extends Entity {
       /*
         Detecting from which side the collision has occured. The reference is character.
       */
-      // Check if the collision occured from the bottom side (landing on the platform).
-      else if (this.oldBottom < platform.oldTop){
-        this.position.y =     platform.top - this.size.h - 0.1;
-        this.velocity.y =     platform.velocity.y;
-        this.remainingJumps = this.jumps;
-        this.isGrounded =     true;
-        
-        // If the platform is invisible and player landed on it, set it to be visible
-        if (platform.visible === false){
-          platform.visible = true;
-        }
-
-        // In debug mode, display red horizontal line whenever collision occurs
-        if (this === PLAYER && DEBUG_MODE){
-          console.log("Bottom side collision detected");
-          Graphics.drawLine({x1: 0, y1: this.position.y + this.size.h, x2: CANVAS.width, y2: this.position.y + this.size.h, thickness: 1, color: 'red'});
-        }
-      }
-
       // Check if collision occured from the left side.
       else if (this.oldLeft > platform.oldRight){
         // Platforms which become visible once you land on them do not cause collision from left side
@@ -182,7 +163,7 @@ export class Character extends Entity {
             this.velocity.x = platform.velocity.x;
           }
         }
-      
+
         // In debug mode, display red vertical line whenever collision occurs
         if (this === PLAYER && DEBUG_MODE){
           console.log("Left side collision detected");
@@ -205,6 +186,25 @@ export class Character extends Entity {
         if (this === PLAYER && DEBUG_MODE){
           console.log("Right side collision detected");
           Graphics.drawLine({x1: this.position.x + this.size.w, y1: 0, x2: this.position.x + this.size.w, y2: CANVAS.height, thickness: 1, color: 'red'});
+        }
+      }
+      
+      // Check if the collision occured from the bottom side (landing on the platform).
+      else if (this.oldBottom < platform.oldTop){
+        this.position.y =     platform.top - this.size.h - 0.1;
+        this.velocity.y =     platform.velocity.y;
+        this.remainingJumps = this.jumps;
+        this.isGrounded =     true;
+        
+        // If the platform is invisible and player landed on it, set it to be visible
+        if (platform.visible === false){
+          platform.visible = true;
+        }
+
+        // In debug mode, display red horizontal line whenever collision occurs
+        if (this === PLAYER && DEBUG_MODE){
+          console.log("Bottom side collision detected");
+          Graphics.drawLine({x1: 0, y1: this.position.y + this.size.h, x2: CANVAS.width, y2: this.position.y + this.size.h, thickness: 1, color: 'red'});
         }
       }
 
