@@ -6,15 +6,8 @@ import { gameOver } from "./gameover.js";
 let stop = false;
 let fpsInterval, startTime, now, then, elapsed;
 let requestID = null;
-let frameCounter = 0;
 
 function Render(){
-	/**
-	 * Count frames in debug mode
-	 */
-	if (DEBUG_MODE){
-		frameCounter >= GAME_FPS ? 0 : frameCounter++;
-	}
 	/*
 		This shit handles FPS restriction
 	*/

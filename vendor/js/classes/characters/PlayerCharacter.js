@@ -105,6 +105,7 @@ export class PlayerCharacter extends Character {
       `Damaged:       ${this.damaged}`,
       `Visible:       ${this.visible}`,
       `Weapon:        { Name: ${this.weapon.name}, Damage: ${this.weapon.damage}, Missile speed: ${this.weapon.missileSpeed} }`,
+      `Visible:       ${this.visible}`,
     ];
     debugContent.forEach((content, index) => {
       Graphics.drawText({
