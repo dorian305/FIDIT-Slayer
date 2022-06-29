@@ -394,8 +394,8 @@ export class Character extends Entity {
       this.velocity.y = this.velocity.y < 15 ? this.velocity.y + GRAVITY : 15;          // Increase character velocity Y by GRAVITY amount
     }
     /*
-      The character top side is less than the canvas height.
-      Character has died and the.
+      The character top side is greater than the canvas height.
+      Character went out of bounds, kill it.
     */
     else {
       this.currentHP = 0;
@@ -403,7 +403,7 @@ export class Character extends Entity {
 
     /*
       Checking whether the character current HP is 0.
-      If it is, the character is dead, remove it from the array.
+      If it is, set character as dead.
     */
     if (this.currentHP <= 0){
       this.isDead = true;
