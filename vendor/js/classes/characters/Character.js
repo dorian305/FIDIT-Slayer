@@ -388,9 +388,10 @@ export class Character extends Entity {
       Every game character is under the influence of gravity.
       So, if a character is in the air, meaning if its bottom side is NOT
       on some kind of platform (isn't grounded), then apply the gravity effect.
+      Maximum downwards velocity is 15.
     */
     if (this.top < CANVAS.height){
-      this.velocity.y = this.velocity.y + GRAVITY;          // Increase character velocity Y by GRAVITY amount
+      this.velocity.y = this.velocity.y < 15 ? this.velocity.y + GRAVITY : 15;          // Increase character velocity Y by GRAVITY amount
     }
     /*
       The character top side is less than the canvas height.
@@ -430,15 +431,10 @@ export class Character extends Entity {
     }
 
     /*
-      Checking if character is crouching
+      Checking if character is crouching. If it is, set new character height to crouching height.
+      Otherwise set to default height.
     */
-   if (this.isCrouching){
-     this.size.h = this.crouchHeight;
-     this.isGrounded = false;
-   }
-   else {
-     this.size.h = this.originalHeight;
-   }
+    this.size.h = this.isCrouching ? this.crouchHeight : this.originalHeight;
 
     // Perform collision detection for each character
     this.collider2D();

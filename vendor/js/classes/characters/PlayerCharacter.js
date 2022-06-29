@@ -119,7 +119,20 @@ export class PlayerCharacter extends Character {
       });
     });
 
-    Graphics.drawLine({x1: 0, y1: this.center.y, x2: CANVAS.width, y2: this.center.y, thickness: 1, color: 'red'});   // Horizontal line
-    Graphics.drawLine({x1: this.center.x, y1: 0, x2: this.center.x, y2: CANVAS.height, thickness: 1, color: 'red'});  // Vertical line
+    // Center of PLAYER
+    Graphics.drawLine({x1: 0, y1: this.center.y, x2: CANVAS.width, y2: this.center.y, thickness: 1, color: 'yellow'});   // Horizontal line
+    Graphics.drawLine({x1: this.center.x, y1: 0, x2: this.center.x, y2: CANVAS.height, thickness: 1, color: 'yellow'});  // Vertical line
+    
+    // Bounding box of PLAYER current sides
+    Graphics.drawLine({x1: this.left, y1: this.top, x2: this.right, y2: this.top, thickness: 1, color: 'yellow'});          // Top line
+    Graphics.drawLine({x1: this.left, y1: this.bottom, x2: this.right, y2: this.bottom, thickness: 1, color: 'yellow'});    // Bottom line
+    Graphics.drawLine({x1: this.left, y1: this.top, x2: this.left, y2: this.bottom, thickness: 1, color: 'yellow'});        // Left line
+    Graphics.drawLine({x1: this.right, y1: this.top, x2: this.right, y2: this.bottom, thickness: 1, color: 'yellow'});      // Right line
+    
+    // Bounding box of PLAYER old sides
+    Graphics.drawLine({x1: this.oldLeft, y1: this.oldTop, x2: this.oldRight, y2: this.oldTop, thickness: 1, color: 'red'});          // Top line
+    Graphics.drawLine({x1: this.oldLeft, y1: this.oldBottom, x2: this.oldRight, y2: this.oldBottom, thickness: 1, color: 'red'});    // Bottom line
+    Graphics.drawLine({x1: this.oldLeft, y1: this.oldTop, x2: this.oldLeft, y2: this.oldBottom, thickness: 1, color: 'red'});        // Left line
+    Graphics.drawLine({x1: this.oldRight, y1: this.oldTop, x2: this.oldRight, y2: this.oldBottom, thickness: 1, color: 'red'});      // Right line
   }
 }
