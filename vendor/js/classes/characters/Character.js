@@ -53,7 +53,9 @@ export class Character extends Entity {
       let missileSize =      {w: 0, h: 0};
       let missileOwner =     this;
 
-      // Determine which way the missile is moving depending on the character direction
+      /*
+        Determine which way the missile is moving depending on the character direction
+      */
       if (this.direction.up && this.direction.left){
           missilePosition.x =   this.left - this.weapon.missileSize.w / 2;
           missilePosition.y =   this.top + this.size.h / 2 + this.weapon.missileSize.h / 2;
@@ -222,75 +224,88 @@ export class Character extends Entity {
     });
 
     // Collision with an enemy character if this === PLAYER
-
     if (this === PLAYER && !DEBUG_MODE && !this.damaged){
       ENEMIES.forEach(enemy => {
-        if (this.checkCollision(enemy)){
-          if (this.currentHP - enemy.contactDamage < 0){
-            enemy.contactDamage = this.currentHP;
-          }
-          this.damaged = true;
-          this.currentHP = this.currentHP - enemy.contactDamage;
+        if (!this.checkCollision(enemy)) return;
 
-          // When the player gets damaged, give PLAYER_DAMAGED_DELAY time before allowing another damage.
-          const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
-          timer.start();
+        console.log("Enemy collision");
+        
+        // Lethal damage
+        if (this.currentHP - enemy.contactDamage < 0){
+          enemy.contactDamage = this.currentHP;
         }
+
+        this.damaged = true;
+        this.currentHP = this.currentHP - enemy.contactDamage;
+
+        // When the player gets damaged, give PLAYER_DAMAGED_DELAY time before allowing another damage.
+        const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
+        timer.start();
       });
     }
 
     // Collision with an orb collectible
     if (this === PLAYER){
       ORBS.forEach(orb => {
-        if (this.checkCollision(orb)){
-          orb.collect();
-        }
+        if (!this.checkCollision(orb)) return;
+        console.log("orb collision");
+        orb.collect();
       });
     }
 
     // Collision with missiles
     MISSILES.forEach(missile => {
-      if (this.checkCollision(missile)){
-        // Missile owner is PLAYER and damaged entity is enemy
-        if (missile.owner === PLAYER && this.isEnemy){
-          if (this.currentHP - missile.damage < 0){
-            missile.damage = this.currentHP;
-           }
-           this.currentHP = this.currentHP - missile.damage;
-           removeFromArray(MISSILES, missile);
+      // If no collision with current missile, move to next missile
+      if (!this.checkCollision(missile)) return;
+
+      // Missile owner is PLAYER and damaged entity is enemy
+      if (this.isEnemy && missile.owner === PLAYER){
+        // Lethal damage
+        if (this.currentHP - missile.damage < 0){
+          missile.damage = this.currentHP;
+        }
+        // Damage an enemy
+        this.currentHP = this.currentHP - missile.damage;
+        removeFromArray(MISSILES, missile);
+      }
+
+      // Missile owner is enemy and damaged entity is PLAYER
+      else if (this === PLAYER && missile.owner.isEnemy){
+        //  When debug mode is on, PLAYER character doesn't take any damage
+        if (DEBUG_MODE) return;
+
+        // Lethal damage
+        if (this.currentHP - missile.damage < 0){
+          missile.damage = this.currentHP;
         }
 
-        // Missile owner is enemy and damaged entity is PLAYER
-        else if (missile.owner.isEnemy && this === PLAYER){
-          //  When debug mode is on, PLAYER character doesn't take any damage
-          if (!DEBUG_MODE){
-             if (this.currentHP - missile.damage < 0){
-               missile.damage = this.currentHP;
-              }
-              if (!this.damaged){
-                this.damaged = true;
-                this.currentHP = this.currentHP - missile.damage;
-                const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
-                timer.start();
-              }
-           }
-           removeFromArray(MISSILES, missile);
+        // If PLAYER is currently in damaged state, do not damage it again
+        if (!this.damaged){
+          this.damaged = true;
+          this.currentHP = this.currentHP - missile.damage;
+          const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
+          timer.start();
         }
+        removeFromArray(MISSILES, missile);
       }
     });
 
     // Collision with Fireballs
     if (this === PLAYER && !this.damaged && !DEBUG_MODE){
       FIREBALLS.forEach(fireball => {
-        if (this.checkCollision(fireball)){
-          if (this.currentHP - fireball.damage < 0){
-            fireball.damage = this.currentHP;
-          }
-          this.damaged = true;
-          this.currentHP = this.currentHP - fireball.damage;
-          const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
-          timer.start();
+        if (!this.checkCollision(fireball)) return;
+
+        console.log("Fireball collision");
+
+        // Lethal damage
+        if (this.currentHP - fireball.damage < 0){
+          fireball.damage = this.currentHP;
         }
+        
+        this.damaged = true;
+        this.currentHP = this.currentHP - fireball.damage;
+        const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
+        timer.start();
       });
     }
   }
