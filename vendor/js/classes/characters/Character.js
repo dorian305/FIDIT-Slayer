@@ -165,7 +165,7 @@ export class Character extends Entity {
           platform.visible = true;
         }
 
-        // In debug mode, display red vertical line whenever collision occurs
+        // In debug mode, display red horizontal line whenever collision occurs
         if (this === PLAYER && DEBUG_MODE){
           Graphics.drawLine({x1: 0, y1: this.position.y + this.size.h, x2: CANVAS.width, y2: this.position.y + this.size.h, thickness: 1, color: 'red'});
         }
@@ -216,7 +216,7 @@ export class Character extends Entity {
           }
         }
 
-        // In debug mode, display red vertical line whenever collision occurs
+        // In debug mode, display red horizontal line whenever collision occurs
         if (this === PLAYER && DEBUG_MODE){
           Graphics.drawLine({x1: 0, y1: this.position.y, x2: CANVAS.width, y2: this.position.y, thickness: 1, color: 'red'});
         }
