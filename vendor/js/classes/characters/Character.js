@@ -188,7 +188,7 @@ export class Character extends Entity {
           Graphics.drawLine({x1: this.position.x + this.size.w, y1: 0, x2: this.position.x + this.size.w, y2: CANVAS.height, thickness: 1, color: 'red'});
         }
       }
-      
+
       // Check if the collision occured from the bottom side (landing on the platform).
       else if (this.oldBottom < platform.oldTop){
         this.position.y =     platform.top - this.size.h - 0.1;
@@ -231,22 +231,22 @@ export class Character extends Entity {
     if (this === PLAYER && !this.damaged){
       ENEMIES.forEach(enemy => {
         if (!this.checkCollision(enemy)) return;
-
-        console.log("Enemy collision");
         
         // Lethal damage
         if (this.currentHP - enemy.contactDamage < 0){
           enemy.contactDamage = this.currentHP;
         }
-
+        
         this.damaged = true;
         if (!DEBUG_MODE){
           this.currentHP = this.currentHP - enemy.contactDamage;
         }
-
+        
         // When the player gets damaged, give PLAYER_DAMAGED_DELAY time before allowing another damage.
         const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
         timer.start();
+
+        console.log("Collision with an enemy character detected");
       });
     }
 
@@ -254,8 +254,9 @@ export class Character extends Entity {
     if (this === PLAYER){
       ORBS.forEach(orb => {
         if (!this.checkCollision(orb)) return;
-        console.log("orb collision");
         orb.collect();
+
+        console.log("Collision with an orb detected");
       });
     }
 
@@ -273,6 +274,8 @@ export class Character extends Entity {
         // Damage an enemy
         this.currentHP = this.currentHP - missile.damage;
         removeFromArray(MISSILES, missile);
+
+        console.log("A missile has hit the enemy");
       }
 
       // Missile owner is enemy and damaged entity is PLAYER
@@ -292,6 +295,8 @@ export class Character extends Entity {
           timer.start();
         }
         removeFromArray(MISSILES, missile);
+
+        console.log("Collision with an enemy missile detected");
       }
     });
 
@@ -299,9 +304,7 @@ export class Character extends Entity {
     if (this === PLAYER && !this.damaged){
       FIREBALLS.forEach(fireball => {
         if (!this.checkCollision(fireball)) return;
-
-        console.log("Fireball collision");
-
+        
         // Lethal damage
         if (this.currentHP - fireball.damage < 0){
           fireball.damage = this.currentHP;
@@ -313,6 +316,8 @@ export class Character extends Entity {
         }
         const timer = new Timer(() => this.damaged = false, PLAYER_DAMAGED_DELAY);
         timer.start();
+
+        console.log("Collision with fireball detected");
       });
     }
   }
