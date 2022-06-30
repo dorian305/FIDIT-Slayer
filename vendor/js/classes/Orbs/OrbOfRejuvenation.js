@@ -10,6 +10,7 @@ export class OrbOfRejuvenation extends Orb {
         this.healPercentage = healPercentage;   // The amount of HP that will be restored when collecting orb of rejuvenation
         this.pickupSound = createSound(`${PATH_AUDIO}/Orbs/OrbOfRejuvenationPickup.wav`);
     }
+    
     // Player has collected the orb
     collect(){
         // Collect orb only if PLAYER health is not full
