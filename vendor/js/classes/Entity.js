@@ -42,7 +42,12 @@ export class Entity {
 	checkCollision(other){
 		// Skip other if it's null
 		if (other){
-			return !(this.left + this.velocity.x > other.right || this.right + this.velocity.x < other.left || this.top + this.velocity.y > other.bottom || this.bottom + this.velocity.y < other.top)
+			return !(
+				this.left + this.velocity.x > other.right ||
+				this.right + this.velocity.x < other.left ||
+				this.top + this.velocity.y > other.bottom ||
+				this.bottom + this.velocity.y < other.top
+			)
 		}
 	}
 

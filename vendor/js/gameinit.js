@@ -64,16 +64,13 @@ window.addEventListener("keydown", event => {
 	Clicking left mouse click performs an attack.
 */
 CANVAS.addEventListener("mousedown", e => {
-	if (e.button === 0 && INGAME && !GAME_PAUSED){
-		PLAYER.attack();
-	}
+	if (e.button === 0 && INGAME && !GAME_PAUSED) PLAYER.attack();
 });
 
 ['keydown', 'keyup'].forEach(event => {
 	window.addEventListener(event, e => {
 		// Events are only available if the PLAYER is existing
 		if (PLAYER){
-			
 			/*
 				Player left right movement, crouching and upwards aiming.
 				The condition checks whether the triggering key is contained in the array,
@@ -105,9 +102,7 @@ CANVAS.addEventListener("mousedown", e => {
 			/*
 				Toggling debug mode.
 			*/
-			if (e.key.toLowerCase() === "z" && event === "keydown"){
-				DEBUG_MODE = !DEBUG_MODE;
-			}
+			if (e.key.toLowerCase() === "z" && event === "keydown") DEBUG_MODE = !DEBUG_MODE;
 		}
 	});
 });
@@ -133,18 +128,18 @@ CANVAS.addEventListener("click", e => {
 		*/
 		BUTTONS.forEach(button => {
 			// -CANVAS_EDGES offset is added to the mouse coordinates because the overlay is drawn with the offset aswell
-			if (
-					mouse.x - CANVAS_EDGES.left > button.position.x &&
-					mouse.x - CANVAS_EDGES.left < button.position.x + button.size.w &&
-					mouse.y - CANVAS_EDGES.top > button.position.y &&
-					mouse.y - CANVAS_EDGES.top < button.position.y + button.size.h
-				){
+			if (!(
+				mouse.x - CANVAS_EDGES.left < button.position.x ||
+				mouse.x - CANVAS_EDGES.left > button.position.x + button.size.w ||
+				mouse.y - CANVAS_EDGES.top < button.position.y ||
+				mouse.y - CANVAS_EDGES.top > button.position.y + button.size.h
+			)){
 				/*
 					The click occured on a button, which means the button was clicked.
 					Perform the button's action and exit forEach.
 				*/
 				button.action();
-				return;
+				console.log(`The button has been clicked`);
 			}
 		});
 	}
@@ -162,13 +157,13 @@ CANVAS.addEventListener('mousemove', e => {
 		*/
 		BUTTONS.forEach(button => {
 			// -CANVAS_EDGES offset is added to the mouse coordinates because the overlay is drawn with the offset aswell
-			if (
-					mouse.x - CANVAS_EDGES.left > button.position.x &&
-					mouse.x - CANVAS_EDGES.left < button.position.x + button.size.w &&
-					mouse.y - CANVAS_EDGES.top > button.position.y &&
-					mouse.y - CANVAS_EDGES.top < button.position.y + button.size.h
-				){
-				console.log("Mouse over button");
+			if (!(
+					mouse.x - CANVAS_EDGES.left < button.position.x ||
+					mouse.x - CANVAS_EDGES.left > button.position.x + button.size.w ||
+					mouse.y - CANVAS_EDGES.top < button.position.y ||
+					mouse.y - CANVAS_EDGES.top > button.position.y + button.size.h
+			)){
+				console.log(`Mouse is hovering over the button`);
 			}
 		});
 	}

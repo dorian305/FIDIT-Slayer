@@ -195,7 +195,7 @@ export function level1(){
 			},
 			default: `${PATH_SPRITES}/Player/PlayerIdleRight.png`,
 		},
-		playerName: "Dorian",
+		playerName: "Pobar",
 		weapon: new Weapon({
 			name: "Izanagi",
 			damage: 10,
