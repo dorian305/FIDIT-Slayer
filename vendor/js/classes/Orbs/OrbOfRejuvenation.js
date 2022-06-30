@@ -7,27 +7,23 @@ import { createSound }  from "../../functions/createsound.js";
 export class OrbOfRejuvenation extends Orb {
     constructor({x, y, w, h, sprite, healPercentage}){
         super({x, y, w, h, sprite});
-        this.healPercentage = healPercentage;                // The amount of HP that will be restored when collecting orb of rejuvenation
+        this.healPercentage = healPercentage;   // The amount of HP that will be restored when collecting orb of rejuvenation
         this.pickupSound = createSound(`${PATH_AUDIO}/Orbs/OrbOfRejuvenationPickup.wav`);
     }
     // Player has collected the orb
     collect(){
-        // Check if player is at full health
-        if (PLAYER.currentHP < PLAYER.maxHP){
-            // Heal the player
-            PLAYER.currentHP = PLAYER.currentHP + (PLAYER.maxHP * this.healPercentage);
-            if (PLAYER.currentHP > PLAYER.maxHP){
-                PLAYER.currentHP = PLAYER.maxHP;
+        // Collect orb only if PLAYER health is not full
+        if (PLAYER.currentHP >= PLAYER.maxHP) return;
 
-                // Playing pickup sound
-                this.pickupSound.play();
-            }
-            // Remove the collected orb
-            removeFromArray(ORBS, this);
+        PLAYER.currentHP = PLAYER.currentHP + (PLAYER.maxHP * this.healPercentage);
+        if (PLAYER.currentHP > PLAYER.maxHP){
+            PLAYER.currentHP = PLAYER.maxHP;
         }
-        // Do not collect the orb
-        else {
-            // ...
-        }
+
+        // Playing pickup sound
+        this.pickupSound.play();
+        
+        // Remove the collected orb
+        removeFromArray(ORBS, this);
     }
 }
