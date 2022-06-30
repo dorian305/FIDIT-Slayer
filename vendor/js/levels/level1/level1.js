@@ -8,46 +8,47 @@ import { OrbOfHealth } 				from "../../classes/Orbs/OrbOfHealth.js";
 import { OrbOfRejuvenation } 		from "../../classes/Orbs/OrbOfRejuvenation.js";
 import { createSound } 				from "../../functions/createsound.js";
 import { spawnFireballs }			from "./fireballs.js";
-import { stopSound } 				from "../../functions/stopsound.js";
 import { bossFight }				from "./bossfight.js";
+import { stopSound } from "../../functions/stopsound.js";
 
 export function level1(){
 	/*
-		Initializing level.
+		Initializing variables.
 	*/
-	GENERIC_OBJECTS.length =  		0;					// Emptying array of generic objects
-	PLATFORMS.length = 				0;					// Emptying array of platforms
-	ENEMIES.length = 				0;					// Emptying array of enemy units
-	MISSILES.length = 				0;					// Emptying array of missiles
-	EFFECTS.length = 				0;					// Emptying array of effects
-	BUTTONS.length = 				0;					// Emptying array of game buttons
-	ORBS.length = 					0;					// Emptying array of orbs
-	FIREBALLS.length = 				0;					// Emptying array of fireballs
-	LEVEL_BEGINNING_EDGE = 			0;					// Setting beginning of the level
-	LEVEL_END_EDGE = 				12000;				// Setting end of the level
-	BOSS_AREA.left = 				10500;
-	BOSS_AREA.right = 				11800;
-	INGAME = 						true;				// Setting INGAME flag to true when starting level
-	PLAYER_ENTERED_BOSS_AREA = 		false;
-	GAME_PAUSED = 					false;				// Setting GAME_PAUSED flag to false when starting level
-	CANVAS.height =					1000;
-	CANVAS.width =                  LEVEL_END_EDGE;		// Setting width of the canvas to the level width
-	CANVAS_EDGES = {									// Resetting the canvas edge positions
-		left: LEVEL_BEGINNING_EDGE,
-		right: LEVEL_END_EDGE,
-		top: 0,
-		bottom: CANVAS.height,
-	}
-	BOSS_FIGHT = bossFight;								// Saving boss fight function handler to global variable (accessed in render.js)
+	ENEMIES.length = 0;
+	PLATFORMS.length = 0;
+	GENERIC_OBJECTS.length = 0;
+	BUTTONS.length = 0;
+	ORBS.length = 0;
+	MISSILES.length = 0;
+	FIREBALLS.length = 0;
+	EFFECTS.length = 0;
+	PLAYER = null;
+	DEBUG_MODE = false;
+	INGAME = true; 
+	GAME_PAUSED = false;
+	PLAYER_ENTERED_BOSS_AREA = false;
+	BOSS = null;
+	BOSS_FIGHT = null;
+	BOSS_AREA = {};
+	CURRENT_LEVEL = level1;
+	LEVEL_BEGINNING_EDGE = 0;
+	LEVEL_END_EDGE = 12000;
+	BOSS_AREA.left = 10500;
+	BOSS_AREA.right = 11800;
+	CANVAS_EDGES = {left: LEVEL_BEGINNING_EDGE, right: LEVEL_END_EDGE, top: 0, bottom: CANVAS.height};
+	CANVAS.height = 1000;
+	CANVAS.width = LEVEL_END_EDGE; // Setting width of the canvas to the level width
+	BOSS_FIGHT = bossFight; // Saving boss fight function handler to global variable (accessed in gameloop.js)
 
-	// Clearing all timers
-	TIMERS.forEach(timer => {
-		if (timer) timer.destroy();
-	});
+	/*
+		Clearing running timers, if any.
+	*/
+	TIMERS.forEach(timer => {if (timer) timer.destroy()});
 	TIMERS.length = 0;
 
 	/*
-		Creating the background image for the level as a generic object with the length of the level.
+		Creating the background image for the level.
 	*/
 	new GenericObject({
 		x: 0,
@@ -495,27 +496,13 @@ export function level1(){
 			healPercentage: 0.25,
 		});
 	});
-
 	/*
-		Stopping game over music
+		Starting level music
 	*/
-	if (GAME_OVER_MUSIC){
-		stopSound(GAME_OVER_MUSIC);
-		GAME_OVER_MUSIC = null;
-	}
-	/*
-		Playing level music
-	*/
-	// If music already defined, stop it
-	if (LEVEL_MUSIC){
-		stopSound(LEVEL_MUSIC);
-	}
-	// Create new music instance
-	else {
-		LEVEL_MUSIC = createSound(`${PATH_AUDIO}/Level 1/Level1Music.mp3`);
-		LEVEL_MUSIC.loop = true;
-	}
-	LEVEL_MUSIC.play();
+	stopSound(MUSIC);
+	MUSIC = createSound(`${PATH_AUDIO}/Level 1/Level1Music.mp3`);
+	MUSIC.loop = true;
+	MUSIC.play();
 
 	/*
 		After done creating and setting up the level, begin gameplay.

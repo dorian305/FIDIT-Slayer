@@ -1,4 +1,6 @@
 export function stopSound(sound){
-    sound.pause();
-    sound.currentTime = 0;
+    if (sound){
+        sound.pause();
+        sound.currentTime = 0;
+    }
 }

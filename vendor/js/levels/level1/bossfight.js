@@ -54,9 +54,10 @@ export const bossFight = () => {
     BOSS.shurikens = [];
 
     // Playing boss fight Music
-    stopSound(LEVEL_MUSIC);
-    LEVEL_MUSIC.src = `${PATH_AUDIO}/Level 1/BossFight.mp3`;
-    LEVEL_MUSIC.play();
+    stopSound(MUSIC);
+    MUSIC.src = `${PATH_AUDIO}/Level 1/BossFight.mp3`;
+    MUSIC.loop = true;
+    MUSIC.play();
 
     // Starting boss fight
     const bossFightTimer = new Timer(() => {
@@ -102,8 +103,8 @@ const bossFightRender = () => {
 
     // Death of the boss
     if (BOSS.isDead){
-        BOSS = null;
-        stopSound(LEVEL_MUSIC);
+        BOSS.shurikens.length = 0;
+        stopSound(MUSIC);
         cancelAnimationFrame(bossRenderFrame);
         bossAttackTimer.destroy();
         orbHealTimer.destroy();
@@ -147,8 +148,8 @@ const bossFightRender = () => {
                 timer.start();
 
                 // Playing endscreen music
-                LEVEL_MUSIC.src = `${PATH_AUDIO}/Level 1/Endscreen.mp3`;
-                LEVEL_MUSIC.play();
+                MUSIC.src = `${PATH_AUDIO}/Level 1/Endscreen.mp3`;
+                MUSIC.play();
             }
         }, 2000);
         cigan.start();
@@ -156,8 +157,6 @@ const bossFightRender = () => {
 
     // Death of the player
     else if (PLAYER.isDead){
-        BOSS = null;
-        stopSound(LEVEL_MUSIC);
         cancelAnimationFrame(bossRenderFrame);
         bossAttackTimer.destroy();
         orbHealTimer.destroy();
@@ -306,7 +305,7 @@ const attack1 = () => {
     BOSS.shurikenLifeDuration = 2500;   // How long will shuriken exist before it dissapears
 
     // Creating the shuriken
-    const shuriken = new Missile({
+    let shuriken = new Missile({
         x: BOSS.shurikenPosition.x,
         y: BOSS.shurikenPosition.y,
         w: BOSS.shurikenSize.w,
@@ -329,10 +328,9 @@ const attack1 = () => {
 
     // Removing shuriken after some time
     const timer = new Timer(() => {
-        if (BOSS){
-            removeFromArray(BOSS.shurikens, shuriken);
-            removeFromArray(MISSILES, shuriken);
-        }
+        removeFromArray(BOSS.shurikens, shuriken);
+        removeFromArray(MISSILES, shuriken);
+        shuriken = null;
     }, BOSS.shurikenLifeDuration);
     timer.start();
 }

@@ -5,8 +5,14 @@ import { level1 } from "./levels/level1/level1.js";
 import { Button } from "./classes/Button.js";
 import { Timer } from "./classes/Timer.js";
 
+/*
+    Starting intro cutscene.
+*/
 export const introCutscene = () => {
-    // Creating intro textbox
+
+    /*
+        Creating a division where intro cutscene text will be animated.
+    */
     const wrapper = document.createElement("div");
     const text = document.createElement("div");
     wrapper.id = "introWrapper";
@@ -28,12 +34,17 @@ export const introCutscene = () => {
     document.body.insertAdjacentElement('beforeend', wrapper);
     text.style.marginTop = `600px`;
 
-    // Intro sequence audio
+    /*
+        Playing intro cutscene audio.
+    */
     const cutsceneAudio = createSound(`${PATH_AUDIO}/Intro/Intro.mp3`);
     cutsceneAudio.volume = 0.5;
     cutsceneAudio.play();
 
-    // Cutscene background images
+    /*
+        Starting intro cutscene illustrations.
+    */
+    //  Scene 1
     let scene = Graphics.createImage(`${PATH_SPRITES}/Intro/Scene1.jpg`);
     scene.onload = () => {
         Graphics.drawImage({
@@ -44,8 +55,6 @@ export const introCutscene = () => {
         const timer = new Timer(drawSkipCutsceneButton, 0);
         timer.start();
     }
-
-    // Running intro cutscene
     const interval = setInterval(() => {
         let margin = parseFloat(text.style.marginTop);
         if (margin > -2000){

@@ -28,7 +28,6 @@ const MISSILES = 				[];											 // Missiles in the game
 const FIREBALLS = 				[];											 // Fireballs in the game
 const EFFECTS = 				[];											 // Effects in the game
 const TIMERS = 					[];											 // Timers in the game
-let CLICKED_BUTTON =			null;										 // Function which will run when a certain button is clicked
 const GRAVITY =                 0.6;                                         // Gravity constant, implementation in character class
 let LEVEL_BEGINNING_EDGE =    	null;	                                     // Leftmost edge of the game level
 let LEVEL_END_EDGE =          	null;	                                     // Rightmost edge of the game level
@@ -36,8 +35,7 @@ const DIMMED_BACKGROUND_COLOR = "#000000b3";								 // Dimmed background color
 const GAME_FONT =				"Roboto Slab";								 // Font which is used for the text in game
 const GAME_FPS =				60;											 // Animation FPS
 let CURRENT_LEVEL =				null;										 // Keeps track of current level
-let LEVEL_MUSIC =				null;										 // Current level music
-let GAME_OVER_MUSIC =			null;										 // Game over music
+let MUSIC =						null;										 // Handler for music ingame
 
 /*
 	Disabling window zoom in / out.
@@ -102,7 +100,7 @@ CANVAS.addEventListener("mousedown", e => {
 			/*
 				Toggling debug mode.
 			*/
-			if (e.key.toLowerCase() === "z" && event === "keydown") DEBUG_MODE = !DEBUG_MODE;
+			if (e.key.toLowerCase() === "z" && event === "keydown" && INGAME) DEBUG_MODE = !DEBUG_MODE;
 		}
 	});
 });

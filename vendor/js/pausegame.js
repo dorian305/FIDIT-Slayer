@@ -7,6 +7,7 @@ import { stopRendering }  from "./render.js";
 function pauseGame(){
 	GAME_PAUSED = !GAME_PAUSED;									// Update game paused flag
 	stopRendering();
+
 	/*
 		If flag is true, game has been paused.
 		Draw the overlay for paused game.
@@ -61,9 +62,7 @@ function pauseGame(){
 		});
 
 		// Pause running timers
-		TIMERS.forEach(timer => {
-			if (timer) timer.pause();
-		});
+		TIMERS.forEach(timer => {if (timer) timer.pause()});
 	}
 	/*
 		Game has been unpaused.
@@ -76,9 +75,7 @@ function pauseGame(){
 		BUTTONS.length = 0;
 
 		// Resume timers
-		TIMERS.forEach(timer => {
-			if (timer) timer.resume();
-		});
+		TIMERS.forEach(timer => {if (timer) timer.resume()});
 	}	
 }
 

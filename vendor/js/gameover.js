@@ -7,17 +7,10 @@ import { stopRendering }  from "./render.js";
 
 export function gameOver(){
 	stopRendering();
+
 	/*
 		Removing existing level data.
 	*/
-	GENERIC_OBJECTS.length =  		0;
-	PLATFORMS.length = 				0;
-	ENEMIES.length = 				0;
-	MISSILES.length = 				0;
-	EFFECTS.length = 				0;
-	BUTTONS.length = 				0;
-	ORBS.length = 					0;
-	FIREBALLS.length = 				0;
 	INGAME =						false;
 	GAME_PAUSED =					false;
 	/*
@@ -67,17 +60,9 @@ export function gameOver(){
 		action: MainMenu
 	});
 
-	// Stopping level music
-	stopSound(LEVEL_MUSIC);
-	LEVEL_MUSIC = null;
-
 	// Playing game over music
-	GAME_OVER_MUSIC = createSound(`${PATH_AUDIO}/YouDied.mp3`);
-	GAME_OVER_MUSIC.play();
-
-	// Destroy any remaining timers
-	TIMERS.forEach(timer => {
-		if (timer) timer.destroy();
-	});
-	TIMERS.length = 0;
+	stopSound(MUSIC);
+	MUSIC = createSound(`${PATH_AUDIO}/YouDied.mp3`);
+	MUSIC.loop = true;
+	MUSIC.play();
 }
