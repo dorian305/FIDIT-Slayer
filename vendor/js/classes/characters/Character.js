@@ -159,7 +159,7 @@ export class Character extends Entity {
         if (platform.visible !== false){
           // Platforms that are "landingOnly" do not cause left side collision
           if (platform.landingOnly !== true){
-            this.position.x = platform.right + 1;
+            this.position.x = platform.right + 0.1;
             this.velocity.x = platform.velocity.x;
           }
         }
@@ -177,7 +177,7 @@ export class Character extends Entity {
         if (platform.visible !== false){
           // Platforms that are "landingOnly" do not cause left side collision
           if (platform.landingOnly !== true){
-            this.position.x = platform.left - this.size.w - 1;
+            this.position.x = platform.left - this.size.w - 0.1;
             this.velocity.x = platform.velocity.x;
           }
         }
@@ -191,7 +191,7 @@ export class Character extends Entity {
 
       // Check if the collision occured from the bottom side (landing on the platform).
       else if (this.oldBottom < platform.oldTop){
-        this.position.y =     platform.top - this.size.h - 1;
+        this.position.y =     platform.top - this.size.h - 0.1;
         this.velocity.y =     platform.velocity.y;
         this.remainingJumps = this.jumps;
         this.isGrounded =     true;
@@ -214,7 +214,7 @@ export class Character extends Entity {
         if (platform.visible !== false){
           // Platforms that are "landingOnly" do not cause left side collision
           if (platform.landingOnly !== true){
-            this.position.y = platform.bottom + 1;
+            this.position.y = platform.bottom + 0.1;
             this.velocity.y = -this.velocity.y;
           }
         }

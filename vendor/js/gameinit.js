@@ -2,7 +2,7 @@
   Game variables and default settings
 */
 const CANVAS =                  document.querySelector('canvas');            // Canvas element
-const CTX =                     CANVAS.getContext("2d");                     // Canvas context
+const CTX =                     CANVAS.getContext("2d", {alpha: false});	 // Canvas context
 const PATH_ASSETS =				"/Assets";									 // Path to game assets
 const PATH_SPRITES =			`${PATH_ASSETS}/Sprites`;					 // Path to sprites
 const PATH_AUDIO =				`${PATH_ASSETS}/Audio`;						 // Path to audio
