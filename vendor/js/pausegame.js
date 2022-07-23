@@ -4,61 +4,65 @@ import { MainMenu }		  from "./mainmenu.js";
 import { startRendering } from "./render.js";
 import { stopRendering }  from "./render.js";
 
-function pauseGame(){
-	GAME_PAUSED = !GAME_PAUSED;									// Update game paused flag
-	stopRendering();
-
+export const pauseGame = () => {
 	/*
 		If flag is true, game has been paused.
 		Draw the overlay for paused game.
 	*/
 	if (GAME_PAUSED){
+		stopRendering(); // Stop rendering if paused
 		// Dimmed overlay
 		Graphics.drawRectangle({
-			x: -CANVAS_EDGES.left,
-			y: -CANVAS_EDGES.top,
-			w: innerWidth,
-			h: innerHeight,
-			color: DIMMED_BACKGROUND_COLOR
+			x: 0,
+			y: 0,
+			w: CANVAS_UI.width,
+			h: CANVAS_UI.height,
+			color: DIMMED_BACKGROUND_COLOR,
+			ctx: UI_CTX,
 		});
 		// Title
 		const title = Graphics.createImage(`${PATH_IMAGES}/Paused.png`);
 		title.onload = () => {
 			Graphics.drawImage({
-				x: -CANVAS_EDGES.left + (innerWidth / 2) - title.width / 2,
-				y: -CANVAS_EDGES.top + (innerHeight / 2) - title.height / 2 - 200,
-				sprite: title
+				x: CANVAS_UI.width / 2,
+				y: CANVAS_UI.height / 2 - 200,
+				sprite: title,
+				ctx: UI_CTX,
+				align: "center",
 			});
 		}
 		// Resume button
 		new Button({
 			w: 200,
 			h: 50,
-			x: -CANVAS_EDGES.left + (innerWidth / 2) - 100,
-			y: -CANVAS_EDGES.top + (innerHeight / 2) - 25,
+			x: CANVAS_UI.width / 2 - 100,
+			y: CANVAS_UI.height / 2 - 25,
 			sprite: `${PATH_IMAGES}/Button.png`,
 			text: "Resume",
-			action: pauseGame
+			action: pauseGame,
+			ctx: UI_CTX,
 		});
 		// Restart button
 		new Button({
 			w: 200,
 			h: 50,
-			x: -CANVAS_EDGES.left + (innerWidth / 2) - 100,
-			y: -CANVAS_EDGES.top + (innerHeight / 2) + 35,
+			x: CANVAS_UI.width / 2 - 100,
+			y: CANVAS_UI.height / 2 + 35,
 			sprite: `${PATH_IMAGES}/Button.png`,
 			text: "Restart",
-			action: CURRENT_LEVEL
+			action: CURRENT_LEVEL,
+			ctx: UI_CTX,
 		});
 		// Main menu button
 		new Button({
 			w: 200,
 			h: 50,
-			x: -CANVAS_EDGES.left + (innerWidth / 2) - 100,
-			y: -CANVAS_EDGES.top + (innerHeight / 2) + 95,
+			x: CANVAS_UI.width / 2 - 100,
+			y: CANVAS_UI.height / 2 + 95,
 			sprite: `${PATH_IMAGES}/Button.png`,
 			text: "Main menu",
-			action: MainMenu
+			action: MainMenu,
+			ctx: UI_CTX,
 		});
 
 		// Pause running timers
@@ -66,24 +70,13 @@ function pauseGame(){
 	}
 	/*
 		Game has been unpaused.
-		Remove all the buttons and continue game loop.
+		Remove all the buttons and continue render.
 	*/
 	else {
 		startRendering();
-		INGAME = true;
-		GAME_PAUSED = false;
 		BUTTONS.length = 0;
 
 		// Resume timers
 		TIMERS.forEach(timer => {if (timer) timer.resume()});
 	}	
 }
-
-/*
-	Pausing the game.
-*/
-window.addEventListener("keydown", e => {
-	if (e.key.toLowerCase() === "escape" && INGAME){
-		pauseGame();
-	}
-});

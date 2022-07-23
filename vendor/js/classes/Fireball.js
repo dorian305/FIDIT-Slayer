@@ -7,12 +7,13 @@ export class Fireball extends Entity {
     constructor({x, y, w, h, sprite, damage}){
         super({x, y, w, h, sprite});
         this.damage  = damage;
+        this.disappearingHeight = y + h;
         FIREBALLS.push(this);
     }
 
     update(){
-        if (this.top < CANVAS.height){
-            this.velocity.y = this.velocity.y + GRAVITY;
+        if (this.top < this.disappearingHeight){
+            this.velocity.y += GRAVITY;
         }
         else {
             removeFromArray(FIREBALLS, this);

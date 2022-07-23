@@ -167,7 +167,7 @@ export class Character extends Entity {
         // In debug mode, display red vertical line whenever collision occurs
         if (this === PLAYER && DEBUG_MODE){
           console.log("Left side collision detected");
-          Graphics.drawLine({x1: this.position.x, y1: 0, x2: this.position.x, y2: CANVAS.height, thickness: 1, color: 'red'});
+          Graphics.drawLine({x1: this.position.x, y1: 0, x2: this.position.x, y2: CANVAS_GAME.height, thickness: 1, color: 'red', ctx: GAME_CTX});
         }
       }
 
@@ -185,7 +185,7 @@ export class Character extends Entity {
         // In debug mode, display red vertical line whenever collision occurs
         if (this === PLAYER && DEBUG_MODE){
           console.log("Right side collision detected");
-          Graphics.drawLine({x1: this.position.x + this.size.w, y1: 0, x2: this.position.x + this.size.w, y2: CANVAS.height, thickness: 1, color: 'red'});
+          Graphics.drawLine({x1: this.position.x + this.size.w, y1: 0, x2: this.position.x + this.size.w, y2: CANVAS_GAME.height, thickness: 1, color: 'red', ctx: GAME_CTX});
         }
       }
 
@@ -204,7 +204,7 @@ export class Character extends Entity {
         // In debug mode, display red horizontal line whenever collision occurs
         if (this === PLAYER && DEBUG_MODE){
           console.log("Bottom side collision detected");
-          Graphics.drawLine({x1: 0, y1: this.position.y + this.size.h, x2: CANVAS.width, y2: this.position.y + this.size.h, thickness: 1, color: 'red'});
+          Graphics.drawLine({x1: 0, y1: this.position.y + this.size.h, x2: CANVAS_GAME.width, y2: this.position.y + this.size.h, thickness: 1, color: 'red', ctx: GAME_CTX});
         }
       }
 
@@ -222,7 +222,7 @@ export class Character extends Entity {
         // In debug mode, display red horizontal line whenever collision occurs
         if (this === PLAYER && DEBUG_MODE){
           console.log("Top side collision detected");
-          Graphics.drawLine({x1: 0, y1: this.position.y, x2: CANVAS.width, y2: this.position.y, thickness: 1, color: 'red'});
+          Graphics.drawLine({x1: 0, y1: this.position.y, x2: CANVAS_GAME.width, y2: this.position.y, thickness: 1, color: 'red', ctx: GAME_CTX});
         }
       }
     });
@@ -362,18 +362,18 @@ export class Character extends Entity {
       else {
         HPBarColor = HPBarColors.critical;				// Heath percentage is in critical range
       }
-      Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY, thickness: HPShellBorderSize, color: HPShellBorderColor});      // Top border
-      Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY, x2: HPShellPositionX, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});     // Left border
-      Graphics.drawLine({x1: HPShellPositionX + HPShellWidth, y1: HPShellPositionY, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});     // Right border
-      Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY + HPShellHeight, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});    // Bottom border
-      Graphics.drawRectangle({x: HPShellPositionX, y: HPShellPositionY, w: HPShellWidth, h: HPShellHeight, color: HPShellColor}); // Drawing HP Shell
-      Graphics.drawRectangle({x: HPBarPositionX, y: HPBarPositionY, w: HPBarWidth, h: HPBarHeight, color: HPBarColor});           // Drawing HP Bar
+      Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY, thickness: HPShellBorderSize, color: HPShellBorderColor, ctx: GAME_CTX});      // Top border
+      Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY, x2: HPShellPositionX, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor, ctx: GAME_CTX});     // Left border
+      Graphics.drawLine({x1: HPShellPositionX + HPShellWidth, y1: HPShellPositionY, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor, ctx: GAME_CTX});     // Right border
+      Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY + HPShellHeight, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor, ctx: GAME_CTX});    // Bottom border
+      Graphics.drawRectangle({x: HPShellPositionX, y: HPShellPositionY, w: HPShellWidth, h: HPShellHeight, color: HPShellColor, ctx: GAME_CTX}); // Drawing HP Shell
+      Graphics.drawRectangle({x: HPBarPositionX, y: HPBarPositionY, w: HPBarWidth, h: HPBarHeight, color: HPBarColor, ctx: GAME_CTX});           // Drawing HP Bar
     }
   }
 
   // Draws the character and their HP bars
   draw() {
-    CTX.drawImage(
+    GAME_CTX.drawImage(
       this.currentSprite,
       this.currentSpriteFrame * this.spriteFrameWidth,
       0,
@@ -395,11 +395,11 @@ export class Character extends Entity {
       on some kind of platform (isn't grounded), then apply the gravity effect.
       Maximum downwards velocity is 15.
     */
-    if (this.top < CANVAS.height){
+    if (this.top < CANVAS_GAME.height){
       this.velocity.y = this.velocity.y < 15 ? this.velocity.y + GRAVITY : 15;          // Increase character velocity Y by GRAVITY amount
     }
     /*
-      The character top side is greater than the canvas height.
+      The character top side is greater than the game canvas height.
       Character went out of bounds, kill it.
     */
     else {

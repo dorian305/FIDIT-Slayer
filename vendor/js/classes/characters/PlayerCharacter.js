@@ -18,6 +18,7 @@ export class PlayerCharacter extends Character {
       W: { pressed: false },                                      // W = jumping
       S: { pressed: false },                                      // S = crouching
     };
+    this.healthUI =        Graphics.createImage(`${PATH_IMAGES}/HealthBarUI.png`);
   }
 
   /*
@@ -25,21 +26,23 @@ export class PlayerCharacter extends Character {
     HP bar consists of HP shell and remaining HP which is reduced from left to right.
   */
   drawHPBar() {
-    // Health bar UI
+
+    // Drawing health UI
     Graphics.drawImage({
-      x: -CANVAS_EDGES.left + 50,
-      y: -CANVAS_EDGES.top + 25,
-      sprite: Graphics.createImage(`${PATH_IMAGES}/HealthBarUI.png`),
+      x: 25,
+      y: 25,
+      sprite: this.healthUI,
+      ctx: UI_CTX,
     });
 
 		// HP Shell properties
 		const HPShellBorderSize = 	0;
 		const HPShellBorderColor =  "#552f2f";
-		const HPShellWidth = 				(this.maxHP * 2) - (HPShellBorderSize * 2);
+		const HPShellWidth = 				this.maxHP - (HPShellBorderSize * 2);
 		const HPShellHeight = 			27 - (HPShellBorderSize * 2);
 		const HPShellColor = 				"#552f2f";
-		const HPShellPositionX = 		-CANVAS_EDGES.left + 127;
-		const HPShellPositionY = 		-CANVAS_EDGES.top + 39;
+		const HPShellPositionX = 	  120;
+		const HPShellPositionY = 		39;
 		// HP Bar properties
 		const HPScale = 						HPShellWidth / this.maxHP;
 		const HPBarWidth = 					this.currentHP * HPScale;
@@ -60,13 +63,13 @@ export class PlayerCharacter extends Character {
     else {
 			HPBarColor = HPBarColors.critical;				// Heath percentage is in critical range
 		}
-    Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY, thickness: HPShellBorderSize, color: HPShellBorderColor});      // Top border
-    Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY, x2: HPShellPositionX, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});     // Left border
-    Graphics.drawLine({x1: HPShellPositionX + HPShellWidth, y1: HPShellPositionY, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});     // Right border
-    Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY + HPShellHeight, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor});    // Bottom border
-    Graphics.drawRectangle({x: HPShellPositionX, y: HPShellPositionY, w: HPShellWidth, h: HPShellHeight, color: HPShellColor}); // Drawing HP Shell
-    Graphics.drawRectangle({x: HPBarPositionX, y: HPBarPositionY, w: HPBarWidth, h: HPBarHeight, color: HPBarColor});           // Drawing HP Bar
-    // Graphics.drawText({x: HPShellPositionX + HPShellWidth / 2 - 10, y: HPShellPositionY + HPShellHeight / 2 + 4, size: 15, color: "White", content: HPBarHealthNumber, align: "Center", font: GAME_FONT});
+    Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY, thickness: HPShellBorderSize, color: HPShellBorderColor, ctx: UI_CTX});      // Top border
+    Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY, x2: HPShellPositionX, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor, ctx: UI_CTX});     // Left border
+    Graphics.drawLine({x1: HPShellPositionX + HPShellWidth, y1: HPShellPositionY, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor, ctx: UI_CTX});     // Right border
+    Graphics.drawLine({x1: HPShellPositionX, y1: HPShellPositionY + HPShellHeight, x2: HPShellPositionX + HPShellWidth, y2: HPShellPositionY + HPShellHeight, thickness: HPShellBorderSize, color: HPShellBorderColor, ctx: UI_CTX});    // Bottom border
+    Graphics.drawRectangle({x: HPShellPositionX, y: HPShellPositionY, w: HPShellWidth, h: HPShellHeight, color: HPShellColor, ctx: UI_CTX}); // Drawing HP Shell
+    Graphics.drawRectangle({x: HPBarPositionX, y: HPBarPositionY, w: HPBarWidth, h: HPBarHeight, color: HPBarColor, ctx: UI_CTX});           // Drawing HP Bar
+    // Graphics.drawText({x: HPShellPositionX + HPShellWidth / 2 - 10, y: HPShellPositionY + HPShellHeight / 2 + 4, size: 15, color: "White", content: HPBarHealthNumber, align: "Center", font: GAME_FONT, ctx: UI_CTX});
   }
 
   /*
@@ -77,15 +80,25 @@ export class PlayerCharacter extends Character {
 
     // Drawing debug backdrop
     Graphics.drawRectangle({
-      x: -CANVAS_EDGES.left + 50,
-      y: -CANVAS_EDGES.top + 100,
-      w: 750,
-      h: 550,
-      color: DIMMED_BACKGROUND_COLOR
+      x: 25,
+      y: 110,
+      w: 550,
+      h: 385,
+      color: DIMMED_BACKGROUND_COLOR,
+      ctx: UI_CTX,
     });
 
     // Debug title
-    Graphics.drawText({x: -CANVAS_EDGES.left + 100, y: -CANVAS_EDGES.top + 150, size: 25, color: "yellow", content: `DEBUG MODE ENABLED`, align: "left", font: "Consolas"});
+    Graphics.drawText({
+      x: 50,
+      y: 135,
+      size: 18,
+      color: "yellow",
+      content: `DEBUG MODE ENABLED`,
+      align: "left",
+      font: "Consolas",
+      ctx: UI_CTX,
+    });
 
     const debugContent = [
       `Name:          ${this.name}`,
@@ -106,33 +119,43 @@ export class PlayerCharacter extends Character {
       `Visible:       ${this.visible}`,
       `Weapon:        { Name: ${this.weapon.name}, Damage: ${this.weapon.damage}, Missile speed: ${this.weapon.missileSpeed} }`,
       `Visible:       ${this.visible}`,
+      `Positions:     { Left: ${this.left}, Right: ${this.right}, Top: ${this.top}, Bottom: ${this.bottom}`,
     ];
     debugContent.forEach((content, index) => {
       Graphics.drawText({
-        x: -CANVAS_EDGES.left + 110,
-        y: -CANVAS_EDGES.top + 150 + (25 * (index + 1)),
-        size: 18,
+        x: 60,
+        y: 135 + (18 * (index + 1)),
+        size: 12,
         color: "yellow",
         content: content,
         align: "left",
-        font: "Consolas"
+        font: "Consolas",
+        ctx: UI_CTX,
       });
     });
 
     // Center of PLAYER
-    Graphics.drawLine({x1: 0, y1: this.center.y, x2: CANVAS.width, y2: this.center.y, thickness: 1, color: 'yellow'});   // Horizontal line
-    Graphics.drawLine({x1: this.center.x, y1: 0, x2: this.center.x, y2: CANVAS.height, thickness: 1, color: 'yellow'});  // Vertical line
+    Graphics.drawLine({x1: 0, y1: this.center.y, x2: CANVAS_GAME.width, y2: this.center.y, thickness: 1, color: 'yellow', ctx: GAME_CTX});   // Horizontal line
+    Graphics.drawLine({x1: this.center.x, y1: 0, x2: this.center.x, y2: CANVAS_GAME.height, thickness: 1, color: 'yellow', ctx: GAME_CTX});  // Vertical line
     
-    // Bounding box of PLAYER current sides
-    Graphics.drawLine({x1: this.left, y1: this.top, x2: this.right, y2: this.top, thickness: 1, color: 'yellow'});          // Top line
-    Graphics.drawLine({x1: this.left, y1: this.bottom, x2: this.right, y2: this.bottom, thickness: 1, color: 'yellow'});    // Bottom line
-    Graphics.drawLine({x1: this.left, y1: this.top, x2: this.left, y2: this.bottom, thickness: 1, color: 'yellow'});        // Left line
-    Graphics.drawLine({x1: this.right, y1: this.top, x2: this.right, y2: this.bottom, thickness: 1, color: 'yellow'});      // Right line
-    
-    // Bounding box of PLAYER old sides
-    Graphics.drawLine({x1: this.oldLeft, y1: this.oldTop, x2: this.oldRight, y2: this.oldTop, thickness: 1, color: 'red'});          // Top line
-    Graphics.drawLine({x1: this.oldLeft, y1: this.oldBottom, x2: this.oldRight, y2: this.oldBottom, thickness: 1, color: 'red'});    // Bottom line
-    Graphics.drawLine({x1: this.oldLeft, y1: this.oldTop, x2: this.oldLeft, y2: this.oldBottom, thickness: 1, color: 'red'});        // Left line
-    Graphics.drawLine({x1: this.oldRight, y1: this.oldTop, x2: this.oldRight, y2: this.oldBottom, thickness: 1, color: 'red'});      // Right line
+    // Bounding box of PLAYER current sides and old sides
+    Graphics.drawOutline({
+			x: this.left,
+			y: this.top,
+			w: this.size.w,
+			h: this.size.h,
+			thickness: 1,
+			color: "yellow",
+			ctx: GAME_CTX,
+		});
+    Graphics.drawOutline({
+			x: this.oldLeft,
+			y: this.oldTop,
+			w: this.size.w,
+			h: this.size.h,
+			thickness: 1,
+			color: "red",
+			ctx: GAME_CTX,
+		});
   }
 }

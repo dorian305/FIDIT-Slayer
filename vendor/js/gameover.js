@@ -5,7 +5,7 @@ import { createSound } from "./functions/createsound.js"
 import { stopSound } from "./functions/stopsound.js";
 import { stopRendering }  from "./render.js";
 
-export function gameOver(){
+export const gameOver = () => {
 	stopRendering();
 
 	/*
@@ -13,10 +13,12 @@ export function gameOver(){
 	*/
 	INGAME =						false;
 	GAME_PAUSED =					false;
+
 	/*
 		Playing death sound and animation of player character.
 	*/
 	// PLAYER.deathSound.play();
+
 	/*
 		Displaying game lost overlay.
 		The overlay contains dimmed background over entire screen, title text,
@@ -24,40 +26,45 @@ export function gameOver(){
 	*/
 	// Dimmed overlay
 	Graphics.drawRectangle({
-		x: -CANVAS_EDGES.left,
-		y: -CANVAS_EDGES.top,
-		w: innerWidth,
-		h: innerHeight,
-		color: DIMMED_BACKGROUND_COLOR
+		x: 0,
+		y: 0,
+		w: CANVAS_UI.width,
+		h: CANVAS_UI.height,
+		color: DIMMED_BACKGROUND_COLOR,
+		ctx: UI_CTX,
 	});
 	// Title
 	const title = Graphics.createImage(`${PATH_IMAGES}/YouDied.png`);
 	title.onload = () => {
 		Graphics.drawImage({
-			x: -CANVAS_EDGES.left + (innerWidth / 2) - title.width / 2,
-			y: -CANVAS_EDGES.top + (innerHeight / 2) - title.height / 2 - 200,
-			sprite: title
+			x: CANVAS_UI.width / 2,
+			y: CANVAS_UI.height / 2 - 200,
+			sprite: title,
+			ctx: UI_CTX,
+			align: "center",
 		});
 	}
 	// Restart button
 	new Button({
-		x: -CANVAS_EDGES.left + (innerWidth / 2) - 100,
-		y: -CANVAS_EDGES.top + (innerHeight / 2) - 25,
 		w: 200,
 		h: 50,
+		x: CANVAS_UI.width / 2 - 100,
+		y: CANVAS_UI.height / 2 - 25,
 		sprite: `${PATH_IMAGES}/Button.png`,
 		text: "Restart",
-		action: CURRENT_LEVEL	// Button's action is to restart the current level
+		action: CURRENT_LEVEL,
+		ctx: UI_CTX,
 	});
 	// Main menu button
 	new Button({
-		x: -CANVAS_EDGES.left + (innerWidth / 2) - 100,
-		y: -CANVAS_EDGES.top + (innerHeight / 2) + 35,
 		w: 200,
 		h: 50,
+		x: CANVAS_UI.width / 2 - 100,
+		y: CANVAS_UI.height / 2 + 35,
 		sprite: `${PATH_IMAGES}/Button.png`,
 		text: "Main menu",
-		action: MainMenu
+		action: MainMenu,
+		ctx: UI_CTX,
 	});
 
 	// Playing game over music

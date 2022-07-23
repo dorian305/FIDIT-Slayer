@@ -1,8 +1,14 @@
 /*
   Game variables and default settings
 */
-const CANVAS =                  document.querySelector('canvas');            // Canvas element
-const CTX =                     CANVAS.getContext("2d", {alpha: false});	 // Canvas context
+const CANVAS_GAME =             document.querySelector('#game');             // Canvas element for game
+const CANVAS_UI =               document.querySelector('#game-ui');          // Canvas element for game ui
+const GAME_CTX =                CANVAS_GAME.getContext("2d", {alpha: false});// Canvas context for canvas game
+const UI_CTX =                	CANVAS_UI.getContext("2d");				     // Canvas context for canvas game ui
+const CANVAS_WRAPPER = 			CANVAS_GAME.parentElement;					 // Wrapper for canvas elements
+const GAME_WIDTH = 				1500;
+const GAME_HEIGHT = 			800;
+const SCALE = 					(innerHeight / CANVAS_WRAPPER.clientHeight).toFixed(2);	 // Ratio of viewport height to game height, used for scaling the game
 const PATH_ASSETS =				"/Assets";									 // Path to game assets
 const PATH_SPRITES =			`${PATH_ASSETS}/Sprites`;					 // Path to sprites
 const PATH_AUDIO =				`${PATH_ASSETS}/Audio`;						 // Path to audio
@@ -11,7 +17,7 @@ let PLAYER =                    null;                                        // 
 let PLAYER_SIZE =               {w: 63, h: 78};                              // Player character size
 const PLAYER_DAMAGED_DELAY =    2000;                                        // Delay between player taking damages
 let PLAYER_INITIATED_JUMP =     false;                                       // Flag to prevent jump to trigger when holding down spacebar
-let CANVAS_EDGES =				{left: 0, top: 0, right: 0, bottom: 0};		 // CANVAS edge positions
+let CANVAS_EDGES =				{};											 // CANVAS edges positions
 let GAME_PAUSED =               false;                                       // Game state flag (Paused / Resumed)
 let INGAME =					false;										 // Playing a level or not
 let DEBUG_MODE =                false;                                       // Flag for when debug mode is enabled
@@ -38,18 +44,23 @@ let CURRENT_LEVEL =				null;										 // Keeps track of current level
 let MUSIC =						null;										 // Handler for music ingame
 
 /*
+	Scaling game to window height.
+*/
+// CANVAS_WRAPPER.style.transform = `scale(${SCALE})`;
+
+/*
 	Disabling window zoom in / out.
 */
 window.addEventListener("keydown", event => {
-		if (event.ctrlKey == true &&
-			(event.which == '61' ||
-			 event.which == '107' ||
-			 event.which == '173' ||
-			 event.which == '109' ||
-			 event.which == '187' ||
-			 event.which == '189')){
-			event.preventDefault();
-		}
+	if (event.ctrlKey == true &&
+		(event.which == '61' ||
+			event.which == '107' ||
+			event.which == '173' ||
+			event.which == '109' ||
+			event.which == '187' ||
+			event.which == '189')){
+		event.preventDefault();
+	}
 });
 ['wheel','mousewheel','DOMMouseScroll'].forEach(event => {
 	window.addEventListener(event, e => {
@@ -61,7 +72,7 @@ window.addEventListener("keydown", event => {
 	Player character attack.
 	Clicking left mouse click performs an attack.
 */
-CANVAS.addEventListener("mousedown", e => {
+CANVAS_WRAPPER.addEventListener("mousedown", e => {
 	if (e.button === 0 && INGAME && !GAME_PAUSED) PLAYER.attack();
 });
 
@@ -96,6 +107,11 @@ CANVAS.addEventListener("mousedown", e => {
 					PLAYER_INITIATED_JUMP = false;
 				}
 			}
+
+			/*
+				Pausing game
+			*/
+			if (event === "keydown" && e.key.toLowerCase() === "escape" && INGAME) GAME_PAUSED = !GAME_PAUSED;
 	
 			/*
 				Toggling debug mode.
@@ -108,29 +124,20 @@ CANVAS.addEventListener("mousedown", e => {
 /*
 	Event listener that tracks whether mouse click has happened on an UI button.
 */
-CANVAS.addEventListener("click", e => {
+CANVAS_WRAPPER.addEventListener("click", e => {
 	if (BUTTONS){
 		// Getting mouse coordinates
-		// const CANVASBoundingBox = CANVAS.getBoundingClientRect(); // Getting CANVAS distances from window edges
-		// let mouse = {
-		// 	x: e.clientX - CANVASBoundingBox.left,
-		// 	y: e.clientY - CANVASBoundingBox.top
-		// };
-		let mouse = {
-			x: e.clientX,
-			y: e.clientY
-		};
+		let mouse = { x: e.clientX - CANVAS_WRAPPER.getBoundingClientRect().left, y: e.clientY - CANVAS_WRAPPER.getBoundingClientRect().top };
 		/*
-		Looping through each button and checking whether the coordinates of the mouse pointer
-		were inside any of the buttons when the mouse click occured.
+			Looping through each button and checking whether the coordinates of the mouse pointer
+			were inside any of the buttons when the mouse click occured.
 		*/
 		BUTTONS.forEach(button => {
-			// -CANVAS_EDGES offset is added to the mouse coordinates because the overlay is drawn with the offset aswell
 			if (!(
-				mouse.x - CANVAS_EDGES.left < button.position.x ||
-				mouse.x - CANVAS_EDGES.left > button.position.x + button.size.w ||
-				mouse.y - CANVAS_EDGES.top < button.position.y ||
-				mouse.y - CANVAS_EDGES.top > button.position.y + button.size.h
+				mouse.x < button.position.x ||
+				mouse.x > button.position.x + button.size.w ||
+				mouse.y < button.position.y ||
+				mouse.y > button.position.y + button.size.h
 			)){
 				/*
 					The click occured on a button, which means the button was clicked.
@@ -143,23 +150,19 @@ CANVAS.addEventListener("click", e => {
 	}
 });
 
-CANVAS.addEventListener('mousemove', e => {
+CANVAS_WRAPPER.addEventListener('mousemove', e => {
 	if (BUTTONS){
 		let mouse = {
-			x: e.clientX,
-			y: e.clientY
+			x: e.clientX - CANVAS_WRAPPER.getBoundingClientRect().left,
+			y: e.clientY - CANVAS_WRAPPER.getBoundingClientRect().top
 		};
-		/*
-		Looping through each button and checking whether the coordinates of the mouse pointer
-		were inside any of the buttons when the mouse click occured.
-		*/
+		// console.log(mouse.y, button.position.y)
 		BUTTONS.forEach(button => {
-			// -CANVAS_EDGES offset is added to the mouse coordinates because the overlay is drawn with the offset aswell
 			if (!(
-					mouse.x - CANVAS_EDGES.left < button.position.x ||
-					mouse.x - CANVAS_EDGES.left > button.position.x + button.size.w ||
-					mouse.y - CANVAS_EDGES.top < button.position.y ||
-					mouse.y - CANVAS_EDGES.top > button.position.y + button.size.h
+					mouse.x - button.size.w / 2 < button.position.x ||
+					mouse.x > button.position.x + button.size.w ||
+					mouse.y < button.position.y ||
+					mouse.y > button.position.y + button.size.h
 			)){
 				console.log(`Mouse is hovering over the button`);
 			}

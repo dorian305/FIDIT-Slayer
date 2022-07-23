@@ -68,7 +68,7 @@ export class Entity {
 	draw() {
 		// Draw entity sprite if it's not hidden
     	if (this.visible !== false){
-			CTX.drawImage(
+			GAME_CTX.drawImage(
 				this.currentSprite,
 				this.currentSpriteFrame * this.spriteFrameWidth,
 				0,

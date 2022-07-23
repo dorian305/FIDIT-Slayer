@@ -4,11 +4,15 @@ import { stopSound } from "./functions/stopsound.js";
 import { level1 } from "./levels/level1/level1.js";
 import { Button } from "./classes/Button.js";
 import { Timer } from "./classes/Timer.js";
+import { randomNumber } from "./functions/randomnumber.js";
 
 /*
     Starting intro cutscene.
 */
 export const introCutscene = () => {
+
+    const loadingScreenDelay = 0;
+    const gameControlsDelay = 0;
 
     /*
         Creating a division where intro cutscene text will be animated.
@@ -48,8 +52,9 @@ export const introCutscene = () => {
     let scene = Graphics.createImage(`${PATH_SPRITES}/Intro/Scene1.jpg`);
     scene.onload = () => {
         Graphics.drawImage({
-            x: CANVAS.width / 2 - scene.width / 2,
-            y: CANVAS.height / 2 - scene.height / 2,
+            x: CANVAS_UI.width / 2 - scene.width / 2,
+            y: CANVAS_UI.height / 2 - scene.height / 2,
+            ctx: UI_CTX,
             sprite: scene
         });
         const timer = new Timer(drawSkipCutsceneButton, 0);
@@ -115,8 +120,9 @@ export const introCutscene = () => {
         new Button({
             w: 200,
             h: 50,
-            x: CANVAS.width / 2 - 100,
-            y: CANVAS.height / 2 + 325,
+            x: CANVAS_UI.width / 2 - 100,
+            y: CANVAS_UI.height / 2 + 350,
+            ctx: UI_CTX,
             sprite: `${PATH_IMAGES}/Button.png`,
             text: "Skip cutscene",
             action: () => {
@@ -140,8 +146,9 @@ export const introCutscene = () => {
         const img = Graphics.createImage(imgSrc);
         img.onload = () => {
             Graphics.drawImage({
-            x: CANVAS.width / 2 - img.width / 2,
-            y: CANVAS.height / 2 - img.height / 2,
+            x: CANVAS_UI.width / 2 - img.width / 2,
+            y: CANVAS_UI.height / 2 - img.height / 2,
+            ctx: UI_CTX,
             sprite: img
           });
           drawSkipCutsceneButton();
@@ -154,23 +161,30 @@ export const introCutscene = () => {
         const loading = Graphics.createImage(`${PATH_SPRITES}/Level 1/Loading.jpg`);
         loading.onload = () => {
             Graphics.drawImage({
-                x: CANVAS.width / 2 - loading.width / 2,
-                y: CANVAS.height / 2 - loading.height / 2,
-                sprite: loading
+                x: CANVAS_UI.width / 2,
+                y: CANVAS_UI.height / 2,
+                ctx: UI_CTX,
+                sprite: loading,
+                align: "center",
             });
 
             // Drawing a tip
+            const tips = [
+                "your character won't take damage when debug mode is enabled (Z).",
+                "collecting red orbs will increase your maximum health.",
+                "collecting green orbs replenishes health.",
+            ];
             Graphics.drawText({
-                x: CANVAS.width / 2,
-                y: CANVAS.height / 2 + 325,
+                x: CANVAS_UI.width / 2,
+                y: CANVAS_UI.height / 2 + 325,
                 size: 20,
                 color: "white",
-                content: "TIP: your character won't take damage when debug mode is enabled (Z).",
+                content: `TIP: ${tips[randomNumber(0, tips.length - 1)]}`,
                 align: "center",
-                font: "Roboto Slab"
+                font: "Roboto Slab",
+                ctx: UI_CTX,
             })
-
-            const timer = new Timer(displayGameControls, 0);
+            const timer = new Timer(displayGameControls, loadingScreenDelay);
             timer.start();
         }
     }
@@ -181,16 +195,18 @@ export const introCutscene = () => {
         const gameControls = Graphics.createImage(`${PATH_IMAGES}/GameControls.png`);
         gameControls.onload = () => {
             Graphics.drawImage({
-                x: CANVAS.width / 2 - gameControls.width / 2,
-                y: CANVAS.height / 2 - gameControls.height / 2,
+                x: CANVAS_UI.width / 2 - gameControls.width / 2,
+                y: CANVAS_UI.height / 2 - gameControls.height / 2,
+                ctx: UI_CTX,
                 sprite: gameControls,
             });
             const timer = new Timer(() => {
                 new Button({
                     w: 200,
                     h: 50,
-                    x: CANVAS.width / 2 - 100,
-                    y: CANVAS.height / 2 + 325,
+                    x: CANVAS_UI.width / 2 - 100,
+                    y: CANVAS_UI.height / 2 + 350,
+                    ctx: UI_CTX,
                     sprite: `${PATH_IMAGES}/Button.png`,
                     text: "Skip",
                     action: () => {
@@ -198,7 +214,7 @@ export const introCutscene = () => {
                         CURRENT_LEVEL();
                     }
                 });
-            }, 0);
+            }, gameControlsDelay);
             timer.start();
         }
     }

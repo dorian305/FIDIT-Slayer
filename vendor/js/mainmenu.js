@@ -3,12 +3,12 @@ import { introCutscene } 	from "./introcutscene.js";
 import { Button }		  	from "./classes/Button.js";
 import { stopRendering }  	from "./render.js";
 import { createSound } 		from "./functions/createsound.js";
-import { stopSound } from "./functions/stopsound.js";
+import { stopSound } 		from "./functions/stopsound.js";
 
 /*
 	Main menu screen.
 */
-export function MainMenu(){
+export const MainMenu = () => {
 	/*
 		Stopping rendering and clearing screen.
 	*/
@@ -43,22 +43,16 @@ export function MainMenu(){
 	MUSIC = null;
 
 	/*
-		Resetting canvas to default settings.
-	*/
-	CANVAS_EDGES = {left: 0, top: 0, right: 0, bottom: 0};
-	CANVAS.width = document.getElementById("canvas-wrapper").clientWidth;
-	CANVAS.height = document.getElementById("canvas-wrapper").clientHeight;
-	CANVAS.style = "";
-
-	/*
 		Drawing main menu logo.
 	*/
 	const logo = Graphics.createImage(`${PATH_IMAGES}/Logo.png`);
 	logo.onload = () => {
 		Graphics.drawImage({
-			x: CANVAS.width / 2 - logo.width / 2,
-			y: CANVAS.height / 2 - logo.height / 2,
-			sprite: logo
+			x: CANVAS_UI.width / 2,
+			y: CANVAS_UI.height / 2,
+			ctx: UI_CTX,
+			sprite: logo,
+			align: "center",
 		});
 	}
 
@@ -76,8 +70,9 @@ export function MainMenu(){
 	new Button({
 		w: 200,
 		h: 50,
-		x: CANVAS.width / 2 - 100,
-		y: CANVAS.height / 2 + 125,
+		x: CANVAS_UI.width / 2 - 100,
+		y: CANVAS_UI.height / 2 + 125,
+		ctx: UI_CTX,
 		sprite: `${PATH_IMAGES}/Button.png`,
 		text: "New game",
 		action: () => {

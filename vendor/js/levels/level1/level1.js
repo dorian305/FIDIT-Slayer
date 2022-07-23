@@ -9,7 +9,7 @@ import { OrbOfRejuvenation } 		from "../../classes/Orbs/OrbOfRejuvenation.js";
 import { createSound } 				from "../../functions/createsound.js";
 import { spawnFireballs }			from "./fireballs.js";
 import { bossFight }				from "./bossfight.js";
-import { stopSound } from "../../functions/stopsound.js";
+import { stopSound } 				from "../../functions/stopsound.js";
 
 export function level1(){
 	/*
@@ -36,9 +36,14 @@ export function level1(){
 	LEVEL_END_EDGE = 12000;
 	BOSS_AREA.left = 10500;
 	BOSS_AREA.right = 11800;
-	CANVAS_EDGES = {left: LEVEL_BEGINNING_EDGE, right: LEVEL_END_EDGE, top: 0, bottom: CANVAS.height};
-	CANVAS.height = 1000;
-	CANVAS.width = LEVEL_END_EDGE; // Setting width of the canvas to the level width
+	CANVAS_EDGES = {
+		left: CANVAS_WRAPPER.getBoundingClientRect().left,
+		right: CANVAS_WRAPPER.getBoundingClientRect().right,
+		top: CANVAS_WRAPPER.getBoundingClientRect().top,
+		bottom: CANVAS_WRAPPER.getBoundingClientRect().bottom,
+	};
+	CANVAS_GAME.width = LEVEL_END_EDGE; // Setting width of the game canvas to the level width
+	CANVAS_GAME.height = 1000;
 	BOSS_FIGHT = bossFight; // Saving boss fight function handler to global variable (accessed in gameloop.js)
 
 	/*
@@ -53,8 +58,8 @@ export function level1(){
 	new GenericObject({
 		x: 0,
 		y: 0,
-		w: LEVEL_END_EDGE,
-		h: CANVAS.height,
+		w: CANVAS_GAME.width,
+		h: CANVAS_GAME.height,
 		sprite: {
 			default: `${PATH_SPRITES}/Level 1/Background.jpg`,
 		},
@@ -124,22 +129,22 @@ export function level1(){
 	Platform.generateRectangle({x: 8300, y: 850,	w: 550,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Spikes_550x50.png`}, killOnTouch: true});
 	Platform.generateRectangle({x: 8500, y: 750,	w: 350,  h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Spikes_350x50.png`}, killOnTouch: true});
 	Platform.generateRectangle({x: 8550, y: 650,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/Spikes_50x50.png`}, killOnTouch: true});
-	Platform.generateRectangle({x: 8600, y: 450,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8600, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8600, y: 550,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8650, y: 400,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8650, y: 450,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8650, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8650, y: 550,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8700, y: 400,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8700, y: 450,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8700, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8750, y: 400,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8750, y: 450,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8750, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8800, y: 400,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8800, y: 450,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
-	Platform.generateRectangle({x: 8800, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 50});
+	Platform.generateRectangle({x: 8600, y: 450,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8600, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8600, y: 550,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8650, y: 400,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8650, y: 450,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8650, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8650, y: 550,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8700, y: 400,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8700, y: 450,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8700, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8750, y: 400,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8750, y: 450,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8750, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8800, y: 400,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8800, y: 450,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
+	Platform.generateRectangle({x: 8800, y: 500,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundDestroy_50x50.png`}, destroyable: true, HP: 20});
 	Platform.generateRectangle({x: 9050, y: 450,	w: 600,  h: 100,  sprite: {default: `${PATH_SPRITES}/Level 1/Ground_600x100.png`}});
 	Platform.generateRectangle({x: 9050, y: 400,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}});
 	Platform.generateRectangle({x: 9600, y: 400,	w: 50,   h: 50,   sprite: {default: `${PATH_SPRITES}/Level 1/GroundTop_50x50.png`}});
@@ -165,7 +170,7 @@ export function level1(){
 	*/
 	PLAYER = new PlayerCharacter({
 		x: 125,
-		y: 0,
+		y: 600,
 		w: PLAYER_SIZE.w,
 		h: PLAYER_SIZE.h,
 		crouchHeight: 62,

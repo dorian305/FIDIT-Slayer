@@ -49,7 +49,12 @@ export class Missile extends Entity {
 
 	update() {
 		// Remove the missile if it gets beyond the viewport
-		if (this.top < 0 || this.bottom > CANVAS.height || this.left < Math.abs(CANVAS_EDGES.left) || this.right > Math.abs(CANVAS_EDGES.left) + window.innerWidth){
+		if (
+			this.top < Math.abs(parseFloat(CANVAS_GAME.style.marginTop)) ||
+			this.left < Math.abs(parseFloat(CANVAS_GAME.style.marginLeft)) ||
+			this.bottom > Math.abs(parseFloat(CANVAS_GAME.style.marginTop)) + CANVAS_WRAPPER.clientHeight ||
+			this.right > Math.abs(parseFloat(CANVAS_GAME.style.marginLeft)) + CANVAS_WRAPPER.clientWidth
+		){
 			removeFromArray(MISSILES, this);
 		}
 		
