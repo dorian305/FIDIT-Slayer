@@ -5,8 +5,8 @@ import { Entity } from "./Entity.js";
   Causes collision!
 */
 export class Platform extends Entity {
-  constructor({x, y, w, h, sprite, visible, destroyable, HP, killOnTouch, landingOnly, destroyExplosion}){
-		super({x, y, w, h, sprite, visible});
+  constructor({x, y, w, h, sprite, visible, destroyable, HP, killOnTouch, color, landingOnly, destroyExplosion}){
+		super({x, y, w, h, sprite, visible, color});
 
     // Platform explosion sprite if destroyable
     this.destroyExplosionSprite = destroyExplosion ? destroyExplosion.sprite : `${PATH_SPRITES}/Effects/PlatformDestroyExplosion.png`;
@@ -41,7 +41,7 @@ export class Platform extends Entity {
     So rectangle with width: 5 and height: 5 is going to the the rectangle
     made of 5 units of ground platform along the X and 5 units along the Y axis.
   */
-  static generateRectangle({x, y, w, h, sprite, visible, destroyable, HP, killOnTouch, landingOnly, destroyExplosion}) {
+  static generateRectangle({x, y, w, h, sprite, visible, destroyable, HP, killOnTouch, color, landingOnly, destroyExplosion}) {
     new Platform({x: x,
       y: y,
       w: w,
@@ -51,7 +51,9 @@ export class Platform extends Entity {
       destroyable: destroyable,
       HP: HP,
       killOnTouch: killOnTouch,
+      color: color,
       landingOnly: landingOnly,
+      destroyExplosion: destroyExplosion,
     });
   }
 

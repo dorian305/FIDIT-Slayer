@@ -6,7 +6,7 @@ import { Graphics } from "./Graphics.js";
 	bullets etc...
 */
 export class Entity {
-	constructor({x, y, w, h, sprite, visible}){
+	constructor({x, y, w, h, sprite, visible, color}){
 		if (this.constructor === Entity){
 			throw new Error(`Cannot instantiate an abstract class "Entity"!`);
 		}
@@ -25,14 +25,19 @@ export class Entity {
 			y: this.left + this.size.h / 2,
 		}
 		this.velocity =       		{x: 0, y: 0};                  						// X and Y components of entity velocity (+ = right and down, - = left and up)
-		this.sprite =         		sprite;												// Character sprite
-		this.currentSprite =  		Graphics.createImage(this.sprite.default); 			// Image handler for sprite that will currently be displayed for a character
+		this.color = 				color;												// Color of the entity
 		this.visible =		  		visible === false ? visible : true;					// Determine if entity sprite is drawn
-		this.currentSprite.onload = () => {
+
+		// If color is defined, skip sprite creation
+		if (!this.color){
+			this.sprite =         		sprite;												// Character sprite
+			this.currentSprite =  		Graphics.createImage(this.sprite.default); 			// Image handler for sprite that will currently be displayed for the entity
+			this.currentSprite.onload = () => {
 			this.currentSpriteFrame =	0;                         							// Current frame of the animation
 			this.spriteWidth =	  		this.currentSprite.width;		 					// Width of character sprite
 			this.spriteLength =	  		Math.floor(this.spriteWidth / this.size.w); 		// Number of frames sprite animation consists of
 			this.spriteFrameWidth = 	Math.floor(this.spriteWidth / this.spriteLength);	// Width of one sprite frame
+			}
 		}
 	}
 
@@ -68,17 +73,29 @@ export class Entity {
 	draw() {
 		// Draw entity sprite if it's not hidden
     	if (this.visible !== false){
-			GAME_CTX.drawImage(
-				this.currentSprite,
-				this.currentSpriteFrame * this.spriteFrameWidth,
-				0,
-				this.size.w,
-				this.size.h,
-				this.position.x,
-				this.position.y,
-				this.size.w,
-				this.size.h
-			  );
+			if (this.color){
+				Graphics.drawRectangle({
+					x: this.position.x,
+					y: this.position.y,
+					w: this.size.w,
+					h: this.size.h,
+					color: this.color,
+					ctx: GAME_CTX,
+				})
+			}
+			else {
+				GAME_CTX.drawImage(
+					this.currentSprite,
+					this.currentSpriteFrame * this.spriteFrameWidth,
+					0,
+					this.size.w,
+					this.size.h,
+					this.position.x,
+					this.position.y,
+					this.size.w,
+					this.size.h
+				);
+			}
 		}
 		
 	}
@@ -99,7 +116,9 @@ export class Entity {
 		this.center.y =			this.top + this.size.h / 2;
 
 		// Periodically updating entity sprite
-		this.updateSpriteFrame();
+		if (!this.color){
+			this.updateSpriteFrame();
+		}
 		
 		// Draw entity at updated coordinates
 		this.draw();
