@@ -8,6 +8,7 @@
 
 - The game loads up.
 - Recommended to use chromium based browsers (Chrome, Edge, Opera...)
+- Recommended to play in fullscreen (F11) in browsers as resolution isn't optimized for smaller screens
 
 # FIDIT Slayer
 A game about REVENGE.
