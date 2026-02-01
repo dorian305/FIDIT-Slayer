@@ -158,7 +158,7 @@ export const introCutscene = () => {
     // Start level 1
     const startLevel1 = () => {
         Graphics.clearScreen();
-        const loading = Graphics.createImage(`${PATH_SPRITES}/Level 1/Loading.jpg`);
+        const loading = Graphics.createImage(`${PATH_SPRITES}/level_1/Loading.jpg`);
         loading.onload = () => {
             Graphics.drawImage({
                 x: CANVAS_UI.width / 2,

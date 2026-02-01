@@ -14,9 +14,9 @@ export const spawnFireballs = () => {
             w: 50,
             h: 78,
             sprite: {
-                up: `${PATH_SPRITES}/Level 1/FireballUp.png`,
-                down: `${PATH_SPRITES}/Level 1/FireballDown.png`,
-                default: `${PATH_SPRITES}/Level 1/FireballUp.png`,
+                up: `${PATH_SPRITES}/level_1/FireballUp.png`,
+                down: `${PATH_SPRITES}/level_1/FireballDown.png`,
+                default: `${PATH_SPRITES}/level_1/FireballUp.png`,
             },
             damage: 30,
         });

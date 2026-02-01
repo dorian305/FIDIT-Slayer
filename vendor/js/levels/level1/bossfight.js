@@ -24,29 +24,29 @@ export const bossFight = () => {
         HP: 2000,
         sprite: {
             idle: {
-                left: `${PATH_SPRITES}/Level 1/Boss/BossIdleLeft.png`,
-                right: `${PATH_SPRITES}/Level 1/Boss/BossIdleRight.png`,
+                left: `${PATH_SPRITES}/level_1/Boss/BossIdleLeft.png`,
+                right: `${PATH_SPRITES}/level_1/Boss/BossIdleRight.png`,
             },
             move: {
-                left: `${PATH_SPRITES}/Level 1/Boss/BossIdleLeft.png`,
-                right: `${PATH_SPRITES}/Level 1/Boss/BossIdleRight.png`,
+                left: `${PATH_SPRITES}/level_1/Boss/BossIdleLeft.png`,
+                right: `${PATH_SPRITES}/level_1/Boss/BossIdleRight.png`,
             },
             jump: {
-                left: `${PATH_SPRITES}/Level 1/Boss/BossJumpLeft.png`,
-                right: `${PATH_SPRITES}/Level 1/Boss/BossJumpRight.png`,
+                left: `${PATH_SPRITES}/level_1/Boss/BossJumpLeft.png`,
+                right: `${PATH_SPRITES}/level_1/Boss/BossJumpRight.png`,
             },
             fall: {
-                left: `${PATH_SPRITES}/Level 1/Boss/BossFallLeft.png`,
-                right: `${PATH_SPRITES}/Level 1/Boss/BossFallRight.png`,
+                left: `${PATH_SPRITES}/level_1/Boss/BossFallLeft.png`,
+                right: `${PATH_SPRITES}/level_1/Boss/BossFallRight.png`,
             },
             death: {
-                src: `${PATH_SPRITES}/Level 1/Enemies/Death.png`,
+                src: `${PATH_SPRITES}/level_1/Enemies/Death.png`,
                 w: 150,
                 h: 150,
             },
-            default: `${PATH_SPRITES}/Level 1/Boss/BossIdleRight.png`,
+            default: `${PATH_SPRITES}/level_1/Boss/BossIdleRight.png`,
         },
-        healthUI: Graphics.createImage(`${PATH_SPRITES}/Level 1/Boss/HealthBarUIBoss.png`),
+        healthUI: Graphics.createImage(`${PATH_SPRITES}/level_1/Boss/HealthBarUIBoss.png`),
         attackCooldown: 3000,
     });
 
@@ -56,7 +56,7 @@ export const bossFight = () => {
 
     // Playing boss fight Music
     stopSound(MUSIC);
-    MUSIC.src = `${PATH_AUDIO}/Level 1/BossFight.mp3`;
+    MUSIC.src = `${PATH_AUDIO}/level_1/BossFight.mp3`;
     MUSIC.loop = true;
     MUSIC.play();
 
@@ -117,7 +117,7 @@ const bossFightRender = () => {
             Graphics.clearScreen();
                         
             // Drawing endscreen
-            const endscreen = Graphics.createImage(`${PATH_SPRITES}/Level 1/Endscreen.jpg`);
+            const endscreen = Graphics.createImage(`${PATH_SPRITES}/level_1/Endscreen.jpg`);
             endscreen.onload = () => {
                 Graphics.drawImage({
                     x: CANVAS_UI.width / 2 - endscreen.width / 2,
@@ -144,7 +144,7 @@ const bossFightRender = () => {
                 timer.start();
 
                 // Playing endscreen music
-                MUSIC.src = `${PATH_AUDIO}/Level 1/Endscreen.mp3`;
+                MUSIC.src = `${PATH_AUDIO}/level_1/Endscreen.mp3`;
                 MUSIC.play();
             }
         }, 2000);
@@ -313,9 +313,9 @@ const attack1 = () => {
             y: 0,
         },
         sprite: {
-            left: `${PATH_SPRITES}/Level 1/Boss/Attack 1/MissileLeft.png`,
-            right: `${PATH_SPRITES}/Level 1/Boss/Attack 1/MissileRight.png`,
-            default: `${PATH_SPRITES}/Level 1/Boss/Attack 1/MissileLeft.png`,
+            left: `${PATH_SPRITES}/level_1/Boss/Attack 1/MissileLeft.png`,
+            right: `${PATH_SPRITES}/level_1/Boss/Attack 1/MissileRight.png`,
+            default: `${PATH_SPRITES}/level_1/Boss/Attack 1/MissileLeft.png`,
         },
         damage: BOSS.shurikenDamage,
         owner: BOSS,
